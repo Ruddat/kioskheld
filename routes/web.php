@@ -1,9 +1,26 @@
 <?php
 
+use App\Http\Controllers\PostcodeAvailabilityController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShopSelectionController;
+use App\Http\Controllers\ShopShowController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'pages.home')->name('home');
+
+Route::get('/plz/pruefen', PostcodeAvailabilityController::class)
+    ->name('postcode.check');
+
+Route::get('/shops/auswahl', ShopSelectionController::class)
+    ->name('shops.selection');
+
+Route::get('/shops/{shopSlug}', ShopShowController::class)
+    ->name('shops.show');
+
+Route::view('/ueber-uns', 'pages.about')->name('about');
+Route::view('/impressum', 'pages.legal.imprint')->name('legal.imprint');
+Route::view('/datenschutz', 'pages.legal.privacy')->name('legal.privacy');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

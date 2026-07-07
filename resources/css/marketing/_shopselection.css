@@ -1,0 +1,197 @@
+.shop-selection-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(255, 214, 0, 0.14), transparent 34rem),
+        radial-gradient(circle at top right, rgba(255, 91, 46, 0.16), transparent 32rem),
+        #0b0b0f;
+    color: #fff;
+}
+
+.shop-selection-hero {
+    padding: 92px 0 36px;
+    text-align: center;
+}
+
+.shop-selection-hero .eyebrow {
+    margin: 0 0 14px;
+    color: #ffd84d;
+    font-size: 0.82rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.shop-selection-hero h1 {
+    margin: 0;
+    font-size: clamp(2.3rem, 6vw, 5rem);
+    line-height: 0.95;
+    letter-spacing: -0.07em;
+}
+
+.shop-selection-subline {
+    max-width: 720px;
+    margin: 22px auto 0;
+    color: rgba(255, 255, 255, 0.74);
+    font-size: 1.08rem;
+    line-height: 1.65;
+}
+
+.shop-selection-subline strong {
+    color: #fff;
+}
+
+.shop-selection-list-section {
+    padding: 36px 0 96px;
+}
+
+.shop-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.shop-selection-card {
+    position: relative;
+    overflow: hidden;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 30px;
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04)),
+        rgba(255, 255, 255, 0.06);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+}
+
+.shop-selection-card::before {
+    content: "";
+    position: absolute;
+    inset: -80px auto auto -80px;
+    width: 180px;
+    height: 180px;
+    border-radius: 999px;
+    background: rgba(255, 216, 77, 0.16);
+    filter: blur(12px);
+}
+
+.shop-selection-card-header {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.shop-selection-card h2 {
+    margin: 0 0 8px;
+    font-size: 1.55rem;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+}
+
+.shop-selection-card p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.68);
+}
+
+.shop-selection-badge {
+    flex: 0 0 auto;
+    border-radius: 999px;
+    padding: 7px 11px;
+    background: rgba(47, 214, 111, 0.14);
+    color: #7dffae;
+    font-size: 0.76rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.shop-selection-area {
+    position: relative;
+    margin-top: 18px !important;
+    font-size: 0.95rem;
+}
+
+.shop-selection-facts {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.shop-selection-facts div {
+    padding: 14px;
+    border-radius: 18px;
+    background: rgba(0, 0, 0, 0.22);
+}
+
+.shop-selection-facts span {
+    display: block;
+    margin-bottom: 5px;
+    color: rgba(255, 255, 255, 0.56);
+    font-size: 0.76rem;
+    font-weight: 800;
+}
+
+.shop-selection-facts strong {
+    display: block;
+    color: #fff;
+    font-size: 0.98rem;
+}
+
+.shop-selection-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+    min-height: 52px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #ffd84d, #ff7a2f);
+    color: #171008;
+    font-weight: 950;
+    text-decoration: none;
+    box-shadow: 0 16px 34px rgba(255, 122, 47, 0.26);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.shop-selection-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 44px rgba(255, 122, 47, 0.34);
+}
+
+.shop-selection-back {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.shop-selection-back a {
+    color: rgba(255, 255, 255, 0.72);
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.shop-selection-back a:hover {
+    color: #fff;
+}
+
+@media (max-width: 820px) {
+    .shop-selection-hero {
+        padding-top: 64px;
+    }
+
+    .shop-selection-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .shop-selection-card {
+        padding: 20px;
+        border-radius: 24px;
+    }
+}
+
+@media (max-width: 520px) {
+    .shop-selection-facts {
+        grid-template-columns: 1fr;
+    }
+}

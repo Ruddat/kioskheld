@@ -31,14 +31,14 @@
                         <span>📍</span>
                         <strong>PLZ {{ $postcode }}</strong>
 
-                        @if(!empty($district))
+                        @if (!empty($district))
                             <small>{{ $district }}</small>
                         @endif
                     </div>
                 </header>
 
                 <div class="shop-selection-list">
-                    @foreach($shops as $index => $shop)
+                    @foreach ($shops as $index => $shop)
                         @php
                             $rule = $shop['delivery_rule'] ?? [];
                             $area = $shop['delivery_area'] ?? [];
@@ -64,14 +64,24 @@
                         @endphp
 
                         <article class="shop-card">
+                            @php
+                                $shopImageNumber = ($index % 10) + 1;
+                                $shopImagePath = 'images/kioskheld/shops/shop-' . $shopImageNumber . '.png';
+                            @endphp
+
                             <div class="shop-card-image">
-                                @if($index === 0)
+                                @if ($index === 0)
                                     <span class="shop-card-badge">★ Beliebtester Kiosk</span>
                                 @endif
 
-                                <div class="shop-card-image-placeholder">
-                                    <span>Kiosk</span>
-                                </div>
+                                @if (file_exists(public_path($shopImagePath)))
+                                    <img src="{{ asset($shopImagePath) }}" alt="{{ $shop['name'] ?? 'Kioskheld Kiosk' }}"
+                                        class="shop-card-img" loading="lazy">
+                                @else
+                                    <div class="shop-card-image-placeholder">
+                                        <span>Kiosk</span>
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="shop-card-content">
@@ -91,15 +101,15 @@
                                 </div>
 
                                 <div class="shop-card-meta">
-                                    @if($minutes)
+                                    @if ($minutes)
                                         <span>⏱ {{ $minutes }} Min.</span>
                                     @endif
 
-                                    @if($minOrder)
+                                    @if ($minOrder)
                                         <span>🛒 ab {{ number_format((float) $minOrder, 2, ',', '.') }} €</span>
                                     @endif
 
-                                    @if($fee !== null)
+                                    @if ($fee !== null)
                                         <span>🚚 {{ number_format((float) $fee, 2, ',', '.') }} € Lieferung</span>
                                     @endif
                                 </div>
@@ -108,16 +118,16 @@
                                     Getränke, Snacks, Süßes, Eis & mehr
                                 </p>
 
-                                @if(count($tags))
+                                @if (count($tags))
                                     <div class="shop-card-tags">
-                                        @foreach(array_slice($tags, 0, 3) as $tag)
+                                        @foreach (array_slice($tags, 0, 3) as $tag)
                                             <span>{{ $tag }}</span>
                                         @endforeach
                                     </div>
                                 @endif
 
                                 <a href="{{ route('shops.show', ['shopSlug' => $shop['slug']]) }}"
-                                   class="shop-card-button">
+                                    class="shop-card-button">
                                     Zum Shop
                                     <span>›</span>
                                 </a>

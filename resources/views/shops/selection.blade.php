@@ -4,23 +4,24 @@
 
 @section('content')
     <main class="shop-selection-page">
-        <section class="shop-selection-shell">
-            <div class="shop-selection-topbar">
-                <x-marketing.logo :show-crown="true" />
+        <div class="shop-selection-nav-wrap">
+            <x-marketing.nav />
+        </div>
 
-                <button class="shop-selection-menu" type="button" aria-label="Menü öffnen">
-                    ☰
-                </button>
-            </div>
-
-            <div class="shop-selection-inner">
-                <a href="{{ route('home') }}" class="shop-selection-back">
+        <section class="shop-selection-hero">
+            <div class="container">
+                <a href="{{ route('home') }}#find" class="shop-selection-back">
                     <span>←</span>
                     Neue Suche
                 </a>
 
                 <header class="shop-selection-header">
-                    <h1>Kioskhelds in deiner Nähe</h1>
+                    <p class="shop-selection-eyebrow">Kioskheld Liefercheck</p>
+
+                    <h1 class="shop-selection-title">
+                        <span>Kioskhelds in deiner</span>
+                        <strong>Nähe</strong>
+                    </h1>
 
                     <p>
                         Wir haben {{ count($shops) }}
@@ -36,7 +37,11 @@
                         @endif
                     </div>
                 </header>
+            </div>
+        </section>
 
+        <section class="shop-selection-results">
+            <div class="container">
                 <div class="shop-selection-list">
                     @foreach ($shops as $index => $shop)
                         @php
@@ -61,14 +66,12 @@
                             if ($freeFrom) {
                                 $tags[] = 'Gratis Lieferung ab ' . number_format((float) $freeFrom, 2, ',', '.') . ' €';
                             }
+
+                            $shopImageNumber = ($index % 10) + 1;
+                            $shopImagePath = 'images/kioskheld/shops/shop-' . $shopImageNumber . '.png';
                         @endphp
 
                         <article class="shop-card">
-                            @php
-                                $shopImageNumber = ($index % 10) + 1;
-                                $shopImagePath = 'images/kioskheld/shops/shop-' . $shopImageNumber . '.png';
-                            @endphp
-
                             <div class="shop-card-image">
                                 @if ($index === 0)
                                     <span class="shop-card-badge">★ Beliebtester Kiosk</span>
@@ -180,5 +183,7 @@
                 </section>
             </div>
         </section>
+
+        <x-marketing.footer />
     </main>
 @endsection

@@ -1,121 +1,178 @@
 .shop-selection-page {
     min-height: 100vh;
-    padding: 20px;
     background:
-        radial-gradient(circle at top left, rgba(255, 214, 0, 0.18), transparent 28rem),
-        radial-gradient(circle at bottom right, rgba(255, 122, 47, 0.12), transparent 34rem),
-        #f4f4f5;
-    color: #111111;
+        radial-gradient(circle at top left, rgba(255, 214, 0, 0.12), transparent 34rem),
+        radial-gradient(circle at top right, rgba(255, 122, 47, 0.08), transparent 34rem),
+        #ffffff;
+    color: #101010;
 }
 
-.shop-selection-shell {
-    overflow: hidden;
-    max-width: 920px;
-    margin: 0 auto;
-    border-radius: 18px;
-    background: #ffffff;
-    box-shadow: 0 26px 90px rgba(0, 0, 0, 0.16);
-}
+/* Shared marketing nav on selection page */
 
-.shop-selection-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 78px;
-    padding: 0 28px;
+.shop-selection-nav-wrap {
     background: #050505;
     color: #ffffff;
 }
 
-.shop-selection-menu {
-    border: 0;
-    background: transparent;
-    color: #ffffff;
-    font-size: 2rem;
-    line-height: 1;
-    cursor: pointer;
+.shop-selection-nav-wrap .nav {
+    min-height: 88px;
 }
 
-.shop-selection-inner {
-    padding: 30px 42px 34px;
+.shop-selection-nav-wrap .nav-links a {
+    color: #ffffff;
+}
+
+.shop-selection-nav-wrap .mobile-menu {
+    color: #ffffff;
+}
+
+/* Hero */
+
+.shop-selection-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 38px 0 26px;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255, 214, 0, 0.18), transparent 30rem),
+        linear-gradient(180deg, #ffffff 0%, #ffffff 74%, #fafafa 100%);
+}
+
+.shop-selection-hero::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -210px;
+    width: min(92vw, 1120px);
+    height: 390px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(255, 214, 0, 0.14), transparent 64%);
+    pointer-events: none;
 }
 
 .shop-selection-back {
+    position: relative;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
     gap: 9px;
     color: #151515;
     font-size: 0.92rem;
-    font-weight: 850;
+    font-weight: 900;
     text-decoration: none;
+}
+
+.shop-selection-back:hover {
+    color: #000000;
 }
 
 .shop-selection-back span {
     font-size: 1.25rem;
+    line-height: 1;
 }
 
 .shop-selection-header {
-    margin-top: 18px;
+    position: relative;
+    z-index: 1;
+    max-width: 1040px;
+    margin: 24px auto 0;
     text-align: center;
 }
 
-.shop-selection-header h1 {
-    margin: 0;
-    font-size: clamp(2rem, 5vw, 3.3rem);
-    line-height: 0.95;
+.shop-selection-eyebrow {
+    margin: 0 0 14px;
+    color: #d2a400;
+    font-size: 0.82rem;
     font-weight: 1000;
-    letter-spacing: -0.07em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
 }
 
-.shop-selection-header p {
-    margin: 14px auto 0;
-    max-width: 560px;
-    color: #565656;
-    font-size: 1rem;
-    font-weight: 650;
+.shop-selection-title {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    color: #090909;
+    font-size: clamp(3.15rem, 7.1vw, 6.25rem);
+    line-height: 0.86;
+    font-weight: 1000;
+    letter-spacing: -0.09em;
+    text-transform: uppercase;
+}
+
+.shop-selection-title span,
+.shop-selection-title strong {
+    display: block;
+}
+
+.shop-selection-title strong {
+    color: #ffd600;
+    font-style: normal;
+    text-shadow:
+        0 2px 0 #111111,
+        0 10px 24px rgba(255, 214, 0, 0.2);
+}
+
+.shop-selection-header > p:not(.shop-selection-eyebrow) {
+    max-width: 620px;
+    margin: 18px auto 0;
+    color: #343434;
+    font-size: 1.05rem;
+    font-weight: 800;
 }
 
 .shop-selection-postcode {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin-top: 22px;
+    margin-top: 20px;
     padding: 10px 16px;
     border-radius: 999px;
     background: #f1f1f1;
     color: #151515;
     font-size: 0.9rem;
-    font-weight: 900;
+    font-weight: 1000;
+    box-shadow:
+        inset 0 0 0 1px rgba(0, 0, 0, 0.03),
+        0 10px 24px rgba(0, 0, 0, 0.04);
 }
 
 .shop-selection-postcode small {
     color: #777777;
-    font-weight: 800;
+    font-weight: 850;
+}
+
+/* Results */
+
+.shop-selection-results {
+    padding: 8px 0 74px;
+    background:
+        linear-gradient(180deg, #ffffff 0%, #ffffff 72%, #fafafa 100%);
 }
 
 .shop-selection-list {
     display: grid;
-    gap: 24px;
-    margin-top: 34px;
+    gap: 22px;
+    max-width: 1040px;
+    margin: 0 auto;
 }
 
 .shop-card {
     display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
-    gap: 26px;
-    padding: 22px;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 24px;
+    padding: 20px;
     border: 1px solid #e8e8e8;
-    border-radius: 22px;
-    background: #ffffff;
-    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.08);
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 16px 42px rgba(0, 0, 0, 0.07);
 }
 
 .shop-card-image {
     position: relative;
     overflow: hidden;
-    min-height: 220px;
-    border-radius: 15px;
+    height: 220px;
+    border-radius: 18px;
     background:
         radial-gradient(circle at 30% 20%, rgba(255, 218, 0, 0.32), transparent 14rem),
         linear-gradient(145deg, #141414, #050505);
@@ -124,19 +181,16 @@
 .shop-card-img {
     display: block;
     width: 100%;
-    height: 100%;
-    min-height: 220px;
+    height: 220px;
     object-fit: cover;
 }
-
 
 .shop-card-image-placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 100%;
-    min-height: 220px;
+    height: 220px;
     color: #ffd600;
     font-size: 2.2rem;
     font-weight: 1000;
@@ -155,39 +209,43 @@
     color: #151515;
     font-size: 0.74rem;
     font-weight: 1000;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .shop-card-content {
     min-width: 0;
-    padding: 4px 0;
+    padding: 5px 0 3px;
 }
 
 .shop-card-head {
     display: flex;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 18px;
 }
 
 .shop-card h2 {
     margin: 0;
-    font-size: 1.38rem;
-    line-height: 1.15;
+    color: #050505;
+    font-size: 1.55rem;
+    line-height: 1.1;
     font-weight: 1000;
-    letter-spacing: -0.045em;
+    letter-spacing: -0.055em;
 }
 
 .shop-card-location {
-    margin: 6px 0 0;
-    color: #6c6c6c;
-    font-weight: 700;
+    margin: 7px 0 0;
+    color: #686868;
+    font-size: 0.96rem;
+    font-weight: 750;
 }
 
 .shop-card-status {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     height: fit-content;
-    color: #239c45;
+    color: #16883b;
     font-size: 0.78rem;
     font-weight: 950;
     white-space: nowrap;
@@ -204,18 +262,18 @@
 .shop-card-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 18px;
+    gap: 14px;
     margin-top: 18px;
-    color: #1d1d1d;
+    color: #151515;
     font-size: 0.94rem;
-    font-weight: 850;
+    font-weight: 900;
 }
 
 .shop-card-description {
     margin: 16px 0 0;
-    color: #3f3f3f;
-    font-size: 0.95rem;
-    font-weight: 650;
+    color: #333333;
+    font-size: 0.96rem;
+    font-weight: 700;
 }
 
 .shop-card-tags {
@@ -231,7 +289,7 @@
     background: #f1f1f1;
     color: #555555;
     font-size: 0.78rem;
-    font-weight: 850;
+    font-weight: 900;
 }
 
 .shop-card-button {
@@ -239,12 +297,13 @@
     align-items: center;
     justify-content: center;
     gap: 16px;
-    min-height: 52px;
-    margin-top: 24px;
+    width: min(100%, 390px);
+    min-height: 50px;
+    margin-top: 22px;
     border-radius: 999px;
     background: linear-gradient(135deg, #ffe600, #ffc400);
     color: #101010;
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     font-weight: 1000;
     text-transform: uppercase;
     text-decoration: none;
@@ -262,16 +321,20 @@
     line-height: 1;
 }
 
+/* Missing box */
+
 .shop-selection-missing {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 18px;
-    margin-top: 34px;
+    max-width: 1040px;
+    margin: 34px auto 0;
     padding: 20px;
-    border-radius: 18px;
+    border: 1px solid rgba(255, 214, 0, 0.28);
+    border-radius: 20px;
     background: linear-gradient(135deg, #fff8dd, #ffffff);
-    box-shadow: inset 0 0 0 1px rgba(255, 214, 0, 0.24);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.04);
 }
 
 .shop-selection-missing-icon {
@@ -286,6 +349,7 @@
 
 .shop-selection-missing h2 {
     margin: 0;
+    color: #090909;
     font-size: 1rem;
     font-weight: 1000;
 }
@@ -294,7 +358,7 @@
     margin: 5px 0 0;
     color: #4e4e4e;
     font-size: 0.88rem;
-    font-weight: 650;
+    font-weight: 700;
     line-height: 1.45;
 }
 
@@ -313,17 +377,26 @@
     text-decoration: none;
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
     white-space: nowrap;
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
+
+.shop-selection-missing a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.13);
+}
+
+/* Benefits */
 
 .shop-selection-benefits {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 14px;
-    margin-top: 28px;
+    max-width: 1040px;
+    margin: 36px auto 0;
 }
 
 .shop-selection-benefits div {
-    min-height: 118px;
+    min-height: 112px;
     padding: 18px 12px;
     border: 1px solid #efefef;
     border-radius: 18px;
@@ -353,37 +426,94 @@
     font-weight: 700;
 }
 
-@media (max-width: 820px) {
-    .shop-selection-page {
-        padding: 0;
-        background: #ffffff;
-    }
+/* Footer alignment on selection page */
 
-    .shop-selection-shell {
-        max-width: none;
-        min-height: 100vh;
-        border-radius: 0;
-        box-shadow: none;
-    }
+.shop-selection-page > footer {
+    background: #050505;
+}
 
-    .shop-selection-inner {
-        padding: 24px 18px 28px;
-    }
+/* Responsive */
 
-    .shop-selection-topbar {
-        min-height: 68px;
-        padding: 0 20px;
+@media (max-width: 1080px) {
+    .shop-selection-list,
+    .shop-selection-missing,
+    .shop-selection-benefits {
+        max-width: 920px;
     }
 
     .shop-card {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        padding: 16px;
+        grid-template-columns: 230px minmax(0, 1fr);
     }
 
     .shop-card-image,
+    .shop-card-img,
     .shop-card-image-placeholder {
-        min-height: 220px;
+        height: 205px;
+    }
+}
+
+@media (max-width: 820px) {
+    .shop-selection-nav-wrap .nav {
+        min-height: 72px;
+    }
+
+    .shop-selection-hero {
+        padding: 30px 0 24px;
+    }
+
+    .shop-selection-header {
+        margin-top: 20px;
+    }
+
+    .shop-selection-title {
+        font-size: clamp(2.65rem, 10vw, 4.2rem);
+        letter-spacing: -0.08em;
+    }
+
+    .shop-selection-header > p:not(.shop-selection-eyebrow) {
+        font-size: 0.96rem;
+    }
+
+    .shop-card {
+        grid-template-columns: 170px minmax(0, 1fr);
+        gap: 16px;
+        padding: 16px;
+        border-radius: 22px;
+    }
+
+    .shop-card-image,
+    .shop-card-img,
+    .shop-card-image-placeholder {
+        height: 170px;
+    }
+
+    .shop-card h2 {
+        font-size: 1.2rem;
+    }
+
+    .shop-card-location {
+        font-size: 0.86rem;
+    }
+
+    .shop-card-meta {
+        gap: 9px;
+        margin-top: 12px;
+        font-size: 0.82rem;
+    }
+
+    .shop-card-description {
+        margin-top: 11px;
+        font-size: 0.86rem;
+    }
+
+    .shop-card-tags {
+        margin-top: 12px;
+    }
+
+    .shop-card-button {
+        width: 100%;
+        min-height: 46px;
+        margin-top: 15px;
     }
 
     .shop-selection-missing {
@@ -400,9 +530,38 @@
     }
 }
 
-@media (max-width: 520px) {
-    .shop-selection-header h1 {
-        font-size: 2rem;
+@media (max-width: 620px) {
+    .shop-selection-results {
+        padding-bottom: 56px;
+    }
+
+    .shop-selection-back {
+        font-size: 0.86rem;
+    }
+
+    .shop-selection-title {
+        font-size: 2.65rem;
+        line-height: 0.9;
+    }
+
+    .shop-selection-eyebrow {
+        margin-bottom: 12px;
+        font-size: 0.72rem;
+    }
+
+    .shop-selection-header > p:not(.shop-selection-eyebrow) {
+        margin-top: 16px;
+        font-size: 0.9rem;
+    }
+
+    .shop-card {
+        grid-template-columns: 1fr;
+    }
+
+    .shop-card-image,
+    .shop-card-img,
+    .shop-card-image-placeholder {
+        height: 220px;
     }
 
     .shop-card-head {
@@ -410,8 +569,14 @@
         gap: 10px;
     }
 
-    .shop-card-meta {
-        gap: 10px;
+    .shop-card-status {
+        align-self: flex-start;
+    }
+}
+
+@media (max-width: 520px) {
+    .shop-selection-list {
+        gap: 16px;
     }
 
     .shop-selection-benefits {

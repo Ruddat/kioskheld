@@ -30,8 +30,10 @@ class CheckoutOrderController extends Controller
         }
 
         $validatedAt = $cart['validated_at'] ?? null;
+        $ttlMinutes = max(1, (int) data_get($validated, 'reservation.ttl_minutes', 10));
+        $expiresAfterMinutes = max(1, $ttlMinutes - 1);
 
-        if (! $validatedAt || Carbon::parse($validatedAt)->lt(now()->subMinutes(10))) {
+        if (! $validatedAt || Carbon::parse($validatedAt)->lt(now()->subMinutes($expiresAfterMinutes))) {
             $request->session()->forget('kioskheld.cart');
             $request->session()->forget('kioskheld.checkout.customer');
 
@@ -145,6 +147,8 @@ class CheckoutOrderController extends Controller
         return [
             'source' => 'kioskheld',
             'external_session_id' => session()->getId(),
+            'reservation' => $validated['reservation'] ?? null,
+            'reservation_cart_token' => data_get($validated, 'reservation.cart_token'),
 
             'shop' => [
                 'id' => $shop['id'] ?? ($cart['shop_id'] ?? null),

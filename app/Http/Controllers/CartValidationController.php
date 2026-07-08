@@ -105,7 +105,7 @@ class CartValidationController extends Controller
                         'menu_id' => (int) $item['menu_id'],
                         'quantity' => (int) $item['quantity'],
                         'choices' => collect($item['choices'] ?? [])
-                            ->map(fn (array $choice) => [
+                            ->map(fn(array $choice) => [
                                 'choice_group_id' => (int) $choice['choice_group_id'],
                                 'variant_id' => (int) $choice['variant_id'],
                                 'quantity' => (int) $choice['quantity'],
@@ -132,6 +132,7 @@ class CartValidationController extends Controller
             'payment_method' => $request->string('payment_method')->toString() ?: 'cash',
             'source' => 'kioskheld',
             'external_session_id' => $request->session()->getId(),
+            'reserve' => true,
             'items' => $items,
         ];
 
@@ -141,7 +142,7 @@ class CartValidationController extends Controller
             ]);
 
             $response = Http::timeout(8)
-                ->when(app()->environment('local'), fn ($http) => $http->withoutVerifying())
+                ->when(app()->environment('local'), fn($http) => $http->withoutVerifying())
                 ->withHeaders([
                     'X-Kioskheld-Api-Key' => $apiKey,
                     'Accept' => 'application/json',
@@ -154,19 +155,23 @@ class CartValidationController extends Controller
                 ? ($responseJson['data'] ?? $responseJson)
                 : null;
 
-Log::debug('Kioskheld cart validation response shape', [
-    'response_json_keys' => is_array($responseJson) ? array_keys($responseJson) : null,
-    'data_keys' => is_array($data) ? array_keys($data) : null,
-    'response_payment_capabilities' => is_array($responseJson)
-        ? ($responseJson['payment_capabilities'] ?? null)
-        : null,
-    'data_payment_capabilities' => is_array($data)
-        ? ($data['payment_capabilities'] ?? null)
-        : null,
-    'data_cart_payment_capabilities' => is_array($data)
-        ? data_get($data, 'cart.payment_capabilities')
-        : null,
-]);
+            Log::debug('Kioskheld cart validation response shape', [
+                'response_json_keys' => is_array($responseJson) ? array_keys($responseJson) : null,
+                'data_keys' => is_array($data) ? array_keys($data) : null,
+                'response_payment_capabilities' => is_array($responseJson)
+                    ? ($responseJson['payment_capabilities'] ?? null)
+                    : null,
+                'data_payment_capabilities' => is_array($data)
+                    ? ($data['payment_capabilities'] ?? null)
+                    : null,
+                'data_cart_payment_capabilities' => is_array($data)
+                    ? data_get($data, 'cart.payment_capabilities')
+                    : null,
+
+                'reservation' => is_array($data)
+                    ? ($data['reservation'] ?? null)
+                    : null,
+            ]);
 
 
             if (! $response->successful()) {
@@ -192,30 +197,65 @@ Log::debug('Kioskheld cart validation response shape', [
 
             $isValid = ($data['valid'] ?? false) === true;
 
-if (! $isValid) {
-    $request->session()->forget('kioskheld.cart');
+            if (! $isValid) {
+                $request->session()->forget('kioskheld.cart');
 
-    $missingMinimum = (float) ($data['totals']['missing_minimum_order_value'] ?? 0);
-    $minimumOrderValue = (float) ($data['totals']['minimum_order_value'] ?? 0);
+                $missingMinimum = (float) data_get($data, 'totals.missing_minimum_order_value', 0);
+                $minimumOrderValue = (float) data_get($data, 'totals.minimum_order_value', 0);
 
-    $message = $responseJson['message']
-        ?? 'Der Warenkorb wurde geprüft, ist aber noch nicht gültig.';
+                $firstError = collect(data_get($data, 'errors', []))
+                    ->first();
 
-    if ($missingMinimum > 0) {
-        $message = 'Noch ' . number_format($missingMinimum, 2, ',', '.') . ' € bis zum Mindestbestellwert.';
+                $errorCode = is_array($firstError)
+                    ? ($firstError['code'] ?? null)
+                    : (is_string($firstError) ? $firstError : null);
 
-        if ($minimumOrderValue > 0) {
-            $message .= ' Mindestbestellwert: ' . number_format($minimumOrderValue, 2, ',', '.') . ' €.';
-        }
-    }
+                $errorMessage = is_array($firstError)
+                    ? ($firstError['message'] ?? ($firstError['detail'] ?? null))
+                    : null;
 
-    return response()->json([
-        'ok' => true,
-        'message' => $message,
-        'data' => $data,
-        'checkout_url' => null,
-    ]);
-}
+                $messages = [
+                    'SHOP_NOT_AVAILABLE' => 'Dieser Kiosk ist aktuell nicht verfügbar.',
+                    'ADDRESS_NOT_DELIVERABLE' => 'Dieser Kiosk liefert aktuell nicht an deine Adresse.',
+                    'VARIANT_NOT_AVAILABLE' => 'Ein Artikel ist aktuell nicht mehr verfügbar.',
+                    'PRICE_NOT_AVAILABLE' => 'Für einen Artikel konnte kein aktueller Preis ermittelt werden.',
+                    'PRODUCT_OUT_OF_STOCK' => 'Ein Artikel ist aktuell nicht ausreichend verfügbar.',
+                    'EMPTY_CART' => 'Dein Warenkorb ist leer.',
+                    'MINIMUM_ORDER_NOT_REACHED' => 'Der Mindestbestellwert ist noch nicht erreicht.',
+                    'PAYMENT_METHOD_NOT_ALLOWED' => 'Diese Zahlungsart ist für diesen Shop aktuell nicht erlaubt.',
+                    'MENU_CHOICE_INVALID' => 'Eine Auswahl im Sparpaket ist nicht mehr gültig.',
+                    'MENU_CHOICE_OUT_OF_STOCK' => 'Eine Auswahl im Sparpaket ist aktuell nicht ausreichend verfügbar.',
+                ];
+
+                $message = $errorMessage
+                    ?? ($errorCode ? ($messages[$errorCode] ?? null) : null)
+                    ?? ($responseJson['message'] ?? null)
+                    ?? data_get($data, 'message')
+                    ?? 'Der Warenkorb wurde geprüft, ist aber noch nicht gültig.';
+
+                if ($missingMinimum > 0) {
+                    $message = 'Noch ' . number_format($missingMinimum, 2, ',', '.') . ' € bis zum Mindestbestellwert.';
+
+                    if ($minimumOrderValue > 0) {
+                        $message .= ' Mindestbestellwert: ' . number_format($minimumOrderValue, 2, ',', '.') . ' €.';
+                    }
+                }
+
+                Log::debug('Kioskheld cart validation invalid response', [
+                    'message' => $message,
+                    'error_code' => $errorCode,
+                    'errors' => data_get($data, 'errors'),
+                    'items' => data_get($data, 'items'),
+                    'totals' => data_get($data, 'totals'),
+                ]);
+
+                return response()->json([
+                    'ok' => true,
+                    'message' => $message,
+                    'data' => $data,
+                    'checkout_url' => null,
+                ]);
+            }
 
             $request->session()->put('kioskheld.cart', [
                 'shop_id' => (int) $shopId,

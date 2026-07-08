@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\CartValidationController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CheckoutCustomerController;
+use App\Http\Controllers\CheckoutOrderController;
+use App\Http\Controllers\OrderThankYouController;
 use App\Http\Controllers\PostcodeAvailabilityController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopSelectionController;
@@ -11,11 +16,26 @@ Route::view('/', 'pages.home')->name('home');
 Route::get('/plz/pruefen', PostcodeAvailabilityController::class)
     ->name('postcode.check');
 
+Route::post('/warenkorb/pruefen', CartValidationController::class)
+    ->name('cart.validate');
+
 Route::get('/shops/auswahl', ShopSelectionController::class)
     ->name('shops.selection');
 
 Route::get('/shops/{shopSlug}', ShopShowController::class)
     ->name('shops.show');
+
+Route::get('/kasse', CheckoutController::class)
+    ->name('checkout.show');
+
+Route::post('/kasse/kundendaten', CheckoutCustomerController::class)
+    ->name('checkout.customer.store');
+
+Route::post('/kasse/bestellen', CheckoutOrderController::class)
+    ->name('checkout.order.store');
+
+Route::get('/bestellung/danke', OrderThankYouController::class)
+    ->name('checkout.thank-you');
 
 Route::view('/ueber-uns', 'pages.about')->name('about');
 Route::view('/impressum', 'pages.legal.imprint')->name('legal.imprint');

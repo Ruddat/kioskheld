@@ -84,9 +84,19 @@ class ShopShowController extends Controller
             }
 
             $shop = $shopResponse->json('data');
-            $catalog = $catalogResponse->json('data') ?? [];
+            $catalogPayload = $catalogResponse->json();
 
-            if (! is_array($shop) || ! is_array($catalog)) {
+            $catalog = $catalogPayload['data'] ?? [];
+            $menus = $catalogPayload['menus'] ?? [];
+            $sections = $catalogPayload['sections'] ?? [];
+
+            if (
+                ! is_array($shop)
+                || ! is_array($catalogPayload)
+                || ! is_array($catalog)
+                || ! is_array($menus)
+                || ! is_array($sections)
+            ) {
                 Log::warning('Kioskheld shop page returned invalid payload', [
                     'slug' => $shopSlug,
                     'shop_payload' => $shopResponse->body(),
@@ -103,10 +113,17 @@ class ShopShowController extends Controller
                 ->map(fn ($products) => $products->values())
                 ->toArray();
 
+            $productsByCategoryId = collect($catalog)
+                ->groupBy(fn ($product) => $product['category']['id'] ?? 'unknown')
+                ->toArray();
+
             return view('shops.show', [
                 'shop' => $shop,
                 'catalog' => $catalog,
+                'menus' => $menus,
+                'sections' => $sections,
                 'groupedCatalog' => $groupedCatalog,
+                'productsByCategoryId' => $productsByCategoryId,
                 'postcode' => $postcode,
                 'deliveryRule' => session('kioskheld.delivery_rule'),
             ]);

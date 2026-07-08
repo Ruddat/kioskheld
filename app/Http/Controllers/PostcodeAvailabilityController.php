@@ -114,6 +114,15 @@ class PostcodeAvailabilityController extends Controller
                 data: $data,
             );
 
+Log::info('Kioskheld availability stored in session', [
+                'postcode' => $postcode,
+                'city' => $city,
+                'district' => $district,
+                'mode' => $data['mode'] ?? null,
+                'available' => $data['available'] ?? null,
+                'shops_count' => count($data['shops'] ?? []),
+            ]);
+
             return response()->json([
                 'ok' => true,
                 'data' => $data,

@@ -8,6 +8,9 @@
 @section('content')
     @php
         $rule = $deliveryRule ?? [];
+        $menus = $menus ?? [];
+        $sections = $sections ?? [];
+        $productsByCategoryId = $productsByCategoryId ?? [];
 
         $estimatedMinutes = $rule['estimated_delivery_minutes'] ?? null;
         $minimumOrderValue = $rule['min_order_value'] ?? null;
@@ -109,8 +112,15 @@
                     <span>⌕</span>
                 </div>
 
-                @if (!empty($groupedCatalog))
+                @if (!empty($groupedCatalog) || !empty($menus))
                     <div class="shop-category-icons">
+                        @if (!empty($menus))
+                            <a href="#menus">
+                                <span class="category-icon">📦</span>
+                                <strong>Sparpakete</strong>
+                            </a>
+                        @endif
+
                         @foreach ($groupedCatalog as $categoryName => $products)
                             <a href="#category-{{ Str::slug($categoryName) }}">
                                 <span class="category-icon">
@@ -136,12 +146,79 @@
                     </div>
                 @endif
 
-                @if (empty($catalog))
+                @if (empty($catalog) && empty($menus))
                     <div class="shop-empty-state">
                         Für diesen Shop sind aktuell noch keine Produkte verfügbar.
                     </div>
                 @else
                     <div class="shop-category-stack">
+
+                        @if (!empty($menus))
+                            <section class="shop-product-section" id="menus">
+                                <div class="shop-section-head">
+                                    <h2>Sparpakete & Menüs</h2>
+                                    <a href="#menus">Alle anzeigen</a>
+                                </div>
+
+                                <div class="shop-product-row">
+                                    @foreach ($menus as $menu)
+                                        @php
+                                            $menuPrice =
+                                                $menu['payable_price'] ??
+                                                ($menu['effective_price'] ?? ($menu['menu_price'] ?? null));
+
+                                            $imageUrl = $menu['image_url'] ?? null;
+                                            $requiresChoices = ($menu['requires_choices'] ?? false) === true;
+                                            $isActive = ($menu['active'] ?? false) === true;
+                                        @endphp
+
+                                        <article
+                                            class="shop-product-card shop-menu-card {{ !$isActive ? 'is-disabled' : '' }}">
+                                            <div class="shop-product-image">
+                                                @if ($imageUrl)
+                                                    <img src="{{ $imageUrl }}" alt="{{ $menu['name'] ?? 'Menübild' }}"
+                                                        loading="lazy">
+                                                @else
+                                                    <span>{{ mb_substr($menu['name'] ?? 'M', 0, 1) }}</span>
+                                                @endif
+                                            </div>
+
+                                            <div class="shop-product-body">
+                                                <h3>{{ $menu['name'] ?? 'Menü' }}</h3>
+
+                                                @if (!empty($menu['description']))
+                                                    <p class="shop-menu-description">
+                                                        {{ $menu['description'] }}
+                                                    </p>
+                                                @endif
+
+                                                <div class="shop-product-bottom">
+                                                    <strong>
+                                                        @if ($menuPrice !== null)
+                                                            {{ number_format((float) $menuPrice, 2, ',', '.') }} €
+                                                        @else
+                                                            Preis folgt
+                                                        @endif
+                                                    </strong>
+
+                                                    <button type="button" class="shop-product-plus add-menu-to-cart"
+                                                        @disabled(!$isActive) data-menu-id="{{ $menu['id'] ?? '' }}"
+                                                        data-menu-name="{{ $menu['name'] ?? '' }}"
+                                                        data-price="{{ $menuPrice ?? '' }}"
+                                                        data-image-url="{{ $imageUrl ?? '' }}"
+                                                        data-requires-choices="{{ $requiresChoices ? '1' : '0' }}">
+                                                        +
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </article>
+                                    @endforeach
+                                </div>
+                            </section>
+                        @endif
+
+
+
                         @foreach ($groupedCatalog as $categoryName => $products)
                             <section class="shop-product-section" id="category-{{ Str::slug($categoryName) }}">
                                 <div class="shop-section-head">
@@ -159,8 +236,13 @@
                                             $imageUrl = $product['image_url'] ?? null;
                                             $hasPlaceholderImage =
                                                 $imageUrl && str_contains($imageUrl, 'no-image-placeholder');
-                                            $isAvailable = $product['is_available'] ?? false;
                                             $variantId = $variant['id'] ?? null;
+
+                                            $productAvailable = ($product['is_available'] ?? false) === true;
+                                            $variantAvailable = ($variant['is_available'] ?? true) === true;
+
+                                            $isAvailable = $productAvailable && $variantAvailable;
+                                            $availableQuantity = $variant['available_quantity'] ?? null;
                                         @endphp
 
                                         <article class="shop-product-card {{ !$isAvailable ? 'is-disabled' : '' }}">
@@ -190,7 +272,9 @@
                                                         data-product-id="{{ $product['id'] ?? '' }}"
                                                         data-product-name="{{ $product['name'] ?? '' }}"
                                                         data-price="{{ $price ?? '' }}"
-                                                        data-image-url="{{ $imageUrl ?? '' }}">
+                                                        data-image-url="{{ $imageUrl ?? '' }}"
+                                                        data-is-available="{{ $isAvailable ? '1' : '0' }}"
+                                                        data-available-quantity="{{ $availableQuantity ?? '' }}">
                                                         +
                                                     </button>
                                                 </div>
@@ -239,12 +323,41 @@
                 </div>
 
                 <div class="cart-summary">
-                    <div>
+                    <div class="cart-subtotal-row">
                         <span>Zwischensumme</span>
                         <strong id="cartSubtotal">0,00 €</strong>
                     </div>
 
-                    <p>
+                    <div class="cart-validation-message" id="cartValidationMessage" hidden></div>
+
+                    <div class="cart-validated-totals" id="cartValidatedTotals" hidden>
+                        <div>
+                            <span>Artikel</span>
+                            <strong id="cartValidatedItemsTotal">0,00 €</strong>
+                        </div>
+
+                        <div>
+                            <span>Liefergebühr</span>
+                            <strong id="cartValidatedDeliveryFee">0,00 €</strong>
+                        </div>
+
+                        <div class="cart-total-row">
+                            <span>Gesamt</span>
+                            <strong id="cartValidatedGrandTotal">0,00 €</strong>
+                        </div>
+
+                        <div class="cart-minimum-row" id="cartMinimumRow" hidden>
+                            <span>Mindestbestellwert</span>
+                            <strong id="cartValidatedMinimum">0,00 €</strong>
+                        </div>
+
+                        <div class="cart-missing-row" id="cartMissingRow" hidden>
+                            <span>Es fehlen noch</span>
+                            <strong id="cartValidatedMissing">0,00 €</strong>
+                        </div>
+                    </div>
+
+                    <p id="cartSummaryHint">
                         Preise, Lieferbarkeit und Mindestbestellwert werden vor dem Checkout noch einmal serverseitig
                         geprüft.
                     </p>
@@ -257,6 +370,41 @@
         </aside>
 
         <div class="cart-backdrop" id="cartBackdrop"></div>
+
+        <aside class="menu-choice-drawer" id="menuChoiceDrawer" aria-hidden="true">
+            <div class="menu-choice-panel">
+                <div class="menu-choice-head">
+                    <div>
+                        <p class="eyebrow">Sparpaket konfigurieren</p>
+                        <h2 id="menuChoiceTitle">Menü</h2>
+                    </div>
+
+                    <button type="button" class="menu-choice-close" id="menuChoiceCloseButton">
+                        ×
+                    </button>
+                </div>
+
+                <div class="menu-choice-body">
+                    <div class="menu-choice-intro">
+                        <p id="menuChoiceDescription"></p>
+                        <strong id="menuChoicePrice">0,00 €</strong>
+                    </div>
+
+                    <div class="menu-choice-groups" id="menuChoiceGroups"></div>
+
+                    <div class="menu-choice-message" id="menuChoiceMessage" hidden></div>
+                </div>
+
+                <div class="menu-choice-footer">
+                    <button type="button" class="menu-choice-add-button" id="menuChoiceAddButton">
+                        In den Warenkorb
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <div class="menu-choice-backdrop" id="menuChoiceBackdrop"></div>
+
 
         <x-marketing.footer />
     </main>
@@ -280,12 +428,44 @@
             const cartFloatingText = document.querySelector('#cartFloatingText');
             const cartCheckoutButton = document.querySelector('#cartCheckoutButton');
 
+            const cartValidationMessage = document.querySelector('#cartValidationMessage');
+            const cartValidatedTotals = document.querySelector('#cartValidatedTotals');
+            const cartValidatedItemsTotal = document.querySelector('#cartValidatedItemsTotal');
+            const cartValidatedDeliveryFee = document.querySelector('#cartValidatedDeliveryFee');
+            const cartValidatedGrandTotal = document.querySelector('#cartValidatedGrandTotal');
+            const cartValidatedMinimum = document.querySelector('#cartValidatedMinimum');
+            const cartValidatedMissing = document.querySelector('#cartValidatedMissing');
+            const cartMinimumRow = document.querySelector('#cartMinimumRow');
+            const cartMissingRow = document.querySelector('#cartMissingRow');
+            const cartSummaryHint = document.querySelector('#cartSummaryHint');
+
+            const menuChoiceDrawer = document.querySelector('#menuChoiceDrawer');
+            const menuChoiceBackdrop = document.querySelector('#menuChoiceBackdrop');
+            const menuChoiceCloseButton = document.querySelector('#menuChoiceCloseButton');
+            const menuChoiceTitle = document.querySelector('#menuChoiceTitle');
+            const menuChoiceDescription = document.querySelector('#menuChoiceDescription');
+            const menuChoicePrice = document.querySelector('#menuChoicePrice');
+            const menuChoiceGroups = document.querySelector('#menuChoiceGroups');
+            const menuChoiceMessage = document.querySelector('#menuChoiceMessage');
+            const menuChoiceAddButton = document.querySelector('#menuChoiceAddButton');
+
             const formatter = new Intl.NumberFormat('de-DE', {
                 style: 'currency',
                 currency: 'EUR',
             });
 
             const cart = new Map();
+
+            const catalogProducts = @json($catalog);
+            const catalogMenus = @json($menus);
+            const productsByCategoryId = @json($productsByCategoryId);
+
+            let activeMenu = null;
+            let activeMenuSelections = new Map();
+            let lastValidation = null;
+            let isValidating = false;
+
+
 
             const openCart = () => {
                 cartDrawer.classList.add('is-open');
@@ -309,6 +489,528 @@
                 }, 0);
             };
 
+            const resetValidationUi = () => {
+                lastValidation = null;
+
+                if (cartValidationMessage) {
+                    cartValidationMessage.hidden = true;
+                    cartValidationMessage.className = 'cart-validation-message';
+                    cartValidationMessage.textContent = '';
+                }
+
+                if (cartValidatedTotals) {
+                    cartValidatedTotals.hidden = true;
+                }
+
+                if (cartSummaryHint) {
+                    cartSummaryHint.textContent =
+                        'Preise, Lieferbarkeit und Mindestbestellwert werden vor dem Checkout noch einmal serverseitig geprüft.';
+                }
+
+                document.querySelectorAll('.cart-item.has-validation-error').forEach((item) => {
+                    item.classList.remove('has-validation-error');
+                });
+            };
+
+            const setValidationMessage = (type, message) => {
+                if (!cartValidationMessage) {
+                    return;
+                }
+
+                cartValidationMessage.hidden = false;
+                cartValidationMessage.className = `cart-validation-message is-${type}`;
+                cartValidationMessage.textContent = message;
+            };
+
+            const getMenuPrice = (menu) => {
+                return Number(menu?.payable_price ?? menu?.effective_price ?? menu?.menu_price ?? 0);
+            };
+
+            const getMenuById = (menuId) => {
+                return catalogMenus.find((menu) => Number(menu.id) === Number(menuId));
+            };
+
+            const getChoiceGroupProducts = (group) => {
+                if (Array.isArray(group.options) && group.options.length > 0) {
+                    return group.options.map((option) => ({
+                        product: {
+                            id: option.product_id,
+                            name: option.product_name || option.name || 'Produkt',
+                            image_url: option.image_url || '',
+                            is_available: option.is_available !== false,
+                        },
+                        variant: {
+                            id: option.id,
+                            name: option.name || option.product_name || 'Auswahl',
+                            price: Number(option.price ?? 0),
+                            regular_price: Number(option.regular_price ?? option.price ?? 0),
+                            is_available: option.is_available !== false,
+                            available_quantity: option.available_quantity ?? null,
+                        },
+                        option,
+                    }));
+                }
+
+                const products = productsByCategoryId[group.category_id] || [];
+                const allowedTitles = group.allowed_variant_titles || [];
+
+                return products
+                    .map((product) => {
+                        const variants = product.variants || [];
+
+                        const matchingVariants = variants.filter((variant) => {
+                            if (allowedTitles.length === 0) {
+                                return true;
+                            }
+
+                            return allowedTitles.includes(variant.name);
+                        });
+
+                        return matchingVariants.map((variant) => ({
+                            product,
+                            variant,
+                            option: null,
+                        }));
+                    })
+                    .flat()
+                    .filter((entry) => entry.product?.is_available !== false && entry.variant?.is_available !==
+                        false);
+            };
+
+            const getGroupSelectionQuantity = (groupId) => {
+                const groupSelection = activeMenuSelections.get(String(groupId));
+
+                if (!groupSelection) {
+                    return 0;
+                }
+
+                return [...groupSelection.values()].reduce((sum, item) => sum + item.quantity, 0);
+            };
+
+            const getVariantSelectionQuantity = (groupId, variantId) => {
+                const groupSelection = activeMenuSelections.get(String(groupId));
+
+                if (!groupSelection) {
+                    return 0;
+                }
+
+                return groupSelection.get(String(variantId))?.quantity || 0;
+            };
+
+            const getChoiceOption = (groupId, variantId) => {
+                if (!activeMenu) {
+                    return null;
+                }
+
+                const group = (activeMenu.choice_groups || [])
+                    .find((choiceGroup) => String(choiceGroup.id) === String(groupId));
+
+                if (!group) {
+                    return null;
+                }
+
+                return getChoiceGroupProducts(group)
+                    .find(({
+                        variant
+                    }) => String(variant.id) === String(variantId)) || null;
+            };
+
+
+
+            const setMenuChoiceMessage = (message) => {
+                if (!menuChoiceMessage) {
+                    return;
+                }
+
+                if (!message) {
+                    menuChoiceMessage.hidden = true;
+                    menuChoiceMessage.textContent = '';
+                    return;
+                }
+
+                menuChoiceMessage.hidden = false;
+                menuChoiceMessage.textContent = message;
+            };
+
+            const openMenuChoiceDrawer = () => {
+                menuChoiceDrawer.classList.add('is-open');
+                menuChoiceDrawer.setAttribute('aria-hidden', 'false');
+                menuChoiceBackdrop.classList.add('is-visible');
+            };
+
+            const closeMenuChoiceDrawer = () => {
+                menuChoiceDrawer.classList.remove('is-open');
+                menuChoiceDrawer.setAttribute('aria-hidden', 'true');
+                menuChoiceBackdrop.classList.remove('is-visible');
+                activeMenu = null;
+                activeMenuSelections = new Map();
+                setMenuChoiceMessage('');
+            };
+
+            const buildMenuChoiceSummary = (choices) => {
+                if (!choices.length) {
+                    return '';
+                }
+
+                return choices
+                    .map((choice) => `${choice.quantity}× ${choice.product_name}`)
+                    .join(', ');
+            };
+
+            const buildMenuCartKey = (menuId, choices) => {
+                const normalizedChoices = choices
+                    .map((choice) => ({
+                        choice_group_id: Number(choice.choice_group_id),
+                        variant_id: Number(choice.variant_id),
+                        quantity: Number(choice.quantity),
+                    }))
+                    .sort((a, b) => {
+                        if (a.choice_group_id !== b.choice_group_id) {
+                            return a.choice_group_id - b.choice_group_id;
+                        }
+
+                        return a.variant_id - b.variant_id;
+                    });
+
+                return `menu:${menuId}:${JSON.stringify(normalizedChoices)}`;
+            };
+
+            const renderMenuChoiceDrawer = () => {
+                if (!activeMenu) {
+                    return;
+                }
+
+                const price = getMenuPrice(activeMenu);
+
+                menuChoiceTitle.textContent = activeMenu.name || 'Menü';
+                menuChoiceDescription.textContent = activeMenu.description || '';
+                menuChoicePrice.textContent = formatter.format(price);
+
+                const groups = activeMenu.choice_groups || [];
+
+                menuChoiceGroups.innerHTML = groups.map((group) => {
+                    const groupId = String(group.id);
+                    const options = getChoiceGroupProducts(group);
+                    const selectedQuantity = getGroupSelectionQuantity(groupId);
+                    const minQuantity = Number(group.min_quantity || 0);
+                    const maxQuantity = Number(group.max_quantity || 0);
+
+                    const optionsHtml = options.map(({
+                        product,
+                        variant
+                    }) => {
+                        const variantId = String(variant.id);
+                        const quantity = getVariantSelectionQuantity(groupId, variantId);
+                        const imageUrl = product.image_url || '';
+                        const hasPlaceholder = imageUrl.includes('no-image-placeholder');
+
+                        const isAvailable = variant.is_available !== false && product
+                            .is_available !== false;
+                        const availableQuantity = variant.available_quantity;
+                        const hasFrontendLimit = availableQuantity !== null &&
+                            availableQuantity !== undefined && Number(availableQuantity) > 0;
+
+                        const image = imageUrl && !hasPlaceholder ?
+                            `<img src="${imageUrl}" alt="">` :
+                            `<span>${(product.name || 'P').charAt(0)}</span>`;
+
+                        const priceInfo = Number(variant.price || 0) > 0 ?
+                            `+ ${formatter.format(Number(variant.price || 0))}` :
+                            'im Paket enthalten';
+
+                        const availabilityInfo = !isAvailable ?
+                            'Aktuell nicht verfügbar' :
+                            hasFrontendLimit ?
+                            `Noch ${Number(availableQuantity)} verfügbar` :
+                            '';
+
+                        return `
+        <div class="menu-choice-option ${!isAvailable ? 'is-disabled' : ''}" data-choice-group-id="${groupId}" data-variant-id="${variantId}">
+            <div class="menu-choice-option-image">
+                ${image}
+            </div>
+
+            <div class="menu-choice-option-main">
+                <h3>${product.name || variant.name || 'Produkt'}</h3>
+                <p>${variant.name || ''} · ${priceInfo}</p>
+                ${availabilityInfo ? `<small>${availabilityInfo}</small>` : ''}
+            </div>
+
+            <div class="menu-choice-option-controls">
+                <button type="button" data-menu-choice-action="decrease" data-choice-group-id="${groupId}" data-variant-id="${variantId}" ${quantity <= 0 ? 'disabled' : ''}>−</button>
+                <span>${quantity}</span>
+                <button type="button" data-menu-choice-action="increase" data-choice-group-id="${groupId}" data-variant-id="${variantId}" ${!isAvailable ? 'disabled' : ''}>+</button>
+            </div>
+        </div>
+    `;
+                    }).join('');
+
+                    return `
+            <section class="menu-choice-group">
+                <div class="menu-choice-group-head">
+                    <div>
+                        <h3>${group.label || 'Auswahl'}</h3>
+                        <p>${selectedQuantity} von ${maxQuantity || minQuantity} gewählt</p>
+                    </div>
+
+                    <strong>${minQuantity}${maxQuantity !== minQuantity ? `–${maxQuantity}` : ''}×</strong>
+                </div>
+
+                <div class="menu-choice-options">
+                    ${optionsHtml || `<div class="menu-choice-empty">Für diese Auswahl sind aktuell keine passenden Produkte verfügbar.</div>`}
+                </div>
+            </section>
+        `;
+                }).join('');
+
+                setMenuChoiceMessage('');
+            };
+
+
+
+            const updateMenuChoiceQuantity = (groupId, variantId, direction) => {
+                if (!activeMenu) {
+                    return;
+                }
+
+                const group = (activeMenu.choice_groups || [])
+                    .find((choiceGroup) => String(choiceGroup.id) === String(groupId));
+
+                if (!group) {
+                    return;
+                }
+
+                const maxQuantity = Number(group.max_quantity || 0);
+                const maxPerVariant = Number(group.max_per_variant || maxQuantity || 99);
+
+                const currentGroupQuantity = getGroupSelectionQuantity(groupId);
+                const currentVariantQuantity = getVariantSelectionQuantity(groupId, variantId);
+
+                const selectedOption = getChoiceOption(groupId, variantId);
+                const isAvailable = selectedOption?.variant?.is_available !== false && selectedOption?.product
+                    ?.is_available !== false;
+                const availableQuantity = selectedOption?.variant?.available_quantity ?? null;
+                const hasFrontendLimit = availableQuantity !== null && availableQuantity !== undefined &&
+                    Number(availableQuantity) > 0;
+
+                if (!isAvailable) {
+                    setMenuChoiceMessage('Diese Auswahl ist aktuell nicht verfügbar.');
+                    return;
+                }
+
+                if (direction === 'increase') {
+                    if (maxQuantity > 0 && currentGroupQuantity >= maxQuantity) {
+                        setMenuChoiceMessage(`Für "${group.label}" sind maximal ${maxQuantity} Stück möglich.`);
+                        return;
+                    }
+
+                    if (currentVariantQuantity >= maxPerVariant) {
+                        setMenuChoiceMessage(`Von diesem Artikel sind maximal ${maxPerVariant} Stück möglich.`);
+                        return;
+                    }
+
+                    if (hasFrontendLimit && currentVariantQuantity >= Number(availableQuantity)) {
+                        setMenuChoiceMessage(
+                            `Von dieser Auswahl sind aktuell nur ${Number(availableQuantity)} verfügbar.`);
+                        return;
+                    }
+                }
+
+                let groupSelection = activeMenuSelections.get(String(groupId));
+
+                if (!groupSelection) {
+                    groupSelection = new Map();
+                    activeMenuSelections.set(String(groupId), groupSelection);
+                }
+
+                const current = groupSelection.get(String(variantId)) || {
+                    variantId: Number(variantId),
+                    quantity: 0,
+                };
+
+                if (direction === 'increase') {
+                    current.quantity += 1;
+                    groupSelection.set(String(variantId), current);
+                }
+
+                if (direction === 'decrease') {
+                    current.quantity -= 1;
+
+                    if (current.quantity <= 0) {
+                        groupSelection.delete(String(variantId));
+                    } else {
+                        groupSelection.set(String(variantId), current);
+                    }
+                }
+
+                setMenuChoiceMessage('');
+                renderMenuChoiceDrawer();
+            };
+
+
+            const getSelectedMenuChoices = () => {
+                if (!activeMenu) {
+                    return [];
+                }
+
+                const choices = [];
+
+                (activeMenu.choice_groups || []).forEach((group) => {
+                    const groupSelection = activeMenuSelections.get(String(group.id));
+
+                    if (!groupSelection) {
+                        return;
+                    }
+
+                    groupSelection.forEach((selection) => {
+                        const options = getChoiceGroupProducts(group);
+                        const selectedOption = options.find(({
+                            variant
+                        }) => Number(variant.id) === Number(selection.variantId));
+
+                        choices.push({
+                            choice_group_id: Number(group.id),
+                            variant_id: Number(selection.variantId),
+                            quantity: Number(selection.quantity),
+                            product_name: selectedOption?.product?.name || 'Produkt',
+                            variant_name: selectedOption?.variant?.name || '',
+                        });
+                    });
+                });
+
+                return choices;
+            };
+
+            const validateActiveMenuChoices = () => {
+                if (!activeMenu) {
+                    return 'Kein Menü ausgewählt.';
+                }
+
+                const groups = activeMenu.choice_groups || [];
+
+                for (const group of groups) {
+                    const selectedQuantity = getGroupSelectionQuantity(String(group.id));
+                    const minQuantity = Number(group.min_quantity || 0);
+                    const maxQuantity = Number(group.max_quantity || 0);
+
+                    if (group.required && selectedQuantity < minQuantity) {
+                        return `Bitte wähle bei "${group.label}" mindestens ${minQuantity} Stück.`;
+                    }
+
+                    if (maxQuantity > 0 && selectedQuantity > maxQuantity) {
+                        return `Bei "${group.label}" sind maximal ${maxQuantity} Stück möglich.`;
+                    }
+                }
+
+                return null;
+            };
+
+            const addActiveMenuToCart = () => {
+                const validationMessage = validateActiveMenuChoices();
+
+                if (validationMessage) {
+                    setMenuChoiceMessage(validationMessage);
+                    return;
+                }
+
+                const choices = getSelectedMenuChoices();
+                const menuId = Number(activeMenu.id);
+                const cartKey = buildMenuCartKey(menuId, choices);
+                const existing = cart.get(cartKey);
+                const price = getMenuPrice(activeMenu);
+
+                resetValidationUi();
+
+                if (existing) {
+                    existing.quantity += 1;
+                    cart.set(cartKey, existing);
+                } else {
+                    cart.set(cartKey, {
+                        cartKey,
+                        type: 'menu',
+                        menuId,
+                        name: activeMenu.name || 'Menü',
+                        price,
+                        imageUrl: activeMenu.image_url || '',
+                        quantity: 1,
+                        choices,
+                        choiceSummary: buildMenuChoiceSummary(choices),
+                    });
+                }
+
+                renderCart();
+                closeMenuChoiceDrawer();
+                openCart();
+            };
+
+            const getErrorMessage = (code, fallback = null) => {
+                const messages = {
+                    SHOP_NOT_AVAILABLE: 'Dieser Kiosk ist aktuell nicht verfügbar.',
+                    ADDRESS_NOT_DELIVERABLE: 'Dieser Kiosk liefert aktuell nicht an deine Adresse.',
+                    VARIANT_NOT_AVAILABLE: 'Ein Artikel ist aktuell nicht mehr verfügbar.',
+                    PRICE_NOT_AVAILABLE: 'Für einen Artikel konnte kein aktueller Preis ermittelt werden.',
+                    PRODUCT_OUT_OF_STOCK: 'Ein Artikel ist aktuell nicht ausreichend verfügbar.',
+                    EMPTY_CART: 'Dein Warenkorb ist leer.',
+                    MINIMUM_ORDER_NOT_REACHED: 'Der Mindestbestellwert ist noch nicht erreicht.',
+                    PAYMENT_METHOD_NOT_ALLOWED: 'Diese Zahlungsart ist für diesen Shop aktuell nicht erlaubt.',
+                };
+
+                return messages[code] || fallback || 'Der Warenkorb konnte nicht validiert werden.';
+            };
+
+            const markInvalidItems = (data) => {
+                const invalidItems = data?.invalid_items || data?.items?.filter((item) => item.valid ===
+                    false) || [];
+
+                invalidItems.forEach((item) => {
+                    const variantId = item.variant_id || item.variantId;
+
+                    if (!variantId) {
+                        return;
+                    }
+
+                    const element = cartItems.querySelector(
+                        `.cart-item[data-variant-id="${variantId}"]`);
+
+                    if (element) {
+                        element.classList.add('has-validation-error');
+                    }
+                });
+            };
+
+            const renderValidatedTotals = (totals = {}) => {
+                if (!cartValidatedTotals) {
+                    return;
+                }
+
+                const itemsTotal = Number(totals.items_total ?? 0);
+                const deliveryFee = Number(totals.delivery_fee ?? 0);
+                const grandTotal = Number(totals.grand_total ?? 0);
+                const minimumOrderValue = totals.minimum_order_value;
+                const missingMinimumOrderValue = totals.missing_minimum_order_value;
+
+                cartValidatedItemsTotal.textContent = formatter.format(itemsTotal);
+                cartValidatedDeliveryFee.textContent = formatter.format(deliveryFee);
+                cartValidatedGrandTotal.textContent = formatter.format(grandTotal);
+
+                if (minimumOrderValue !== null && minimumOrderValue !== undefined) {
+                    cartMinimumRow.hidden = false;
+                    cartValidatedMinimum.textContent = formatter.format(Number(minimumOrderValue));
+                } else {
+                    cartMinimumRow.hidden = true;
+                }
+
+                if (missingMinimumOrderValue !== null && missingMinimumOrderValue !== undefined && Number(
+                        missingMinimumOrderValue) > 0) {
+                    cartMissingRow.hidden = false;
+                    cartValidatedMissing.textContent = formatter.format(Number(missingMinimumOrderValue));
+                } else {
+                    cartMissingRow.hidden = true;
+                }
+
+                cartValidatedTotals.hidden = false;
+            };
+
             const renderCart = () => {
                 const items = [...cart.values()];
                 const count = getCartCount();
@@ -317,7 +1019,7 @@
                 cartSubtotal.textContent = formatter.format(total);
                 cartFloatingTotal.textContent = formatter.format(total);
                 cartFloatingCount.textContent = count;
-                cartCheckoutButton.disabled = count === 0;
+                cartCheckoutButton.disabled = count === 0 || isValidating;
 
                 if (cartFloatingText) {
                     cartFloatingText.textContent = count === 0 ?
@@ -337,62 +1039,241 @@
                         Dein Warenkorb ist noch leer.
                     </div>
                 `;
+
+                    resetValidationUi();
+
                     return;
                 }
 
                 cartItems.innerHTML = items.map((item) => {
+                    const cartKey = item.cartKey || String(item.variantId);
                     const image = item.imageUrl ?
                         `<img src="${item.imageUrl}" alt="">` :
                         `<span>${item.name.charAt(0)}</span>`;
 
+                    const meta = item.type === 'menu' && item.choiceSummary ?
+                        item.choiceSummary :
+                        `${formatter.format(item.price)} · ${formatter.format(item.price * item.quantity)}`;
+
+                    const badge = item.type === 'menu' ?
+                        `<em class="cart-item-badge">Sparpaket</em>` :
+                        '';
+
                     return `
-                    <div class="cart-item" data-variant-id="${item.variantId}">
-                        <div class="cart-item-image">
-                            ${image}
-                        </div>
+        <div class="cart-item" data-cart-key="${cartKey}" data-variant-id="${item.variantId || ''}" data-menu-id="${item.menuId || ''}">
+            <div class="cart-item-image">
+                ${image}
+            </div>
 
-                        <div class="cart-item-main">
-                            <h3>${item.name}</h3>
-                            <p>${formatter.format(item.price)} · ${formatter.format(item.price * item.quantity)}</p>
+            <div class="cart-item-main">
+                ${badge}
+                <h3>${item.name}</h3>
+                <p>${meta}</p>
 
-                            <div class="cart-item-controls">
-                                <button type="button" data-action="decrease" data-variant-id="${item.variantId}">−</button>
-                                <span>${item.quantity}</span>
-                                <button type="button" data-action="increase" data-variant-id="${item.variantId}">+</button>
-                                <button type="button" class="cart-remove" data-action="remove" data-variant-id="${item.variantId}">×</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                <div class="cart-item-controls">
+                    <button type="button" data-action="decrease" data-cart-key="${cartKey}">−</button>
+                    <span>${item.quantity}</span>
+                    <button type="button" data-action="increase" data-cart-key="${cartKey}">+</button>
+                    <button type="button" class="cart-remove" data-action="remove" data-cart-key="${cartKey}">×</button>
+                </div>
+            </div>
+        </div>
+    `;
                 }).join('');
+
+                if (lastValidation) {
+                    markInvalidItems(lastValidation);
+                }
+            };
+
+
+
+
+
+            const validateCart = async () => {
+                const items = [...cart.values()].map((item) => {
+                    if (item.type === 'menu') {
+                        return {
+                            type: 'menu',
+                            menu_id: Number(item.menuId),
+                            quantity: Number(item.quantity),
+                            choices: (item.choices || []).map((choice) => ({
+                                choice_group_id: Number(choice.choice_group_id),
+                                variant_id: Number(choice.variant_id),
+                                quantity: Number(choice.quantity),
+                            })),
+                        };
+                    }
+
+                    return {
+                        type: 'product',
+                        variant_id: Number(item.variantId),
+                        quantity: Number(item.quantity),
+                    };
+                });
+
+                if (items.length === 0 || isValidating) {
+                    return;
+                }
+
+                isValidating = true;
+                cartCheckoutButton.disabled = true;
+                cartCheckoutButton.textContent = 'Warenkorb wird geprüft...';
+                resetValidationUi();
+
+                try {
+                    const response = await fetch(@json(route('cart.validate')), {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': @json(csrf_token()),
+                        },
+                        body: JSON.stringify({
+                            shop_id: Number(shopPage.dataset.shopId),
+                            payment_method: 'cash',
+                            items,
+                        }),
+                    });
+
+                    const result = await response.json().catch(() => ({
+                        ok: false,
+                        message: 'Die Antwort der Warenkorb-Prüfung konnte nicht gelesen werden.',
+                        data: null,
+                    }));
+
+                    const data = result.data || {};
+                    lastValidation = data;
+
+                    const isValid = data.valid === true || result.valid === true;
+
+                    if (data.totals) {
+                        renderValidatedTotals(data.totals);
+                    }
+
+                    if (isValid && result.ok === true) {
+                        setValidationMessage('success', 'Preise und Lieferkosten wurden geprüft.');
+
+                        if (cartSummaryHint) {
+                            cartSummaryHint.textContent =
+                                'Dein Warenkorb wurde geprüft. Du kannst jetzt zur Kasse gehen.';
+                        }
+
+                        if (result.checkout_url) {
+                            cartCheckoutButton.textContent = 'Zur Kasse';
+                            cartCheckoutButton.disabled = false;
+
+                            cartCheckoutButton.removeEventListener('click', validateCart);
+                            cartCheckoutButton.addEventListener('click', () => {
+                                window.location.href = result.checkout_url;
+                            }, {
+                                once: true
+                            });
+                        }
+
+                        return;
+                    }
+
+                    const code = data.code || data.error_code || result.code || null;
+                    const message = getErrorMessage(code, result.message);
+
+                    setValidationMessage('error', message);
+                    markInvalidItems(data);
+
+                    if (data.totals?.missing_minimum_order_value > 0) {
+                        setValidationMessage(
+                            'warning',
+                            `Der Mindestbestellwert ist noch nicht erreicht. Es fehlen ${formatter.format(Number(data.totals.missing_minimum_order_value))}.`
+                        );
+                    }
+                } catch (error) {
+                    setValidationMessage(
+                        'error',
+                        'Die Warenkorb-Prüfung ist gerade nicht erreichbar. Bitte versuche es erneut.'
+                    );
+                } finally {
+                    isValidating = false;
+                    cartCheckoutButton.disabled = getCartCount() === 0;
+                    cartCheckoutButton.textContent = 'Weiter zur Kasse';
+                }
             };
 
             document.querySelectorAll('.add-to-cart').forEach((button) => {
                 button.addEventListener('click', () => {
                     const variantId = button.dataset.variantId;
+                    const isAvailable = button.dataset.isAvailable !== '0';
+                    const availableQuantityRaw = button.dataset.availableQuantity;
+                    const availableQuantity = availableQuantityRaw === '' ? null : Number(
+                        availableQuantityRaw);
 
                     if (!variantId) {
                         return;
                     }
 
-                    const existing = cart.get(variantId);
+                    if (!isAvailable) {
+                        openCart();
+                        setValidationMessage('error',
+                            'Dieser Artikel ist aktuell nicht verfügbar.');
+                        return;
+                    }
+
+
+                    resetValidationUi();
+
+                    const cartKey = `product:${variantId}`;
+                    const existing = cart.get(cartKey);
+
+                    const currentQuantity = existing?.quantity || 0;
+                    const hasFrontendLimit = availableQuantity !== null && availableQuantity !==
+                        undefined && availableQuantity > 0;
+
+                    if (hasFrontendLimit && currentQuantity >= availableQuantity) {
+                        openCart();
+                        setValidationMessage('warning',
+                            `Von diesem Artikel sind aktuell nur ${availableQuantity} verfügbar.`
+                            );
+                        return;
+                    }
+
 
                     if (existing) {
                         existing.quantity += 1;
-                        cart.set(variantId, existing);
+                        cart.set(cartKey, existing);
                     } else {
-                        cart.set(variantId, {
+                        cart.set(cartKey, {
+                            cartKey,
+                            type: 'product',
                             variantId,
                             productId: button.dataset.productId,
                             name: button.dataset.productName || 'Produkt',
                             price: Number(button.dataset.price || 0),
                             imageUrl: button.dataset.imageUrl || '',
+                            availableQuantity,
                             quantity: 1,
                         });
                     }
 
                     renderCart();
                     openCart();
+                });
+            });
+
+            document.querySelectorAll('.add-menu-to-cart').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const menu = getMenuById(button.dataset.menuId);
+
+                    if (!menu) {
+                        openCart();
+                        setValidationMessage('error',
+                            'Dieses Sparpaket konnte nicht geladen werden.');
+                        return;
+                    }
+
+                    activeMenu = menu;
+                    activeMenuSelections = new Map();
+
+                    renderMenuChoiceDrawer();
+                    openMenuChoiceDrawer();
                 });
             });
 
@@ -403,31 +1284,33 @@
                     return;
                 }
 
-                const variantId = button.dataset.variantId;
+                const cartKey = button.dataset.cartKey;
                 const action = button.dataset.action;
-                const item = cart.get(variantId);
+                const item = cart.get(cartKey);
 
                 if (!item) {
                     return;
                 }
 
+                resetValidationUi();
+
                 if (action === 'increase') {
                     item.quantity += 1;
-                    cart.set(variantId, item);
+                    cart.set(cartKey, item);
                 }
 
                 if (action === 'decrease') {
                     item.quantity -= 1;
 
                     if (item.quantity <= 0) {
-                        cart.delete(variantId);
+                        cart.delete(cartKey);
                     } else {
-                        cart.set(variantId, item);
+                        cart.set(cartKey, item);
                     }
                 }
 
                 if (action === 'remove') {
-                    cart.delete(variantId);
+                    cart.delete(cartKey);
                 }
 
                 renderCart();
@@ -436,21 +1319,24 @@
             cartFloatingButton.addEventListener('click', openCart);
             cartCloseButton.addEventListener('click', closeCart);
             cartBackdrop.addEventListener('click', closeCart);
+            cartCheckoutButton.addEventListener('click', validateCart);
 
-            cartCheckoutButton.addEventListener('click', () => {
-                const payload = {
-                    shop_id: Number(shopPage.dataset.shopId),
-                    postcode: shopPage.dataset.postcode || null,
-                    source: 'kioskheld',
-                    items: [...cart.values()].map((item) => ({
-                        variant_id: Number(item.variantId),
-                        quantity: item.quantity,
-                    })),
-                };
+            menuChoiceCloseButton.addEventListener('click', closeMenuChoiceDrawer);
+            menuChoiceBackdrop.addEventListener('click', closeMenuChoiceDrawer);
+            menuChoiceAddButton.addEventListener('click', addActiveMenuToCart);
 
-                console.log('Cart validate payload:', payload);
+            menuChoiceGroups.addEventListener('click', (event) => {
+                const button = event.target.closest('button[data-menu-choice-action]');
 
-                alert('Nächster Schritt: Warenkorb serverseitig validieren.');
+                if (!button) {
+                    return;
+                }
+
+                updateMenuChoiceQuantity(
+                    button.dataset.choiceGroupId,
+                    button.dataset.variantId,
+                    button.dataset.menuChoiceAction
+                );
             });
 
             renderCart();

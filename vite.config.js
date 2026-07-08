@@ -9,6 +9,7 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/css/marketing.css',
                 'resources/js/marketing-home.js',
+                'resources/js/shop-cart.js',
             ],
             refresh: true,
         }),

@@ -154,6 +154,21 @@ class CartValidationController extends Controller
                 ? ($responseJson['data'] ?? $responseJson)
                 : null;
 
+Log::debug('Kioskheld cart validation response shape', [
+    'response_json_keys' => is_array($responseJson) ? array_keys($responseJson) : null,
+    'data_keys' => is_array($data) ? array_keys($data) : null,
+    'response_payment_capabilities' => is_array($responseJson)
+        ? ($responseJson['payment_capabilities'] ?? null)
+        : null,
+    'data_payment_capabilities' => is_array($data)
+        ? ($data['payment_capabilities'] ?? null)
+        : null,
+    'data_cart_payment_capabilities' => is_array($data)
+        ? data_get($data, 'cart.payment_capabilities')
+        : null,
+]);
+
+
             if (! $response->successful()) {
                 Log::warning('Kioskheld cart validation failed', [
                     'status' => $response->status(),

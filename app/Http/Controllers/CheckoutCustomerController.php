@@ -21,12 +21,18 @@ class CheckoutCustomerController extends Controller
 
         $validated = $cart['validated'] ?? [];
 
-        $paymentCapabilities = $validated['payment_capabilities'] ?? [];
+        $paymentCapabilities =
+            $validated['payment_capabilities']
+            ?? data_get($validated, 'cart.payment_capabilities')
+            ?? [];
+
+        if (! is_array($paymentCapabilities)) {
+            $paymentCapabilities = [];
+        }
 
         $allowedPaymentMethods = collect($paymentCapabilities)
             ->filter(
-                fn ($capability) =>
-                    ($capability['available'] ?? false) === true
+                fn($capability) => ($capability['available'] ?? false) === true
                     && ($capability['direct_order_supported'] ?? false) === true
             )
             ->keys()

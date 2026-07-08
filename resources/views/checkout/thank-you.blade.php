@@ -83,6 +83,8 @@
 
         $paymentLabel = match ($paymentMethod) {
             'cash' => 'Barzahlung bei Lieferung',
+            'card' => 'Kartenzahlung bei Lieferung',
+            'paypal' => 'PayPal',
             default => ucfirst((string) $paymentMethod),
         };
 
@@ -153,9 +155,17 @@
 
                 <div class="thank-you-card thank-you-note-card">
                     <h2>Hinweis</h2>
+
                     <p>
                         Bitte halte dein Telefon erreichbar, falls der Kiosk oder Fahrer Rückfragen hat.
-                        Bei Barzahlung bezahlst du direkt bei Lieferung.
+
+                        @if ($paymentMethod === 'cash')
+                            Bei Barzahlung bezahlst du direkt bei Lieferung.
+                        @elseif ($paymentMethod === 'card')
+                            Bei Kartenzahlung bezahlst du bequem bei Lieferung.
+                        @elseif ($paymentMethod === 'paypal')
+                            Deine PayPal-Zahlung wird über den vorgesehenen Zahlungsablauf verarbeitet.
+                        @endif
                     </p>
                 </div>
             </div>

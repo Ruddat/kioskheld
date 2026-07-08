@@ -757,3 +757,80 @@
         text-align: left;
     }
 }
+
+
+.thank-you-page {
+    position: relative;
+}
+
+.thank-you-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+.thank-you-hero::before {
+    content: "";
+    position: absolute;
+    right: 46px;
+    bottom: -54px;
+    width: 150px;
+    height: 150px;
+    border-radius: 999px;
+    background: rgba(21, 18, 14, 0.045);
+}
+
+.thank-you-note-card {
+    background: #15120e;
+    color: #fff7df;
+}
+
+.thank-you-note-card h2 {
+    color: #fff7df;
+}
+
+.thank-you-note-card p {
+    color: rgba(255, 247, 223, 0.72);
+}
+
+.thank-you-summary .checkout-card {
+    overflow: hidden;
+}
+
+.thank-you-summary .checkout-summary-head {
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(21, 18, 14, 0.08);
+}
+
+.thank-you-summary .checkout-summary-head > span {
+    background: #ecfdf3;
+    color: #146c43;
+    border: 1px solid rgba(20, 108, 67, 0.14);
+}
+
+.thank-you-facts {
+    margin-top: 4px;
+}
+
+.thank-you-address {
+    border: 1px solid rgba(255, 200, 0, 0.22);
+}
+
+.thank-you-address strong,
+.thank-you-address p,
+.thank-you-address small {
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+    .thank-you-hero h1 {
+        font-size: clamp(2.05rem, 12vw, 3.2rem);
+    }
+
+    .thank-you-actions {
+        display: grid;
+    }
+
+    .thank-you-secondary-link {
+        width: 100%;
+    }
+}

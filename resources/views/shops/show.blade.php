@@ -464,8 +464,48 @@
             let activeMenuSelections = new Map();
             let lastValidation = null;
             let isValidating = false;
+            let checkoutUrl = null;
+            let validatedCartFingerprint = null;
 
+            const buildCartFingerprint = () => {
+                return JSON.stringify(
+                    [...cart.values()]
+                    .map((item) => {
+                        if (item.type === 'menu') {
+                            return {
+                                type: 'menu',
+                                menu_id: Number(item.menuId),
+                                quantity: Number(item.quantity),
+                                choices: (item.choices || [])
+                                    .map((choice) => ({
+                                        choice_group_id: Number(choice.choice_group_id),
+                                        variant_id: Number(choice.variant_id),
+                                        quantity: Number(choice.quantity),
+                                    }))
+                                    .sort((a, b) => {
+                                        if (a.choice_group_id !== b.choice_group_id) {
+                                            return a.choice_group_id - b.choice_group_id;
+                                        }
 
+                                        return a.variant_id - b.variant_id;
+                                    }),
+                            };
+                        }
+
+                        return {
+                            type: 'product',
+                            variant_id: Number(item.variantId),
+                            quantity: Number(item.quantity),
+                        };
+                    })
+                    .sort((a, b) => {
+                        const left = `${a.type}:${a.variant_id || a.menu_id}`;
+                        const right = `${b.type}:${b.variant_id || b.menu_id}`;
+
+                        return left.localeCompare(right);
+                    })
+                );
+            };
 
             const openCart = () => {
                 cartDrawer.classList.add('is-open');
@@ -491,6 +531,12 @@
 
             const resetValidationUi = () => {
                 lastValidation = null;
+                checkoutUrl = null;
+                validatedCartFingerprint = null;
+
+                if (cartCheckoutButton) {
+                    cartCheckoutButton.textContent = 'Weiter zur Kasse';
+                }
 
                 if (cartValidationMessage) {
                     cartValidationMessage.hidden = true;
@@ -1160,15 +1206,11 @@
                         }
 
                         if (result.checkout_url) {
+                            checkoutUrl = result.checkout_url;
+                            validatedCartFingerprint = buildCartFingerprint();
+
                             cartCheckoutButton.textContent = 'Zur Kasse';
                             cartCheckoutButton.disabled = false;
-
-                            cartCheckoutButton.removeEventListener('click', validateCart);
-                            cartCheckoutButton.addEventListener('click', () => {
-                                window.location.href = result.checkout_url;
-                            }, {
-                                once: true
-                            });
                         }
 
                         return;
@@ -1193,8 +1235,18 @@
                     );
                 } finally {
                     isValidating = false;
-                    cartCheckoutButton.disabled = getCartCount() === 0;
-                    cartCheckoutButton.textContent = 'Weiter zur Kasse';
+
+                    const hasItems = getCartCount() > 0;
+                    const currentFingerprint = buildCartFingerprint();
+                    const isStillValidated = checkoutUrl && validatedCartFingerprint === currentFingerprint;
+
+                    cartCheckoutButton.disabled = !hasItems;
+
+                    if (isStillValidated) {
+                        cartCheckoutButton.textContent = 'Zur Kasse';
+                    } else {
+                        cartCheckoutButton.textContent = 'Weiter zur Kasse';
+                    }
                 }
             };
 
@@ -1231,7 +1283,7 @@
                         openCart();
                         setValidationMessage('warning',
                             `Von diesem Artikel sind aktuell nur ${availableQuantity} verfügbar.`
-                            );
+                        );
                         return;
                     }
 
@@ -1319,7 +1371,16 @@
             cartFloatingButton.addEventListener('click', openCart);
             cartCloseButton.addEventListener('click', closeCart);
             cartBackdrop.addEventListener('click', closeCart);
-            cartCheckoutButton.addEventListener('click', validateCart);
+            cartCheckoutButton.addEventListener('click', async () => {
+                const currentFingerprint = buildCartFingerprint();
+
+                if (checkoutUrl && validatedCartFingerprint === currentFingerprint) {
+                    window.location.href = checkoutUrl;
+                    return;
+                }
+
+                await validateCart();
+            });
 
             menuChoiceCloseButton.addEventListener('click', closeMenuChoiceDrawer);
             menuChoiceBackdrop.addEventListener('click', closeMenuChoiceDrawer);

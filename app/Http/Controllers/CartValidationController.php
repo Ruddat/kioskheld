@@ -197,6 +197,31 @@ class CartValidationController extends Controller
 
             $isValid = ($data['valid'] ?? false) === true;
 
+$reservation = data_get($data, 'reservation');
+
+$reservationRequested = data_get($reservation, 'requested') === true;
+$reservationReserved = data_get($reservation, 'reserved') === true;
+
+if ($isValid && $reservationRequested && ! $reservationReserved) {
+    $request->session()->forget('kioskheld.cart');
+
+    Log::warning('Kioskheld cart reservation failed', [
+        'shop_id' => $shopId,
+        'postcode' => $postcode,
+        'reservation' => $reservation,
+        'items' => $items,
+    ]);
+
+    return response()->json([
+        'ok' => true,
+        'message' => 'Ein oder mehrere Artikel konnten nicht reserviert werden. Bitte prüfe deinen Warenkorb erneut.',
+        'data' => $data,
+        'checkout_url' => null,
+    ]);
+}
+
+
+
             if (! $isValid) {
                 $request->session()->forget('kioskheld.cart');
 
@@ -257,15 +282,28 @@ class CartValidationController extends Controller
                 ]);
             }
 
+            $reservation = data_get($data, 'reservation');
+
             $request->session()->put('kioskheld.cart', [
                 'shop_id' => (int) $shopId,
                 'postcode' => $postcode,
                 'city' => $city,
                 'district' => $district,
+
                 'payment_method' => $payload['payment_method'],
+                'external_session_id' => $payload['external_session_id'],
+
                 'items' => $items,
+
                 'validated' => $data,
                 'validated_at' => now()->toIso8601String(),
+
+                'shop' => data_get($data, 'shop'),
+                'delivery' => data_get($data, 'delivery'),
+                'totals' => data_get($data, 'totals'),
+                'payment_methods' => data_get($data, 'payment_methods', []),
+                'payment_capabilities' => data_get($data, 'payment_capabilities', []),
+                'reservation' => is_array($reservation) ? $reservation : null,
             ]);
 
             return response()->json([

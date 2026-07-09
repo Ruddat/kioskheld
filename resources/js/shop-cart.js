@@ -698,6 +698,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cartItems.innerHTML = items.map((item) => {
             const cartKey = item.cartKey || String(item.variantId);
+            const encodedCartKey = encodeURIComponent(cartKey);
+
             const image = item.imageUrl ?
                 `<img src="${item.imageUrl}" alt="">` :
                 `<span>${item.name.charAt(0)}</span>`;
@@ -711,25 +713,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 '';
 
             return `
-                    <div class="cart-item" data-cart-key="${cartKey}" data-variant-id="${item.variantId || ''}" data-menu-id="${item.menuId || ''}">
-                        <div class="cart-item-image">
-                            ${image}
-                        </div>
+        <div class="cart-item" data-cart-key="${encodedCartKey}" data-variant-id="${item.variantId || ''}" data-menu-id="${item.menuId || ''}">
+            <div class="cart-item-image">
+                ${image}
+            </div>
 
-                        <div class="cart-item-main">
-                            ${badge}
-                            <h3>${item.name}</h3>
-                            <p>${meta}</p>
+            <div class="cart-item-main">
+                ${badge}
+                <h3>${item.name}</h3>
+                <p>${meta}</p>
 
-                            <div class="cart-item-controls">
-                                <button type="button" data-action="decrease" data-cart-key="${cartKey}">−</button>
-                                <span>${item.quantity}</span>
-                                <button type="button" data-action="increase" data-cart-key="${cartKey}">+</button>
-                                <button type="button" class="cart-remove" data-action="remove" data-cart-key="${cartKey}">×</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                <div class="cart-item-controls">
+                    <button type="button" data-action="decrease" data-cart-key="${encodedCartKey}">−</button>
+                    <span>${item.quantity}</span>
+                    <button type="button" data-action="increase" data-cart-key="${encodedCartKey}">+</button>
+                    <button type="button" class="cart-remove" data-action="remove" data-cart-key="${encodedCartKey}">×</button>
+                </div>
+            </div>
+        </div>
+    `;
         }).join('');
 
         if (lastValidation) {
@@ -843,6 +845,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 valid: data.valid,
                 errors: data.errors,
                 totals: data.totals,
+                reservation: data.reservation,
                 items: data.items,
             });
 
@@ -990,7 +993,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const cartKey = button.dataset.cartKey;
+        const cartKey = decodeURIComponent(button.dataset.cartKey || '');
         const action = button.dataset.action;
         const item = cart.get(cartKey);
 
@@ -1018,6 +1021,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (action === 'remove') {
             cart.delete(cartKey);
         }
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        closeCart();
+        closeMenuChoiceDrawer();
+    }
+});
+
 
         renderCart();
     });

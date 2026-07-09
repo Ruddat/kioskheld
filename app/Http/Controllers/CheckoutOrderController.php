@@ -29,8 +29,23 @@ class CheckoutOrderController extends Controller
                 ->with('status', 'Bitte prüfe deinen Warenkorb erneut.');
         }
 
+        $reservation = $cart['reservation'] ?? data_get($validated, 'reservation');
+
+        $reservationRequested = data_get($reservation, 'requested') === true;
+        $reservationReserved = data_get($reservation, 'reserved') === true;
+
+        if ($reservationRequested && ! $reservationReserved) {
+            $request->session()->forget('kioskheld.cart');
+            $request->session()->forget('kioskheld.checkout.customer');
+
+            return redirect()
+                ->route('shops.selection')
+                ->with('status', 'Ein oder mehrere Artikel konnten nicht reserviert werden. Bitte prüfe deinen Warenkorb erneut.');
+        }
+
+
         $validatedAt = $cart['validated_at'] ?? null;
-        $ttlMinutes = max(1, (int) data_get($validated, 'reservation.ttl_minutes', 10));
+        $ttlMinutes = max(1, (int) data_get($reservation, 'ttl_minutes', 10));
         $expiresAfterMinutes = max(1, $ttlMinutes - 1);
 
         if (! $validatedAt || Carbon::parse($validatedAt)->lt(now()->subMinutes($expiresAfterMinutes))) {
@@ -144,11 +159,13 @@ class CheckoutOrderController extends Controller
         $location = $validated['delivery']['location'] ?? [];
         $shop = $validated['shop'] ?? [];
 
+        $reservation = $cart['reservation'] ?? data_get($validated, 'reservation');
+
         return [
             'source' => 'kioskheld',
-            'external_session_id' => session()->getId(),
-            'reservation' => $validated['reservation'] ?? null,
-            'reservation_cart_token' => data_get($validated, 'reservation.cart_token'),
+            'external_session_id' => $cart['external_session_id'] ?? session()->getId(),
+            'reservation' => $reservation,
+            'reservation_cart_token' => data_get($reservation, 'cart_token'),
 
             'shop' => [
                 'id' => $shop['id'] ?? ($cart['shop_id'] ?? null),
@@ -184,6 +201,8 @@ class CheckoutOrderController extends Controller
                 'grand_total' => $validated['totals']['grand_total'] ?? null,
                 'minimum_order_value' => $validated['totals']['minimum_order_value'] ?? null,
                 'currency' => $validated['totals']['currency'] ?? 'EUR',
+                'reservation_cart_token' => data_get($reservation, 'cart_token'),
+                'reservation_ttl_minutes' => data_get($reservation, 'ttl_minutes'),
             ],
         ];
     }

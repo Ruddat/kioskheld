@@ -27,16 +27,32 @@ class CheckoutController extends Controller
                 ->with('status', 'Bitte prüfe deinen Warenkorb erneut.');
         }
 
-        $validatedAt = $cart['validated_at'] ?? null;
+$reservation = $cart['reservation'] ?? data_get($validated, 'reservation');
 
-        if ($validatedAt && Carbon::parse($validatedAt)->lt(now()->subMinutes(10))) {
-            $request->session()->forget('kioskheld.cart');
-            $request->session()->forget('kioskheld.checkout.customer');
+$reservationRequested = data_get($reservation, 'requested') === true;
+$reservationReserved = data_get($reservation, 'reserved') === true;
 
-            return redirect()
-                ->route('shops.selection')
-                ->with('status', 'Deine Warenkorb-Prüfung ist abgelaufen. Bitte prüfe erneut.');
-        }
+if ($reservationRequested && ! $reservationReserved) {
+    $request->session()->forget('kioskheld.cart');
+    $request->session()->forget('kioskheld.checkout.customer');
+
+    return redirect()
+        ->route('shops.selection')
+        ->with('status', 'Ein oder mehrere Artikel konnten nicht reserviert werden. Bitte prüfe deinen Warenkorb erneut.');
+}
+
+$validatedAt = $cart['validated_at'] ?? null;
+$ttlMinutes = max(1, (int) data_get($reservation, 'ttl_minutes', 10));
+$expiresAfterMinutes = max(1, $ttlMinutes - 1);
+
+if (! $validatedAt || Carbon::parse($validatedAt)->lt(now()->subMinutes($expiresAfterMinutes))) {
+    $request->session()->forget('kioskheld.cart');
+    $request->session()->forget('kioskheld.checkout.customer');
+
+    return redirect()
+        ->route('shops.selection')
+        ->with('status', 'Deine Warenkorb-Prüfung ist abgelaufen. Bitte prüfe erneut.');
+}
 
         $validatedCart = $validated['cart'] ?? $validated;
 

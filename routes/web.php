@@ -4,6 +4,7 @@ use App\Http\Controllers\CartValidationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CheckoutCustomerController;
 use App\Http\Controllers\CheckoutOrderController;
+use App\Http\Controllers\CheckoutPaypalController;
 use App\Http\Controllers\OrderThankYouController;
 use App\Http\Controllers\PostcodeAvailabilityController;
 use App\Http\Controllers\ProfileController;
@@ -33,6 +34,16 @@ Route::post('/kasse/kundendaten', CheckoutCustomerController::class)
 
 Route::post('/kasse/bestellen', CheckoutOrderController::class)
     ->name('checkout.order.store');
+
+Route::post('/kasse/paypal/create', [CheckoutPaypalController::class, 'create'])
+    ->name('checkout.paypal.create');
+
+Route::get('/kasse/paypal/success', [CheckoutPaypalController::class, 'success'])
+    ->name('checkout.paypal.success');
+
+Route::get('/kasse/paypal/cancel', [CheckoutPaypalController::class, 'cancel'])
+    ->name('checkout.paypal.cancel');
+
 
 Route::get('/bestellung/danke', OrderThankYouController::class)
     ->name('checkout.thank-you');

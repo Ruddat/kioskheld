@@ -36,10 +36,17 @@
         $paymentCapabilities = $validatedCart['payment_capabilities'] ?? ($paymentCapabilities ?? []);
 
         $directPaymentMethods = collect($paymentCapabilities)
-            ->filter(
-                fn($capability) => ($capability['available'] ?? false) === true &&
-                    ($capability['direct_order_supported'] ?? false) === true,
-            )
+            ->filter(function ($capability, string $method) {
+                if (($capability['available'] ?? false) !== true) {
+                    return false;
+                }
+
+                if ($method === 'paypal') {
+                    return true;
+                }
+
+                return ($capability['direct_order_supported'] ?? false) === true;
+            })
             ->keys()
             ->values()
             ->all();
@@ -108,6 +115,14 @@
         $deliveryFee =
             $displayTotals['delivery_fee'] ??
             ($displayTotals['shipping_total'] ?? ($displayTotals['delivery_cost'] ?? 0));
+
+        $customerFee = $displayTotals['customer_fee'] ?? 0;
+
+        $paymentFee = $displayTotals['payment_fee'] ?? 0;
+
+        $paymentFeeLabel = $displayTotals['payment_fee_label'] ?? 'Zahlungsgebühr';
+
+        $tipAmount = $displayTotals['tip_amount'] ?? 0;
 
         $grandTotal =
             $displayTotals['grand_total'] ?? ($displayTotals['total'] ?? ($displayTotals['order_total'] ?? 0));
@@ -281,7 +296,7 @@
 
                                 <label class="checkout-radio">
                                     <input type="radio" name="payment_method" value="{{ $method }}"
-                                        @checked($selectedPaymentMethod === $method)>
+                                        class="checkout-payment-radio" @checked($selectedPaymentMethod === $method)>
 
                                     <span>
                                         <strong>{{ $label['title'] }}</strong>
@@ -290,17 +305,6 @@
                                 </label>
                             @endforeach
                         </div>
-
-                        @if (
-                            !empty($paymentCapabilities['paypal']) &&
-                                ($paymentCapabilities['paypal']['available'] ?? false) === true &&
-                                ($paymentCapabilities['paypal']['direct_order_supported'] ?? false) !== true)
-                            <div class="checkout-payment-disabled">
-                                <strong>PayPal ist verfügbar, aber noch nicht direkt im Checkout nutzbar.</strong>
-                                <span>Diese Zahlungsart benötigt einen separaten Zahlungsablauf und wird später
-                                    freigeschaltet.</span>
-                            </div>
-                        @endif
                     </div>
 
                     <button type="submit"
@@ -312,29 +316,6 @@
                         @endif
                     </button>
                 </form>
-
-                @if (!empty($customer))
-                    <div class="checkout-final-card">
-                        <div>
-                            <strong>Bereit zur Bestellung</strong>
-                            <span>Deine Lieferdaten und dein Warenkorb sind geprüft.</span>
-                        </div>
-
-                        <form method="post" action="{{ route('checkout.order.store') }}">
-                            @csrf
-
-                            <button type="submit" class="checkout-order-submit">
-                                Jetzt verbindlich bestellen
-                            </button>
-                        </form>
-
-                        <p class="checkout-legal-note">
-                            Mit Klick auf den Button gibst du eine verbindliche Bestellung beim Kiosk auf.
-                            Preise, Lieferkosten und Verfügbarkeit wurden zuvor geprüft.
-                        </p>
-                    </div>
-                @endif
-
 
             </div>
 
@@ -452,6 +433,27 @@
                                 <strong>{{ $formatMoney($deliveryFee) }}</strong>
                             </div>
 
+                            @if ((float) $customerFee > 0)
+                                <div>
+                                    <span>Servicegebühr</span>
+                                    <strong>{{ $formatMoney($customerFee) }}</strong>
+                                </div>
+                            @endif
+
+                            @if ((float) $paymentFee > 0)
+                                <div>
+                                    <span>{{ $paymentFeeLabel }}</span>
+                                    <strong>{{ $formatMoney($paymentFee) }}</strong>
+                                </div>
+                            @endif
+
+                            @if ((float) $tipAmount > 0)
+                                <div>
+                                    <span>Trinkgeld</span>
+                                    <strong>{{ $formatMoney($tipAmount) }}</strong>
+                                </div>
+                            @endif
+
                             @if ($minimumOrderValue !== null)
                                 <div>
                                     <span>Mindestbestellwert</span>
@@ -469,6 +471,47 @@
                             Preise, Lieferkosten und Verfügbarkeit wurden durch JustDeliver geprüft.
                         </div>
                     </div>
+
+
+                    @if (!empty($customer))
+                        <div class="checkout-final-card">
+                            <div>
+                                <strong>Bereit zur Bestellung</strong>
+                                <span>Deine Lieferdaten und dein Warenkorb sind geprüft.</span>
+                            </div>
+
+                            @php
+                                $selectedFinalPaymentMethod =
+                                    $customer['payment_method'] ?? ($cart['payment_method'] ?? 'cash');
+                            @endphp
+
+                            <form method="post"
+                                action="{{ $selectedFinalPaymentMethod === 'paypal' ? route('checkout.paypal.create') : route('checkout.order.store') }}">
+                                @csrf
+
+                                <button type="submit" class="checkout-order-submit">
+                                    @if ($selectedFinalPaymentMethod === 'paypal')
+                                        Mit PayPal bezahlen
+                                    @else
+                                        Jetzt verbindlich bestellen
+                                    @endif
+                                </button>
+                            </form>
+
+                            <p class="checkout-legal-note">
+                                @if ($selectedFinalPaymentMethod === 'paypal')
+                                    Du wirst zu PayPal weitergeleitet. Die Bestellung wird nach erfolgreicher Zahlung
+                                    abgeschlossen.
+                                @else
+                                    Mit Klick auf den Button gibst du eine verbindliche Bestellung beim Kiosk auf.
+                                    Preise, Lieferkosten und Verfügbarkeit wurden zuvor geprüft.
+                                @endif
+                            </p>
+                        </div>
+                    @endif
+
+
+
                 </div>
             </aside>
         </section>
@@ -476,5 +519,27 @@
 
     <x-marketing.footer />
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const checkoutForm = document.querySelector('.checkout-form');
+        const paymentRadios = document.querySelectorAll('.checkout-payment-radio');
+
+        if (!checkoutForm || paymentRadios.length === 0) {
+            return;
+        }
+
+        const hasSavedCustomer = @json(!empty($customer));
+
+        paymentRadios.forEach((radio) => {
+            radio.addEventListener('change', () => {
+                if (!hasSavedCustomer) {
+                    return;
+                }
+
+                checkoutForm.submit();
+            });
+        });
+    });
+</script>
 
 </html>

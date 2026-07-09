@@ -1,0 +1,496 @@
+/* resources/css/marketing/_terms.css */
+
+.legal-terms-page {
+    background: #ffffff;
+    color: #050505;
+    overflow: hidden;
+}
+
+/* Hero */
+
+.terms-hero {
+    position: relative;
+    padding: 34px 0 74px;
+    color: #ffffff;
+    background:
+        linear-gradient(90deg, rgba(0, 0, 0, .97) 0%, rgba(0, 0, 0, .91) 48%, rgba(0, 0, 0, .64) 100%),
+        linear-gradient(180deg, rgba(0, 0, 0, .08) 0%, rgba(0, 0, 0, .76) 100%),
+        url("/images/partner-hero-bg.webp") right center / cover no-repeat,
+        #050505;
+}
+
+.terms-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 16% 72%, rgba(255, 214, 0, .13), transparent 24%),
+        linear-gradient(180deg, transparent 84%, rgba(255, 255, 255, .96) 100%);
+}
+
+.terms-hero-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, .95fr) minmax(320px, .52fr);
+    gap: clamp(28px, 4vw, 56px);
+    align-items: center;
+    padding-top: 34px;
+}
+
+.legal-terms-page .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px;
+    color: #ffd600;
+    font-size: .78rem;
+    font-weight: 950;
+    letter-spacing: .085em;
+    text-transform: uppercase;
+}
+
+.legal-terms-page .eyebrow::before {
+    content: "✦";
+    color: #ffffff;
+    font-size: .86rem;
+}
+
+.terms-hero h1 {
+    margin: 0;
+    max-width: 760px;
+    color: #ffffff;
+    font-size: clamp(2.35rem, 4.6vw, 4.35rem);
+    line-height: .94;
+    letter-spacing: -.055em;
+    text-transform: uppercase;
+    font-weight: 1000;
+}
+
+.terms-hero h1 span {
+    display: block;
+    color: #ffd600;
+}
+
+.terms-hero .lead {
+    max-width: 700px;
+    margin: 20px 0 0;
+    color: rgba(255, 255, 255, .88);
+    font-size: clamp(.98rem, 1.08vw, 1.08rem);
+    line-height: 1.58;
+    font-weight: 750;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, .42);
+}
+
+/* Summary Card */
+
+.terms-summary-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 26px;
+    padding: 24px;
+    color: #050505;
+    background:
+        radial-gradient(circle at 90% 10%, rgba(255, 255, 255, .3), transparent 26%),
+        linear-gradient(145deg, rgba(255, 214, 0, .96), rgba(245, 158, 11, .92));
+    box-shadow:
+        0 26px 72px rgba(0, 0, 0, .32),
+        inset 0 1px 0 rgba(255, 255, 255, .45);
+}
+
+.terms-summary-card::after {
+    content: "AGB";
+    position: absolute;
+    right: 16px;
+    bottom: 2px;
+    color: rgba(0, 0, 0, .08);
+    font-size: 5.2rem;
+    line-height: 1;
+    font-weight: 1000;
+    letter-spacing: -.08em;
+    pointer-events: none;
+}
+
+.terms-summary-card > span {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    border-radius: 999px;
+    padding: 0 11px;
+    background: #050505;
+    color: #ffd600;
+    font-size: .68rem;
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: .055em;
+}
+
+.terms-summary-card strong {
+    position: relative;
+    z-index: 2;
+    display: block;
+    margin: 16px 0;
+    max-width: 320px;
+    font-size: clamp(1.45rem, 2.2vw, 2.05rem);
+    line-height: 1;
+    letter-spacing: -.052em;
+    text-transform: uppercase;
+    font-weight: 1000;
+}
+
+.terms-summary-card ul {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.terms-summary-card li {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: .92rem;
+    font-weight: 900;
+    line-height: 1.32;
+}
+
+.terms-summary-card li::before {
+    content: "✓";
+    width: 21px;
+    height: 21px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: #050505;
+    color: #ffd600;
+    font-size: .72rem;
+    font-weight: 1000;
+}
+
+/* Content */
+
+.terms-content-section {
+    position: relative;
+    padding: 28px 0 78px;
+    background:
+        radial-gradient(circle at 50% 0, rgba(255, 214, 0, .12), transparent 30%),
+        #ffffff;
+}
+
+.terms-layout {
+    display: grid;
+    grid-template-columns: 270px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+/* TOC */
+
+.terms-toc {
+    position: sticky;
+    top: 24px;
+    display: grid;
+    gap: 14px;
+    padding: 18px;
+    border: 1px solid rgba(17, 24, 39, .08);
+    border-radius: 22px;
+    background: #ffffff;
+    box-shadow: 0 20px 50px rgba(17, 24, 39, .08);
+}
+
+.terms-toc strong {
+    color: #050505;
+    font-size: .82rem;
+    font-weight: 1000;
+    text-transform: uppercase;
+    letter-spacing: -.02em;
+}
+
+.terms-toc nav {
+    display: grid;
+    gap: 2px;
+}
+
+.terms-toc a {
+    display: block;
+    border-radius: 11px;
+    padding: 8px 9px;
+    color: #4b5563;
+    font-size: .82rem;
+    line-height: 1.2;
+    font-weight: 800;
+    text-decoration: none;
+    transition:
+        background .15s ease,
+        color .15s ease;
+}
+
+.terms-toc a:hover {
+    color: #050505;
+    background: #fff8d1;
+}
+
+/* Terms Card */
+
+.terms-card {
+    position: relative;
+    display: grid;
+    gap: 24px;
+    padding: clamp(24px, 3vw, 40px);
+    border: 1px solid rgba(17, 24, 39, .08);
+    border-radius: 30px;
+    background: #ffffff;
+    box-shadow: 0 26px 72px rgba(17, 24, 39, .085);
+}
+
+.terms-card::before {
+    content: "";
+    position: absolute;
+    right: -70px;
+    top: -70px;
+    width: 220px;
+    height: 220px;
+    border-radius: 999px;
+    background: rgba(255, 214, 0, .1);
+    pointer-events: none;
+}
+
+.terms-meta {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 0;
+}
+
+.terms-meta span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    border-radius: 999px;
+    padding: 0 12px;
+    color: #050505;
+    background: #fff8d1;
+    font-size: .72rem;
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.terms-card section {
+    position: relative;
+    z-index: 2;
+    scroll-margin-top: 24px;
+    padding-bottom: 2px;
+}
+
+.terms-card h2 {
+    margin: 0 0 10px;
+    color: #050505;
+    font-size: clamp(1.28rem, 2vw, 1.78rem);
+    line-height: 1.08;
+    letter-spacing: -.045em;
+    text-transform: uppercase;
+    font-weight: 1000;
+}
+
+.terms-card p {
+    margin: 0;
+    color: #374151;
+    font-size: .97rem;
+    line-height: 1.68;
+    font-weight: 620;
+}
+
+.terms-card p + p {
+    margin-top: 10px;
+}
+
+.terms-card strong {
+    color: #050505;
+    font-weight: 1000;
+}
+
+.terms-highlight,
+.terms-final-note {
+    margin-top: 14px;
+    border-radius: 18px;
+    padding: 16px 18px;
+    color: #050505;
+    background:
+        linear-gradient(135deg, #fff8d1, #ffffff);
+    border: 1px solid rgba(255, 214, 0, .3);
+    font-size: .94rem;
+    line-height: 1.58;
+    font-weight: 700;
+}
+
+.terms-highlight strong,
+.terms-final-note strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+    .terms-hero {
+        padding-bottom: 68px;
+    }
+
+    .terms-hero-grid {
+        grid-template-columns: 1fr;
+        padding-top: 30px;
+    }
+
+    .terms-summary-card {
+        max-width: 560px;
+    }
+
+    .terms-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .terms-toc {
+        position: relative;
+        top: auto;
+    }
+
+    .terms-toc nav {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .terms-toc nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .terms-hero {
+        padding: 26px 0 58px;
+        background:
+            linear-gradient(90deg, rgba(0, 0, 0, .97) 0%, rgba(0, 0, 0, .93) 100%),
+            linear-gradient(180deg, rgba(0, 0, 0, .12) 0%, rgba(0, 0, 0, .82) 100%),
+            url("/images/partner-hero-bg.webp") 74% center / cover no-repeat,
+            #050505;
+    }
+
+    .terms-hero-grid {
+        padding-top: 22px;
+        gap: 24px;
+    }
+
+    .legal-terms-page .eyebrow {
+        margin-bottom: 14px;
+        font-size: .74rem;
+        letter-spacing: .075em;
+    }
+
+    .terms-hero h1 {
+        font-size: clamp(2rem, 10.5vw, 3.35rem);
+        line-height: .94;
+    }
+
+    .terms-hero .lead {
+        margin-top: 16px;
+        font-size: .95rem;
+        line-height: 1.52;
+    }
+
+    .terms-summary-card {
+        padding: 20px;
+        border-radius: 22px;
+    }
+
+    .terms-summary-card strong {
+        font-size: clamp(1.35rem, 7vw, 1.85rem);
+    }
+
+    .terms-content-section {
+        padding: 24px 0 62px;
+    }
+
+    .terms-toc {
+        padding: 14px;
+        border-radius: 20px;
+    }
+
+    .terms-toc nav {
+        grid-template-columns: 1fr;
+    }
+
+    .terms-card {
+        gap: 22px;
+        padding: 22px;
+        border-radius: 24px;
+    }
+
+    .terms-card h2 {
+        font-size: clamp(1.2rem, 6.5vw, 1.65rem);
+        line-height: 1.08;
+    }
+
+    .terms-card p {
+        font-size: .94rem;
+        line-height: 1.62;
+    }
+
+    .terms-card p + p {
+        margin-top: 9px;
+    }
+
+    .terms-highlight,
+    .terms-final-note {
+        padding: 15px;
+        border-radius: 16px;
+        font-size: .9rem;
+    }
+}
+
+@media (max-width: 520px) {
+    .terms-hero {
+        padding-bottom: 52px;
+    }
+
+    .terms-hero h1 {
+        font-size: clamp(1.9rem, 12vw, 3rem);
+    }
+
+    .terms-summary-card::after {
+        font-size: 4.3rem;
+        right: 12px;
+    }
+
+    .terms-summary-card li {
+        font-size: .88rem;
+    }
+
+    .terms-card {
+        gap: 20px;
+        padding: 18px;
+        border-radius: 20px;
+    }
+
+    .terms-card h2 {
+        font-size: 1.22rem;
+    }
+
+    .terms-card p {
+        font-size: .92rem;
+    }
+
+    .terms-meta span {
+        width: 100%;
+        justify-content: center;
+    }
+}

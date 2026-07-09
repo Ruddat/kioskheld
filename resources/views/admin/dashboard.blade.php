@@ -1,20 +1,23 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Kioskheld Admin
-        </h2>
-    </x-slot>
+@extends('layouts.admin')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h1 class="text-2xl font-bold mb-2">Adminbereich</h1>
+@section('title', 'Dashboard')
 
-                <p class="text-gray-600">
-                    Hier verwalten wir später Vendoren, Kiosk-Standorte,
-                    Foodzwerge-API-Verknüpfungen, Leads und Systemstatus.
-                </p>
+@section('content')
+    <main class="admin-content">
+        <section class="admin-page-header">
+            <div>
+                <p class="admin-eyebrow">Kioskheld Admin</p>
+                <h1>Dashboard</h1>
+                <p>Interne Übersicht für Partner-Anfragen, Shops und Kioskheld-Verwaltung.</p>
             </div>
-        </div>
-    </div>
-</x-app-layout>
+        </section>
+
+        <section class="admin-grid">
+            <a href="{{ route('admin.partner-leads.index') }}" class="admin-stat-card">
+                <span>Partner-Anfragen</span>
+                <strong>{{ \App\Models\PartnerLead::count() }}</strong>
+                <small>Registrierte Kiosk-Interessenten</small>
+            </a>
+        </section>
+    </main>
+@endsection

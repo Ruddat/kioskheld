@@ -8,11 +8,11 @@
             <a href="{{ route('home') }}#partner">Für Partner</a>
 
             <a href="{{ route('about') }}">Über uns</a>
-            <a href="{{ route('home') }}#faq">FAQ</a>
+            <a href="{{ route('faq') }}">FAQ</a>
 
             <a href="{{ route('legal.imprint') }}">Impressum</a>
             <a href="{{ route('legal.privacy') }}">Datenschutz</a>
-            <a href="{{ route('home') }}#agb">AGB</a>
+            <a href="{{ route('legal.terms') }}">AGB</a>
         </nav>
     </div>
 </footer>

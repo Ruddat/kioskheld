@@ -3,7 +3,11 @@
 @section('title', 'Datenschutz | Kioskheld')
 
 @section('content')
-    <main class="subpage legal-page">
+    <main class="subpage legal-page privacy-page">
+        <div class="shop-app-nav-wrap">
+            <x-marketing.nav />
+        </div>
+
         <section class="subpage-hero subpage-hero-compact">
             <div class="container subpage-hero-copy subpage-hero-copy-narrow">
                 <p class="subpage-kicker">Datenschutz</p>

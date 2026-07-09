@@ -8,6 +8,6 @@
         <span class="crown">♛ ♛</span>
     @endif
 
-    <span class="brand">KIOS<span>HELD</span></span>
+    <span class="brand">KIOSK<span>HELD</span></span>
     <span class="powered">POWERED BY FOODZWERGE</span>
 </a>

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class PartnerLead extends Model
 {
@@ -28,4 +30,17 @@ class PartnerLead extends Model
             'metadata' => 'array',
         ];
     }
+
+public function onboardings(): HasMany
+{
+    return $this->hasMany(PartnerOnboarding::class);
+}
+
+public function latestOnboarding(): HasOne
+{
+    return $this->hasOne(PartnerOnboarding::class)->latestOfMany();
+}
+
+
+
 }

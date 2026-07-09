@@ -3,25 +3,54 @@
 @section('title', 'Impressum | Kioskheld')
 
 @section('content')
-    <main class="subpage legal-page">
-        <section class="subpage-hero subpage-hero-compact">
-            <div class="container subpage-hero-copy subpage-hero-copy-narrow">
-                <p class="subpage-kicker">Rechtliches</p>
+    <main class="imprint-page">
+        <section class="imprint-hero">
+            <div class="container imprint-hero-grid">
+                <div class="imprint-hero-copy">
+                    <p class="imprint-kicker">Rechtliches</p>
 
-                <h1>Impressum</h1>
+                    <h1>
+                        Impressum.
+                        <span>Klar und erreichbar.</span>
+                    </h1>
 
-                <p>
-                    Angaben gemäß den gesetzlichen Informationspflichten.
-                    Die Platzhalter bitte vor Veröffentlichung vollständig ersetzen.
-                </p>
+                    <p>
+                        Angaben zum Betreiber von Kioskheld gemäß den gesetzlichen Informationspflichten.
+                        Die Platzhalter bitte vor Veröffentlichung vollständig ersetzen und rechtlich prüfen lassen.
+                    </p>
+                </div>
+
+                <div class="imprint-hero-card">
+                    <span>Betreiberangaben</span>
+                    <strong>Transparenz gehört zur Plattform.</strong>
+                    <p>
+                        Kioskheld soll einfach nutzbar sein. Dazu gehört auch, dass rechtliche Angaben sauber,
+                        auffindbar und verständlich dargestellt werden.
+                    </p>
+                </div>
             </div>
         </section>
 
-        <section class="subpage-section">
-            <div class="container legal-container">
-                <div class="legal-card">
-                    <div class="legal-block">
-                        <h2>Angaben gemäß § 5 TMG</h2>
+        <section class="imprint-section">
+            <div class="container imprint-container">
+                <div class="imprint-card">
+                    <div class="imprint-note imprint-note-warning">
+                        <strong>Hinweis:</strong>
+                        Diese Vorlage enthält Platzhalter und muss vor Veröffentlichung mit den tatsächlichen
+                        Betreiberangaben ergänzt und rechtlich geprüft werden.
+                    </div>
+
+                    <div class="imprint-toc" aria-label="Impressum Übersicht">
+                        <a href="#anbieter">Anbieter</a>
+                        <a href="#kontakt">Kontakt</a>
+                        <a href="#register">Register</a>
+                        <a href="#steuer">Steuer</a>
+                        <a href="#streitbeilegung">Streitbeilegung</a>
+                        <a href="#haftung">Haftung</a>
+                    </div>
+
+                    <div class="imprint-block" id="anbieter">
+                        <h2>Angaben gemäß § 5 DDG</h2>
 
                         <p>
                             <strong>[Firmenname / Betreiber]</strong><br>
@@ -31,7 +60,7 @@
                         </p>
                     </div>
 
-                    <div class="legal-block">
+                    <div class="imprint-block">
                         <h2>Vertreten durch</h2>
 
                         <p>
@@ -39,13 +68,13 @@
                         </p>
                     </div>
 
-                    <div class="legal-grid">
-                        <div class="legal-mini-card">
+                    <div class="imprint-contact-grid" id="kontakt">
+                        <div class="imprint-mini-card">
                             <span>Telefon</span>
                             <strong>[Telefonnummer]</strong>
                         </div>
 
-                        <div class="legal-mini-card">
+                        <div class="imprint-mini-card">
                             <span>E-Mail</span>
                             <strong>
                                 <a href="mailto:[E-Mail-Adresse]">[E-Mail-Adresse]</a>
@@ -53,7 +82,7 @@
                         </div>
                     </div>
 
-                    <div class="legal-block">
+                    <div class="imprint-block" id="register">
                         <h2>Registereintrag</h2>
 
                         <p>
@@ -62,7 +91,7 @@
                         </p>
                     </div>
 
-                    <div class="legal-block">
+                    <div class="imprint-block" id="steuer">
                         <h2>Umsatzsteuer-ID</h2>
 
                         <p>
@@ -71,7 +100,7 @@
                         </p>
                     </div>
 
-                    <div class="legal-block">
+                    <div class="imprint-block">
                         <h2>Wirtschafts-Identifikationsnummer</h2>
 
                         <p>
@@ -80,7 +109,7 @@
                         </p>
                     </div>
 
-                    <div class="legal-block">
+                    <div class="imprint-block">
                         <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
 
                         <p>
@@ -90,7 +119,7 @@
                         </p>
                     </div>
 
-                    <div class="legal-block">
+                    <div class="imprint-block" id="streitbeilegung">
                         <h2>EU-Streitschlichtung</h2>
 
                         <p>
@@ -105,7 +134,7 @@
                         </p>
                     </div>
 
-                    <div class="legal-block">
+                    <div class="imprint-block">
                         <h2>Verbraucherstreitbeilegung / Universalschlichtungsstelle</h2>
 
                         <p>
@@ -114,7 +143,7 @@
                         </p>
                     </div>
 
-                    <div class="legal-block">
+                    <div class="imprint-block" id="haftung">
                         <h2>Haftung für Inhalte</h2>
 
                         <p>
@@ -124,7 +153,7 @@
                         </p>
                     </div>
 
-                    <div class="legal-block">
+                    <div class="imprint-block">
                         <h2>Haftung für Links</h2>
 
                         <p>
@@ -134,7 +163,7 @@
                         </p>
                     </div>
 
-                    <div class="legal-block">
+                    <div class="imprint-block">
                         <h2>Urheberrecht</h2>
 
                         <p>
@@ -144,17 +173,10 @@
                             der jeweiligen schriftlichen Zustimmung.
                         </p>
                     </div>
-
-                    <div class="legal-note">
-                        <strong>Hinweis:</strong>
-                        Diese Vorlage enthält Platzhalter und muss vor Veröffentlichung mit den tatsächlichen Betreiberangaben
-                        ergänzt und rechtlich geprüft werden.
-                    </div>
                 </div>
             </div>
         </section>
     </main>
-    
-    <x-marketing.footer />
 
+    <x-marketing.footer />
 @endsection

@@ -3,176 +3,229 @@
 @section('title', 'Über uns | Kioskheld')
 
 @section('content')
-    <main class="subpage">
-        <section class="subpage-hero subpage-hero-about">
-            <div class="container subpage-hero-grid">
-                <div class="subpage-hero-copy">
-                    <p class="subpage-kicker">Über Kioskheld</p>
+    <main class="about-page">
+        <section class="about-hero">
+            <div class="container about-hero-grid">
+                <div class="about-hero-copy">
+                    <p class="about-kicker">Über Kioskheld</p>
 
                     <h1>
-                        Dein lokaler Kiosk.
-                        <span>Digital, schnell, direkt.</span>
+                        Der Kiosk um die Ecke.
+                        <span>Jetzt auch online.</span>
                     </h1>
 
                     <p>
-                        Kioskheld macht lokale Kioske, Spätis und Getränkedienste online erreichbar.
-                        Kunden geben ihre Postleitzahl ein, finden verfügbare Händler in der Nähe und bestellen
-                        genau das, was sonst schnell um die Ecke geholt wird.
+                        Kioskheld bringt lokale Kioske, Spätis und Getränkeläden dahin, wo Kunden heute bestellen:
+                        direkt aufs Handy. Ohne Konzern-Blabla. Ohne komplizierten Shop. Schnell, lokal und klar.
                     </p>
 
-                    <div class="subpage-hero-actions">
-                        <a href="{{ route('home') }}#find" class="subpage-btn subpage-btn-primary">
+                    <div class="about-hero-actions">
+                        <a href="{{ route('home') }}#find" class="about-btn about-btn-primary">
                             Kiosk finden
                         </a>
 
-                        <a href="{{ route('home') }}#partner" class="subpage-btn subpage-btn-outline">
+                        <a href="{{ route('partner.index') }}" class="about-btn about-btn-outline">
                             Partner werden
                         </a>
                     </div>
                 </div>
 
-                <div class="subpage-hero-card">
-                    <div class="hero-card-badge">Powered by Foodzwerge</div>
+                <div class="about-hero-card">
+                    <div class="about-hero-badge">Powered by Foodzwerge</div>
 
-                    <h2>Eine Plattform für lokale Sofortbestellungen.</h2>
+                    <h2>Lokale Sofortbestellungen brauchen keine komplizierte Plattform.</h2>
 
                     <p>
-                        Kioskheld ist die klare Bestelloberfläche nach außen.
-                        Foodzwerge liefert die technische Shop-Basis im Hintergrund.
+                        Kioskheld ist die einfache Oberfläche für Kunden. Foodzwerge liefert die Technik im Hintergrund:
+                        Produkte, Warenkorb, Bestellungen, Händlerlogik und Schnittstellen.
                     </p>
 
-                    <div class="hero-card-stats">
+                    <div class="about-hero-steps">
                         <div>
-                            <strong>PLZ</strong>
-                            <span>eingeben</span>
+                            <strong>01</strong>
+                            <span>PLZ eingeben</span>
                         </div>
 
                         <div>
-                            <strong>Kiosk</strong>
-                            <span>auswählen</span>
+                            <strong>02</strong>
+                            <span>Kiosk wählen</span>
                         </div>
 
                         <div>
-                            <strong>Schnell</strong>
-                            <span>liefern lassen</span>
+                            <strong>03</strong>
+                            <span>Bestellen</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="subpage-section">
+        <section class="about-section about-pullup-section">
             <div class="container">
-                <div class="subpage-intro-card">
-                    <p class="subpage-kicker dark">Was wir bauen</p>
+                <div class="about-statement">
+                    <p class="about-kicker about-kicker-dark">Warum Kioskheld?</p>
 
-                    <h2>Kein Konzern-Blabla. Eine einfache Lösung für echte Händler.</h2>
+                    <h2>
+                        Weil kleine Händler digital sichtbar sein müssen,
+                        ohne sich von großen Plattformen abhängig zu machen.
+                    </h2>
 
                     <p>
-                        Viele kleine Händler haben gute Produkte, gute Lage und Stammkunden – aber keinen einfachen
-                        digitalen Verkaufskanal. Genau hier setzt Kioskheld an. Die Plattform soll verständlich bleiben:
-                        Postleitzahl eingeben, Händler finden, Produkte auswählen, bestellen.
+                        Viele Kioske haben gute Lage, Stammkunden und Produkte, die Menschen sofort brauchen:
+                        Getränke, Snacks, Süßes, Eis, Tabakwaren, Haushaltsartikel oder kleine Alltagsretter.
+                        Aber online sind sie oft kaum auffindbar. Genau diese Lücke schließt Kioskheld.
                     </p>
                 </div>
 
-                <div class="subpage-feature-grid">
-                    <article class="subpage-feature-card">
-                        <div class="feature-icon">⌖</div>
-                        <h3>Lokal gedacht</h3>
+                <div class="about-proof-grid">
+                    <article class="about-proof-card">
+                        <span>Für Kunden</span>
+                        <strong>Schneller bestellen</strong>
                         <p>
-                            Kioskheld stellt Händler aus der Umgebung in den Vordergrund. Nicht irgendein Marktplatz,
-                            sondern echte Anbieter aus der Region.
+                            Postleitzahl eingeben, verfügbaren Kiosk finden und typische Kioskprodukte direkt online bestellen.
                         </p>
                     </article>
 
-                    <article class="subpage-feature-card">
-                        <div class="feature-icon">↯</div>
-                        <h3>Schnell gemacht</h3>
+                    <article class="about-proof-card">
+                        <span>Für Händler</span>
+                        <strong>Mehr Sichtbarkeit</strong>
                         <p>
-                            Kiosk-Produkte sind Impulsprodukte. Deshalb muss der Weg kurz sein:
-                            suchen, auswählen, bestellen, liefern lassen.
+                            Ein digitaler Verkaufskanal, ohne selbst eine große Plattform entwickeln oder betreiben zu müssen.
                         </p>
                     </article>
 
-                    <article class="subpage-feature-card">
-                        <div class="feature-icon">▣</div>
-                        <h3>Einfach betreibbar</h3>
+                    <article class="about-proof-card">
+                        <span>Für die Region</span>
+                        <strong>Lokal bleibt lokal</strong>
                         <p>
-                            Händler sollen nicht erst ein komplexes Shopsystem lernen müssen.
-                            Die Technik läuft über Foodzwerge im Hintergrund.
+                            Bestellungen landen bei echten Anbietern aus der Umgebung statt in anonymen Konzernstrukturen.
                         </p>
                     </article>
                 </div>
             </div>
         </section>
 
-        <section class="subpage-section subpage-section-dark">
-            <div class="container subpage-split">
+        <section class="about-section about-dark-section">
+            <div class="container about-split">
+                <div class="about-split-copy">
+                    <p class="about-kicker">Unsere Haltung</p>
+
+                    <h2>
+                        Wir bauen keinen Marktplatz für alles.
+                        Wir bauen eine klare Lösung für Kioske.
+                    </h2>
+
+                    <p>
+                        Kioskprodukte sind Impulskäufe. Niemand will sich durch eine komplizierte Plattform klicken,
+                        wenn er schnell Getränke, Chips, Süßes oder Eis braucht. Deshalb ist Kioskheld bewusst fokussiert:
+                        finden, auswählen, bestellen.
+                    </p>
+                </div>
+
+                <div class="about-dark-card">
+                    <div class="about-dark-card-line">
+                        <span>Keine App-Pflicht</span>
+                        <strong>Direkt im Browser nutzbar.</strong>
+                    </div>
+
+                    <div class="about-dark-card-line">
+                        <span>Kein Technik-Chaos</span>
+                        <strong>Foodzwerge arbeitet im Hintergrund.</strong>
+                    </div>
+
+                    <div class="about-dark-card-line">
+                        <span>Kein unnötiger Ballast</span>
+                        <strong>Fokus auf Bestellungen, Sortiment und Region.</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <div class="container">
+                <div class="about-section-head">
+                    <p class="about-kicker about-kicker-dark">So denken wir</p>
+
+                    <h2>Einfach genug für Kunden. Stark genug für Händler.</h2>
+                </div>
+
+                <div class="about-feature-grid">
+                    <article class="about-feature-card">
+                        <div class="about-feature-icon">⌖</div>
+                        <h3>Lokal zuerst</h3>
+                        <p>
+                            Kioskheld stellt Anbieter aus der Umgebung in den Vordergrund. Nicht irgendeinen Händler,
+                            sondern den Kiosk, der wirklich erreichbar ist.
+                        </p>
+                    </article>
+
+                    <article class="about-feature-card">
+                        <div class="about-feature-icon">↯</div>
+                        <h3>Schnell statt kompliziert</h3>
+                        <p>
+                            Der Weg zur Bestellung muss kurz bleiben. Gerade bei Snacks, Getränken und Sofortbedarf zählt Tempo.
+                        </p>
+                    </article>
+
+                    <article class="about-feature-card">
+                        <div class="about-feature-icon">▣</div>
+                        <h3>Technisch sauber</h3>
+                        <p>
+                            Kioskheld nutzt Foodzwerge als technische Basis. Dadurch bleibt die Plattform erweiterbar,
+                            ohne die Oberfläche unnötig aufzublähen.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section about-engine-section">
+            <div class="container about-engine">
                 <div>
-                    <p class="subpage-kicker">Foodzwerge Verbindung</p>
+                    <p class="about-kicker">Foodzwerge Verbindung</p>
 
                     <h2>Kioskheld ist die Bühne. Foodzwerge ist der Motor.</h2>
                 </div>
 
-                <div class="subpage-dark-card">
+                <div class="about-engine-card">
                     <p>
-                        Foodzwerge stellt die Shop-Technik bereit: Produkte, Bestellungen, Händlerverwaltung,
-                        Lieferlogik und Schnittstellen. Kioskheld nutzt diese Grundlage und macht daraus eine
-                        einfache, fokussierte Plattform für Kiosk- und Sofortlieferungen.
+                        Im Vordergrund sieht der Kunde Kioskheld: eine einfache Plattform für lokale Kioskbestellungen.
+                        Im Hintergrund arbeitet Foodzwerge: Shop-Technik, Produkte, Bestellungen, Lieferlogik,
+                        Händlerverwaltung und Schnittstellen.
                     </p>
 
                     <p>
-                        Für Kunden bleibt es simpel. Für Händler bleibt es handhabbar. Für die Plattform bleibt
-                        die technische Basis sauber erweiterbar.
+                        Das Ergebnis: Kunden bekommen eine einfache Oberfläche. Händler bekommen ein handhabbares System.
+                        Und die technische Basis bleibt stabil erweiterbar.
                     </p>
                 </div>
             </div>
         </section>
 
-        <section class="subpage-section">
+        <section class="about-section about-final-section">
             <div class="container">
-                <div class="subpage-card-grid">
-                    <article class="subpage-info-card">
-                        <span>01</span>
-                        <h3>Für Kunden</h3>
-                        <p>
-                            Keine langen Umwege. Kunden prüfen schnell, ob ein Kioskheld in der Nähe verfügbar ist
-                            und bestellen typische Kioskprodukte direkt online.
-                        </p>
-                    </article>
-
-                    <article class="subpage-info-card">
-                        <span>02</span>
-                        <h3>Für Händler</h3>
-                        <p>
-                            Händler bekommen einen zusätzlichen Verkaufskanal, ohne selbst eine große Plattform
-                            entwickeln oder betreiben zu müssen.
-                        </p>
-                    </article>
-
-                    <article class="subpage-info-card">
-                        <span>03</span>
-                        <h3>Für die Region</h3>
-                        <p>
-                            Lokale Bestellungen bleiben lokaler. Kleine Anbieter werden sichtbarer und können
-                            digital gegen große Plattformen bestehen.
-                        </p>
-                    </article>
-                </div>
-
-                <div class="subpage-final-cta">
+                <div class="about-final-cta">
                     <div>
-                        <p class="subpage-kicker dark">Bereit?</p>
-                        <h2>Finde deinen Kioskheld oder werde selbst Partner.</h2>
+                        <p class="about-kicker about-kicker-dark">Bereit?</p>
+
+                        <h2>
+                            Finde deinen Kioskheld.
+                            Oder werde selbst einer.
+                        </h2>
+
+                        <p>
+                            Kioskheld startet regional und wächst mit den Händlern, die verstanden haben:
+                            Online bestellen ist längst nicht mehr nur etwas für Restaurants.
+                        </p>
                     </div>
 
-                    <div class="subpage-hero-actions">
-                        <a href="{{ route('home') }}#find" class="subpage-btn subpage-btn-primary">
-                            Jetzt suchen
+                    <div class="about-final-actions">
+                        <a href="{{ route('home') }}#find" class="about-btn about-btn-primary">
+                            Jetzt Kiosk suchen
                         </a>
 
-                        <a href="{{ route('home') }}#partner" class="subpage-btn subpage-btn-dark">
-                            Partner werden
+                        <a href="{{ route('partner.register') }}" class="about-btn about-btn-dark">
+                            Als Partner starten
                         </a>
                     </div>
                 </div>
@@ -181,5 +234,4 @@
     </main>
 
     <x-marketing.footer />
-
 @endsection

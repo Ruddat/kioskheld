@@ -285,7 +285,7 @@
                             Werde Kioskheld-Partner und erreiche mehr Kunden mit deinem eigenen Online-Shop.
                         </p>
 
-                        <a class="partner-banner__button" href="{{ url('/portal') }}">
+                        <a class="partner-banner__button" href="{{ route('partner.index') }}">
                             Mehr erfahren
                         </a>
                     </div>

@@ -1,0 +1,154 @@
+.partner-hero,
+.partner-register-section {
+    padding: 96px 0;
+    background: #fff7df;
+}
+
+.partner-hero-grid,
+.form-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+    gap: 48px;
+    align-items: center;
+}
+
+.eyebrow {
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: #f59e0b;
+    margin-bottom: 14px;
+}
+
+.partner-hero h1,
+.partner-register-section h1 {
+    font-size: clamp(2.4rem, 5vw, 4.8rem);
+    line-height: .95;
+    margin: 0 0 22px;
+}
+
+.lead {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #4b5563;
+    max-width: 680px;
+}
+
+.hero-actions,
+.center-action {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+}
+
+.partner-card {
+    background: #111827;
+    color: white;
+    border-radius: 28px;
+    padding: 34px;
+    box-shadow: 0 24px 70px rgba(17, 24, 39, .22);
+}
+
+.partner-card strong {
+    display: block;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+}
+
+.partner-card ul {
+    display: grid;
+    gap: 12px;
+    padding-left: 20px;
+    margin: 0;
+}
+
+.partner-section {
+    padding: 80px 0;
+    background: white;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-top: 32px;
+}
+
+.steps-grid article {
+    background: #fff7df;
+    border-radius: 24px;
+    padding: 28px;
+}
+
+.steps-grid span {
+    display: inline-grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    background: #111827;
+    color: white;
+    font-weight: 800;
+    margin-bottom: 18px;
+}
+
+.partner-form {
+    background: white;
+    border-radius: 28px;
+    padding: 32px;
+    box-shadow: 0 24px 70px rgba(17, 24, 39, .12);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.form-grid label {
+    display: grid;
+    gap: 7px;
+    font-weight: 700;
+}
+
+.form-grid label.full {
+    grid-column: 1 / -1;
+}
+
+.partner-form input,
+.partner-form textarea,
+.partner-form select {
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 14px 16px;
+    font: inherit;
+    background: #f9fafb;
+}
+
+.partner-form small {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+.full-button {
+    width: 100%;
+    margin-top: 22px;
+}
+
+.narrow {
+    max-width: 760px;
+}
+
+@media (max-width: 900px) {
+    .partner-hero-grid,
+    .form-layout,
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

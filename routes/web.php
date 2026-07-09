@@ -6,6 +6,8 @@ use App\Http\Controllers\CheckoutCustomerController;
 use App\Http\Controllers\CheckoutOrderController;
 use App\Http\Controllers\CheckoutPaypalController;
 use App\Http\Controllers\OrderThankYouController;
+use App\Http\Controllers\Partner\PartnerLeadController;
+use App\Http\Controllers\Partner\PartnerPageController;
 use App\Http\Controllers\PostcodeAvailabilityController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopSelectionController;
@@ -47,6 +49,19 @@ Route::get('/kasse/paypal/cancel', [CheckoutPaypalController::class, 'cancel'])
 
 Route::get('/bestellung/danke', OrderThankYouController::class)
     ->name('checkout.thank-you');
+
+Route::get('/partner', [PartnerPageController::class, 'index'])
+    ->name('partner.index');
+
+Route::get('/partner/registrieren', [PartnerPageController::class, 'register'])
+    ->name('partner.register');
+
+Route::post('/partner/registrieren', [PartnerLeadController::class, 'store'])
+    ->name('partner.store');
+
+Route::get('/partner/danke', [PartnerPageController::class, 'thankYou'])
+    ->name('partner.thank-you');
+
 
 Route::view('/ueber-uns', 'pages.about')->name('about');
 Route::view('/impressum', 'pages.legal.imprint')->name('legal.imprint');

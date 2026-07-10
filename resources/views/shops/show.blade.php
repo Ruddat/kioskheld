@@ -23,87 +23,92 @@
             <x-marketing.nav />
         </div>
 
-        <section class="shop-app-hero">
-            <div class="shop-app-hero-bg"></div>
+<section class="shop-app-hero">
+    <div class="shop-app-hero-bg" aria-hidden="true"></div>
 
-            <div class="container shop-app-hero-inner">
-                <a href="{{ route('shops.selection') }}" class="shop-app-back">
-                    <span>←</span>
-                    Zurück zur Kioskauswahl
-                </a>
+    <div class="container shop-app-hero-inner">
+        <a href="{{ route('shops.selection') }}" class="shop-app-back">
+            <span>←</span>
+            Kioskauswahl
+        </a>
 
-                <div class="shop-app-hero-grid">
-                    <div class="shop-app-hero-content">
-                        <p class="shop-powered">Powered by Foodzwerge</p>
+        <div class="shop-app-hero-grid">
+            <div class="shop-app-hero-content">
+                <p class="shop-powered">Kioskheld Shop</p>
 
-                        <h1>
-                            <span>{{ $shop['name'] ?? 'Kioskheld' }}</span>
-                            <strong>liefert zu dir.</strong>
-                        </h1>
+                <h1>
+                    <span>{{ $shop['name'] ?? 'Kioskheld' }}</span>
+                    <strong>direkt zu dir.</strong>
+                </h1>
 
-                        <div class="shop-open-status">
-                            <span></span>
-                            Geöffnet
+                <p class="shop-hero-subline">
+                    Snacks, Getränke, Süßes, Eis und Kiosk-Bundles online bestellen.
+                    Dein Warenkorb wird vor dem Checkout noch einmal geprüft.
+                </p>
+
+                <div class="shop-open-status">
+                    <span></span>
+                    Geöffnet
+                </div>
+
+                <div class="shop-hero-facts">
+                    @if ($estimatedMinutes)
+                        <div>
+                            <small>Lieferzeit</small>
+                            <strong>{{ $estimatedMinutes }} Min.</strong>
                         </div>
+                    @endif
 
-                        <div class="shop-hero-facts">
-                            @if ($estimatedMinutes)
-                                <div>
-                                    <small>Lieferzeit</small>
-                                    <strong>{{ $estimatedMinutes }} Min.</strong>
-                                </div>
-                            @endif
-
-                            @if ($minimumOrderValue)
-                                <div>
-                                    <small>Mindestbestellwert</small>
-                                    <strong>ab {{ number_format((float) $minimumOrderValue, 2, ',', '.') }} €</strong>
-                                </div>
-                            @endif
-
-                            @if ($deliveryFee !== null)
-                                <div>
-                                    <small>Liefergebühr</small>
-                                    <strong>{{ number_format((float) $deliveryFee, 2, ',', '.') }} €</strong>
-                                </div>
-                            @endif
-
-                            @if ($freeDeliveryFrom)
-                                <div>
-                                    <small>Kostenlos ab</small>
-                                    <strong>{{ number_format((float) $freeDeliveryFrom, 2, ',', '.') }} €</strong>
-                                </div>
-                            @endif
+                    @if ($minimumOrderValue)
+                        <div>
+                            <small>Mindestbestellwert</small>
+                            <strong>ab {{ number_format((float) $minimumOrderValue, 2, ',', '.') }} €</strong>
                         </div>
+                    @endif
 
-                        @if (!empty($postcode))
-                            <div class="shop-app-postcode">
-                                <span>📍</span>
-                                Lieferung nach <strong>PLZ {{ $postcode }}</strong>
-                            </div>
-                        @endif
+                    @if ($deliveryFee !== null)
+                        <div>
+                            <small>Liefergebühr</small>
+                            <strong>{{ number_format((float) $deliveryFee, 2, ',', '.') }} €</strong>
+                        </div>
+                    @endif
+
+                    @if ($freeDeliveryFrom)
+                        <div>
+                            <small>Kostenlos ab</small>
+                            <strong>{{ number_format((float) $freeDeliveryFrom, 2, ',', '.') }} €</strong>
+                        </div>
+                    @endif
+                </div>
+
+                @if (!empty($postcode))
+                    <div class="shop-app-postcode">
+                        <span>📍</span>
+                        Lieferung nach <strong>PLZ {{ $postcode }}</strong>
                     </div>
+                @endif
+            </div>
 
-                    <div class="shop-app-hero-card">
-                        <div class="shop-app-hero-card-inner">
-                            <span class="shop-app-hero-badge">Kioskheld Shop</span>
+            <div class="shop-app-hero-card">
+                <div class="shop-app-hero-card-inner">
+                    <span class="shop-app-hero-badge">Schnell bestellen</span>
 
-                            <h2>{{ $shop['name'] ?? 'Kioskheld' }}</h2>
+                    <h2>Kiosk-Produkte ohne Umweg.</h2>
 
-                            <p>
-                                Snacks, Getränke, Süßes, Eis und Kiosk-Bundles.
-                                Schnell geliefert und vor dem Checkout noch einmal serverseitig geprüft.
-                            </p>
+                    <p>
+                        Sortiment ansehen, Produkte wählen und direkt zur Kasse.
+                        Preise und Lieferbarkeit werden serverseitig geprüft.
+                    </p>
 
-                            <a href="#catalog" class="shop-app-hero-button">
-                                Sortiment ansehen
-                                <span>↓</span>
-                            </a>
-                        </div>
-                    </div>
+                    <a href="#catalog" class="shop-app-hero-button">
+                        Sortiment ansehen
+                        <span>↓</span>
+                    </a>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
         <section class="shop-app-content" id="catalog">
             <div class="container">

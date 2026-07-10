@@ -1,0 +1,358 @@
+.partner-onboarding-thank-you-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(255, 214, 10, 0.15), transparent 34rem),
+        linear-gradient(180deg, #070707 0%, #111111 25rem, #f6f1e7 25rem, #f6f1e7 100%);
+    color: #111111;
+}
+
+.onboarding-thank-you-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 104px 0 120px;
+    background:
+        linear-gradient(135deg, rgba(0, 0, 0, 0.93), rgba(0, 0, 0, 0.58)),
+        url("/images/partner-hero-bg.webp") center / cover no-repeat;
+    color: #ffffff;
+}
+
+.onboarding-thank-you-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 16% 22%, rgba(255, 214, 10, 0.32), transparent 30rem),
+        radial-gradient(circle at 82% 16%, rgba(255, 214, 10, 0.12), transparent 25rem),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.24));
+    pointer-events: none;
+}
+
+.onboarding-thank-you-hero::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 58px;
+    background: linear-gradient(180deg, transparent, #f6f1e7);
+    pointer-events: none;
+}
+
+.onboarding-thank-you-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 430px);
+    gap: 58px;
+    align-items: center;
+}
+
+.onboarding-thank-you-copy {
+    max-width: 850px;
+}
+
+.onboarding-thank-you-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    width: fit-content;
+    margin: 0 0 18px;
+    padding: 9px 14px;
+    border: 1px solid rgba(255, 214, 10, 0.36);
+    border-radius: 999px;
+    background: rgba(255, 214, 10, 0.13);
+    color: #ffd60a;
+    font-size: 0.78rem;
+    font-weight: 1000;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.onboarding-thank-you-kicker::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #ffd60a;
+    box-shadow: 0 0 0 5px rgba(255, 214, 10, 0.16);
+}
+
+.onboarding-thank-you-kicker-dark {
+    border-color: rgba(17, 17, 17, 0.1);
+    background: rgba(255, 214, 10, 0.2);
+    color: #111111;
+}
+
+.onboarding-thank-you-copy h1 {
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(2.75rem, 6vw, 5.95rem);
+    line-height: 0.9;
+    letter-spacing: -0.085em;
+}
+
+.onboarding-thank-you-copy h1 span {
+    display: block;
+    color: #ffd60a;
+}
+
+.onboarding-thank-you-copy > p:not(.onboarding-thank-you-kicker) {
+    max-width: 760px;
+    margin: 24px 0 0;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: clamp(1.02rem, 1.55vw, 1.18rem);
+    line-height: 1.72;
+}
+
+.onboarding-thank-you-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 34px;
+}
+
+.onboarding-thank-you-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 0 23px;
+    border-radius: 999px;
+    font-size: 0.96rem;
+    font-weight: 1000;
+    text-decoration: none;
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.onboarding-thank-you-btn:hover {
+    transform: translateY(-2px);
+}
+
+.onboarding-thank-you-btn-primary {
+    background: linear-gradient(135deg, #ffe600, #ffc400);
+    color: #111111;
+    box-shadow: 0 18px 38px rgba(255, 204, 0, 0.24);
+}
+
+.onboarding-thank-you-btn-outline {
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.07);
+    color: #ffffff;
+}
+
+.onboarding-thank-you-btn-outline:hover {
+    border-color: rgba(255, 214, 10, 0.48);
+    background: rgba(255, 214, 10, 0.12);
+    color: #ffd60a;
+}
+
+.onboarding-thank-you-card {
+    position: relative;
+    overflow: hidden;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 32px;
+    background:
+        radial-gradient(circle at top right, rgba(255, 214, 10, 0.22), transparent 19rem),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06)),
+        rgba(0, 0, 0, 0.44);
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(16px);
+}
+
+.onboarding-success-icon {
+    display: grid;
+    place-items: center;
+    width: 66px;
+    height: 66px;
+    margin-bottom: 20px;
+    border-radius: 22px;
+    background: #ffd60a;
+    color: #111111;
+    font-size: 2rem;
+    font-weight: 1000;
+    box-shadow: 0 18px 36px rgba(255, 214, 10, 0.22);
+}
+
+.onboarding-thank-you-card > span {
+    display: inline-flex;
+    width: fit-content;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255, 214, 10, 0.14);
+    color: #ffd60a;
+    font-size: 0.76rem;
+    font-weight: 1000;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.onboarding-thank-you-card h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 2rem;
+    line-height: 0.98;
+    letter-spacing: -0.06em;
+}
+
+.onboarding-next-steps {
+    display: grid;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.onboarding-next-steps div {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 13px;
+    align-items: start;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.065);
+}
+
+.onboarding-next-steps strong {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    background: rgba(255, 214, 10, 0.16);
+    color: #ffd60a;
+    font-size: 0.78rem;
+    font-weight: 1000;
+}
+
+.onboarding-next-steps p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.74);
+    font-weight: 800;
+    line-height: 1.48;
+}
+
+.onboarding-thank-you-section {
+    position: relative;
+    z-index: 2;
+    padding: 0 0 96px;
+}
+
+.onboarding-thank-you-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+    gap: 30px;
+    align-items: center;
+    margin-top: -54px;
+    padding: 36px;
+    border: 1px solid rgba(17, 17, 17, 0.08);
+    border-radius: 34px;
+    background:
+        radial-gradient(circle at top right, rgba(255, 214, 10, 0.19), transparent 24rem),
+        #ffffff;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.14);
+}
+
+.onboarding-thank-you-panel h2 {
+    max-width: 760px;
+    margin: 0;
+    color: #111111;
+    font-size: clamp(2rem, 3.6vw, 3.6rem);
+    line-height: 0.96;
+    letter-spacing: -0.075em;
+}
+
+.onboarding-thank-you-panel p:not(.onboarding-thank-you-kicker) {
+    max-width: 740px;
+    margin: 18px 0 0;
+    color: rgba(17, 17, 17, 0.66);
+    font-size: 1.04rem;
+    line-height: 1.7;
+    font-weight: 760;
+}
+
+.onboarding-contact-hint {
+    padding: 24px;
+    border: 1px solid rgba(17, 17, 17, 0.08);
+    border-radius: 26px;
+    background: #111111;
+    color: #ffffff;
+}
+
+.onboarding-contact-hint span {
+    display: inline-flex;
+    margin-bottom: 12px;
+    color: #ffd60a;
+    font-size: 0.78rem;
+    font-weight: 1000;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.onboarding-contact-hint strong {
+    display: block;
+    color: #ffffff;
+    font-size: 1.25rem;
+    line-height: 1.28;
+    letter-spacing: -0.035em;
+}
+
+.partner-onboarding-thank-you-page > footer {
+    background: #050505;
+}
+
+@media (max-width: 980px) {
+    .onboarding-thank-you-grid,
+    .onboarding-thank-you-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .onboarding-thank-you-card {
+        max-width: 620px;
+    }
+}
+
+@media (max-width: 640px) {
+    .onboarding-thank-you-hero {
+        padding: 78px 0 94px;
+    }
+
+    .onboarding-thank-you-actions {
+        display: grid;
+    }
+
+    .onboarding-thank-you-btn {
+        width: 100%;
+    }
+
+    .onboarding-thank-you-card,
+    .onboarding-thank-you-panel {
+        padding: 24px;
+        border-radius: 26px;
+    }
+
+    .onboarding-thank-you-panel {
+        margin-top: -40px;
+    }
+
+    .onboarding-next-steps div {
+        grid-template-columns: 40px minmax(0, 1fr);
+    }
+
+    .onboarding-success-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 20px;
+        font-size: 1.7rem;
+    }
+}
+
+@media (max-width: 460px) {
+    .onboarding-thank-you-copy h1 {
+        font-size: clamp(2.4rem, 15vw, 3.65rem);
+    }
+}

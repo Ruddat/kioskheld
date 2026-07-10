@@ -44,7 +44,8 @@
                         <h2>In wenigen Minuten vollständig.</h2>
 
                         <p>
-                            Je sauberer die Angaben sind, desto schneller können wir deinen Kiosk für den Online-Start vorbereiten.
+                            Je sauberer die Angaben sind, desto schneller können wir deinen Kiosk für den Online-Start
+                            vorbereiten.
                         </p>
 
                         <div class="onboarding-steps">
@@ -81,7 +82,8 @@
                     </div>
                 </aside>
 
-                <form method="POST" action="{{ route('partner.onboarding.store', $onboarding->token) }}" class="partner-form onboarding-form">
+                <form method="POST" action="{{ route('partner.onboarding.store', $onboarding->token) }}"
+                    class="partner-form onboarding-form">
                     @csrf
 
                     <section class="onboarding-form-section" id="kioskdaten">
@@ -96,44 +98,71 @@
                         <div class="form-grid">
                             <label>
                                 <span>Kioskname *</span>
-                                <input type="text" name="business_name" value="{{ old('business_name', data_get($onboarding->business_data, 'business_name', $lead->business_name)) }}" required>
-                                @error('business_name') <small>{{ $message }}</small> @enderror
+                                <input type="text" name="business_name"
+                                    value="{{ old('business_name', data_get($onboarding->business_data, 'business_name', $lead->business_name)) }}"
+                                    required>
+                                @error('business_name')
+                                    <small>{{ $message }}</small>
+                                @enderror
                             </label>
 
                             <label>
                                 <span>Ansprechpartner</span>
-                                <input type="text" name="contact_name" value="{{ old('contact_name', data_get($onboarding->business_data, 'contact_name', $lead->contact_name)) }}">
-                                @error('contact_name') <small>{{ $message }}</small> @enderror
+                                <input type="text" name="contact_name"
+                                    value="{{ old('contact_name', data_get($onboarding->business_data, 'contact_name', $lead->contact_name)) }}">
+                                @error('contact_name')
+                                    <small>{{ $message }}</small>
+                                @enderror
                             </label>
 
                             <label>
                                 <span>Telefon / WhatsApp *</span>
-                                <input type="text" name="phone" value="{{ old('phone', data_get($onboarding->business_data, 'phone', $lead->phone)) }}" required>
-                                @error('phone') <small>{{ $message }}</small> @enderror
+                                <input type="text" name="phone"
+                                    value="{{ old('phone', data_get($onboarding->business_data, 'phone', $lead->phone)) }}"
+                                    required>
+                                @error('phone')
+                                    <small>{{ $message }}</small>
+                                @enderror
                             </label>
 
                             <label>
-                                <span>E-Mail</span>
-                                <input type="email" name="email" value="{{ old('email', data_get($onboarding->business_data, 'email', $lead->email)) }}">
-                                @error('email') <small>{{ $message }}</small> @enderror
+                                <span>E-Mail *</span>
+                                <input type="email" name="email"
+                                    value="{{ old('email', data_get($onboarding->business_data, 'email', $lead->email)) }}"
+                                    required>
+                                @error('email')
+                                    <small>{{ $message }}</small>
+                                @enderror
                             </label>
 
                             <label class="full">
-                                <span>Straße</span>
-                                <input type="text" name="street" value="{{ old('street', data_get($onboarding->business_data, 'street', $lead->street)) }}">
-                                @error('street') <small>{{ $message }}</small> @enderror
+                                <span>Straße und Hausnummer *</span>
+                                <input type="text" name="street"
+                                    value="{{ old('street', data_get($onboarding->business_data, 'street', $lead->street)) }}"
+                                    required>
+                                @error('street')
+                                    <small>{{ $message }}</small>
+                                @enderror
                             </label>
 
                             <label>
                                 <span>PLZ *</span>
-                                <input type="text" name="postcode" value="{{ old('postcode', data_get($onboarding->business_data, 'postcode', $lead->postcode)) }}" maxlength="5" inputmode="numeric" required>
-                                @error('postcode') <small>{{ $message }}</small> @enderror
+                                <input type="text" name="postcode"
+                                    value="{{ old('postcode', data_get($onboarding->business_data, 'postcode', $lead->postcode)) }}"
+                                    maxlength="5" inputmode="numeric" required>
+                                @error('postcode')
+                                    <small>{{ $message }}</small>
+                                @enderror
                             </label>
 
                             <label>
-                                <span>Ort</span>
-                                <input type="text" name="city" value="{{ old('city', data_get($onboarding->business_data, 'city', $lead->city)) }}">
-                                @error('city') <small>{{ $message }}</small> @enderror
+                                <span>Ort *</span>
+                                <input type="text" name="city"
+                                    value="{{ old('city', data_get($onboarding->business_data, 'city', $lead->city)) }}"
+                                    required>
+                                @error('city')
+                                    <small>{{ $message }}</small>
+                                @enderror
                             </label>
                         </div>
                     </section>
@@ -150,7 +179,8 @@
                         <div class="checkbox-grid">
                             @foreach ($categories as $category)
                                 <label class="check-card">
-                                    <input type="checkbox" name="categories[]" value="{{ $category }}" @checked(in_array($category, old('categories', []), true))>
+                                    <input type="checkbox" name="categories[]" value="{{ $category }}"
+                                        @checked(in_array($category, old('categories', []), true))>
                                     <span>{{ $category }}</span>
                                 </label>
                             @endforeach
@@ -178,22 +208,25 @@
 
                         <div class="opening-grid">
                             @foreach ([
-                                'monday' => 'Montag',
-                                'tuesday' => 'Dienstag',
-                                'wednesday' => 'Mittwoch',
-                                'thursday' => 'Donnerstag',
-                                'friday' => 'Freitag',
-                                'saturday' => 'Samstag',
-                                'sunday' => 'Sonntag',
-                            ] as $dayKey => $dayLabel)
+            'monday' => 'Montag',
+            'tuesday' => 'Dienstag',
+            'wednesday' => 'Mittwoch',
+            'thursday' => 'Donnerstag',
+            'friday' => 'Freitag',
+            'saturday' => 'Samstag',
+            'sunday' => 'Sonntag',
+        ] as $dayKey => $dayLabel)
                                 <div class="opening-row">
                                     <label class="opening-active">
-                                        <input type="checkbox" name="opening_hours[{{ $dayKey }}][open]" value="1" checked>
+                                        <input type="checkbox" name="opening_hours[{{ $dayKey }}][open]"
+                                            value="1" checked>
                                         <strong>{{ $dayLabel }}</strong>
                                     </label>
 
-                                    <input type="time" name="opening_hours[{{ $dayKey }}][from]" value="{{ old("opening_hours.$dayKey.from", '10:00') }}">
-                                    <input type="time" name="opening_hours[{{ $dayKey }}][to]" value="{{ old("opening_hours.$dayKey.to", '23:00') }}">
+                                    <input type="time" name="opening_hours[{{ $dayKey }}][from]"
+                                        value="{{ old("opening_hours.$dayKey.from", '10:00') }}">
+                                    <input type="time" name="opening_hours[{{ $dayKey }}][to]"
+                                        value="{{ old("opening_hours.$dayKey.to", '23:00') }}">
                                 </div>
                             @endforeach
                         </div>
@@ -212,7 +245,8 @@
                             <label class="full">
                                 <span>Lieferst du selbst?</span>
                                 <select name="delivery_enabled">
-                                    <option value="maybe" @selected(old('delivery_enabled', $lead->delivery_possible) === 'maybe')>Vielleicht / müssen wir klären</option>
+                                    <option value="maybe" @selected(old('delivery_enabled', $lead->delivery_possible) === 'maybe')>Vielleicht / müssen wir klären
+                                    </option>
                                     <option value="yes" @selected(old('delivery_enabled', $lead->delivery_possible) === 'yes')>Ja</option>
                                     <option value="no" @selected(old('delivery_enabled', $lead->delivery_possible) === 'no')>Nein</option>
                                 </select>
@@ -220,22 +254,27 @@
 
                             <label class="full">
                                 <span>Liefer-PLZ</span>
-                                <input type="text" name="delivery_postcodes" value="{{ old('delivery_postcodes', $lead->postcode) }}" placeholder="z. B. 31234, 31224, 31226">
+                                <input type="text" name="delivery_postcodes"
+                                    value="{{ old('delivery_postcodes', $lead->postcode) }}"
+                                    placeholder="z. B. 31234, 31224, 31226">
                             </label>
 
                             <label>
                                 <span>Mindestbestellwert</span>
-                                <input type="number" step="0.01" min="0" name="minimum_order_value" value="{{ old('minimum_order_value', '15.00') }}">
+                                <input type="number" step="0.01" min="0" name="minimum_order_value"
+                                    value="{{ old('minimum_order_value', '15.00') }}">
                             </label>
 
                             <label>
                                 <span>Lieferkosten</span>
-                                <input type="number" step="0.01" min="0" name="delivery_fee" value="{{ old('delivery_fee', '2.50') }}">
+                                <input type="number" step="0.01" min="0" name="delivery_fee"
+                                    value="{{ old('delivery_fee', '2.50') }}">
                             </label>
 
                             <label>
                                 <span>Kostenlose Lieferung ab</span>
-                                <input type="number" step="0.01" min="0" name="free_delivery_from" value="{{ old('free_delivery_from') }}">
+                                <input type="number" step="0.01" min="0" name="free_delivery_from"
+                                    value="{{ old('free_delivery_from') }}">
                             </label>
                         </div>
                     </section>
@@ -264,12 +303,14 @@
                         <div class="form-grid">
                             <label>
                                 <span>Kartenzahlung ab</span>
-                                <input type="number" step="0.01" min="0" name="card_minimum_order_value" value="{{ old('card_minimum_order_value') }}">
+                                <input type="number" step="0.01" min="0" name="card_minimum_order_value"
+                                    value="{{ old('card_minimum_order_value') }}">
                             </label>
 
                             <label>
                                 <span>Kartengebühr</span>
-                                <input type="number" step="0.01" min="0" name="card_fee_amount" value="{{ old('card_fee_amount') }}">
+                                <input type="number" step="0.01" min="0" name="card_fee_amount"
+                                    value="{{ old('card_fee_amount') }}">
                             </label>
 
                             <label class="full check-line">
@@ -291,7 +332,8 @@
                         <div class="terms-box">
                             <p>
                                 Kioskheld vermittelt Bestellungen für deinen Kiosk. Für vermittelte Bestellungen fällt eine
-                                Servicegebühr von <strong>3 %</strong> auf den Bestellwert an. Die Freischaltung erfolgt erst
+                                Servicegebühr von <strong>3 %</strong> auf den Bestellwert an. Die Freischaltung erfolgt
+                                erst
                                 nach Prüfung der Angaben.
                             </p>
 
@@ -310,9 +352,15 @@
                                 <span>Ich bin berechtigt, diese Angaben für den Kiosk zu übermitteln.</span>
                             </label>
 
-                            @error('accept_terms') <small>{{ $message }}</small> @enderror
-                            @error('confirm_data') <small>{{ $message }}</small> @enderror
-                            @error('confirm_authorized') <small>{{ $message }}</small> @enderror
+                            @error('accept_terms')
+                                <small>{{ $message }}</small>
+                            @enderror
+                            @error('confirm_data')
+                                <small>{{ $message }}</small>
+                            @enderror
+                            @error('confirm_authorized')
+                                <small>{{ $message }}</small>
+                            @enderror
                         </div>
 
                         <button type="submit" class="btn btn-primary full-button onboarding-submit">

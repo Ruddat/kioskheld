@@ -22,12 +22,14 @@ class PartnerLeadAdminController extends Controller
         ]);
     }
 
-    public function show(PartnerLead $partnerLead): View
-    {
-        return view('admin.partner-leads.show', [
-            'partnerLead' => $partnerLead,
-        ]);
-    }
+public function show(PartnerLead $partnerLead): View
+{
+    $partnerLead->load('latestOnboarding');
+
+    return view('admin.partner-leads.show', [
+        'partnerLead' => $partnerLead,
+    ]);
+}
 
     public function updateStatus(Request $request, PartnerLead $partnerLead): RedirectResponse
     {

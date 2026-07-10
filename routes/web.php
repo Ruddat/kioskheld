@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\PartnerLeadAdminController;
 use App\Http\Controllers\Admin\PartnerOnboardingAdminController;
+use App\Http\Controllers\Admin\PartnerOnboardingImportController;
+use App\Http\Controllers\Admin\PartnerOnboardingStatusController;
 use App\Http\Controllers\CartValidationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CheckoutCustomerController;
@@ -118,10 +120,18 @@ Route::middleware(['auth', 'admin'])
         Route::patch('/partner-leads/{partnerLead}/status', [PartnerLeadAdminController::class, 'updateStatus'])
             ->name('partner-leads.update-status');
 
-            Route::post('/partner-leads/{partnerLead}/onboarding', [PartnerOnboardingAdminController::class, 'store'])
+        Route::post('/partner-leads/{partnerLead}/onboarding', [PartnerOnboardingAdminController::class, 'store'])
             ->name('partner-leads.onboarding.store');
 
+        Route::post(
+            '/partner-onboardings/{partnerOnboarding}/import',
+            PartnerOnboardingImportController::class
+        )->name('partner-onboardings.import');
 
+        Route::post(
+            '/partner-onboardings/{partnerOnboarding}/status',
+            PartnerOnboardingStatusController::class
+        )->name('partner-onboardings.status');
     });
 
 Route::middleware(['auth', 'vendor'])
@@ -131,4 +141,4 @@ Route::middleware(['auth', 'vendor'])
         Route::view('/', 'vendor.dashboard')->name('dashboard');
     });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -39,10 +39,10 @@ class PartnerOnboardingController extends Controller
             'business_name' => ['required', 'string', 'max:160'],
             'contact_name' => ['nullable', 'string', 'max:120'],
             'phone' => ['required', 'string', 'max:60'],
-            'email' => ['nullable', 'email', 'max:160'],
-            'street' => ['nullable', 'string', 'max:180'],
+            'email' => ['required', 'email', 'max:160'],
+            'street' => ['required', 'string', 'max:180'],
             'postcode' => ['required', 'regex:/^[0-9]{5}$/'],
-            'city' => ['nullable', 'string', 'max:120'],
+            'city' => ['required', 'string', 'max:120'],
 
             'categories' => ['nullable', 'array'],
             'categories.*' => ['string', 'max:80'],
@@ -69,8 +69,12 @@ class PartnerOnboardingController extends Controller
         ], [
             'business_name.required' => 'Bitte gib den Kiosknamen ein.',
             'phone.required' => 'Bitte gib eine Telefonnummer ein.',
+            'email.required' => 'Bitte gib eine E-Mail-Adresse ein.',
+            'email.email' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
+            'street.required' => 'Bitte gib die Straße und Hausnummer ein.',
             'postcode.required' => 'Bitte gib eine Postleitzahl ein.',
             'postcode.regex' => 'Bitte gib eine gültige 5-stellige Postleitzahl ein.',
+            'city.required' => 'Bitte gib den Ort ein.',
             'accept_terms.accepted' => 'Bitte bestätige die Partnerkonditionen.',
             'confirm_data.accepted' => 'Bitte bestätige die Richtigkeit deiner Angaben.',
             'confirm_authorized.accepted' => 'Bitte bestätige, dass du zur Übermittlung berechtigt bist.',
@@ -110,6 +114,8 @@ class PartnerOnboardingController extends Controller
             'accepted_terms_at' => now(),
             'accepted_terms_ip' => $request->ip(),
             'submitted_at' => now(),
+            'justdeliver_import_status' => 'pending',
+            'justdeliver_import_error' => null,
         ]);
 
         return redirect()

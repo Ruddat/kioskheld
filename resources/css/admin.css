@@ -484,3 +484,63 @@ a {
         padding: 20px;
     }
 }
+
+.admin-alert-error {
+    border-color: rgba(220, 38, 38, 0.2);
+    background: rgba(220, 38, 38, 0.1);
+    color: #991b1b;
+}
+
+
+.admin-card-wide {
+    grid-column: 1 / -1;
+}
+
+.admin-onboarding-section {
+    display: grid;
+    gap: 20px;
+}
+
+.admin-card-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.admin-import-box {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: center;
+    padding: 22px;
+    border: 1px solid rgba(17, 17, 17, 0.08);
+    border-radius: 20px;
+    background: rgba(255, 214, 10, 0.09);
+}
+
+.admin-import-box h4 {
+    margin: 0 0 8px;
+}
+
+.admin-import-box .admin-muted {
+    margin: 0;
+}
+
+.admin-alert-error {
+    border-color: rgba(220, 38, 38, 0.2);
+    background: rgba(220, 38, 38, 0.1);
+    color: #991b1b;
+}
+
+@media (max-width: 760px) {
+    .admin-import-box {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .admin-import-box .admin-action-form,
+    .admin-import-box .btn {
+        width: 100%;
+    }
+}

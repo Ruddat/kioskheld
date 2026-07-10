@@ -7,6 +7,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    const postcodeCheckUrl = form.dataset.postcodeCheckUrl;
+    const shopSelectionUrl = form.dataset.shopSelectionUrl;
+    const shopLegacyUrl = form.dataset.shopLegacyUrl;
+
+    if (!postcodeCheckUrl || !shopSelectionUrl || !shopLegacyUrl) {
+        console.error('Kioskheld postcode route configuration missing', {
+            postcodeCheckUrl,
+            shopSelectionUrl,
+            shopLegacyUrl,
+        });
+
+        return;
+    }
+
     let currentPostcode = null;
 
     const showToast = (message) => {
@@ -81,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const buildAvailabilityUrl = ({ postcode, city = null, district = null }) => {
-        const url = new URL('/plz/pruefen', window.location.origin);
+        const url = new URL(postcodeCheckUrl, window.location.origin);
 
         url.searchParams.set('postcode', postcode);
 
@@ -127,7 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(`${shop.name || 'Kiosk'} gefunden. Du wirst weitergeleitet ...`);
 
             window.setTimeout(() => {
-                window.location.href = `/shops/${encodeURIComponent(shop.slug)}`;
+                window.location.href = shopLegacyUrl.replace(
+                    '__SHOP_SLUG__',
+                    encodeURIComponent(shop.slug)
+                );
             }, 700);
 
             return;
@@ -137,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(`${data.shops.length} Kioske gefunden. Bitte wähle deinen Shop.`);
 
             window.setTimeout(() => {
-                window.location.href = '/shops/auswahl';
+                window.location.href = shopSelectionUrl;
             }, 700);
 
             return;

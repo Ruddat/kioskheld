@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/css/marketing.css',
                 'resources/js/marketing-home.js',
                 'resources/js/shop-cart.js',
+                'resources/js/language-switcher.js',
             ],
             refresh: true,
         }),

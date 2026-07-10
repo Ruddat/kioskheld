@@ -129,7 +129,10 @@
                                     </div>
                                 @endif
 
-                                <a href="{{ route('shops.show', ['shopSlug' => $shop['slug']]) }}"
+                                <a href="{{ route('shops.show', [
+                                    'citySlug' => \App\Support\ShopUrl::citySlug($shop),
+                                    'shopSlugWithId' => \App\Support\ShopUrl::shopSlugWithId($shop),
+                                ]) }}"
                                     class="shop-card-button">
                                     Zum Shop
                                     <span>›</span>

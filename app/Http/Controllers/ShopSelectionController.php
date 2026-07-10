@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\ShopUrl;
 use Illuminate\Http\Request;
 
 class ShopSelectionController extends Controller
@@ -20,19 +21,23 @@ class ShopSelectionController extends Controller
                 ->with('error', 'Bitte gib zuerst deine Postleitzahl ein.');
         }
 
-        if ($mode !== 'multiple') {
-            $selectedShopSlug = session('kioskheld.selected_shop_slug');
+if ($mode !== 'multiple') {
+    $selectedShopSlug = session('kioskheld.selected_shop_slug');
 
-            if ($selectedShopSlug) {
-                return redirect()->route('shops.show', [
-                    'shopSlug' => $selectedShopSlug,
-                ]);
-            }
+    if ($selectedShopSlug) {
+        $selectedShop = collect($shops)
+            ->firstWhere('slug', $selectedShopSlug);
 
-            return redirect()
-                ->route('home')
-                ->with('error', 'Es wurde keine Shopauswahl gefunden.');
-        }
+        return redirect()->route('shops.show', [
+            'citySlug' => is_array($selectedShop) ? ShopUrl::citySlug($selectedShop) : 'deine-naehe',
+            'shopSlugWithId' => is_array($selectedShop) ? ShopUrl::shopSlugWithId($selectedShop) : $selectedShopSlug,
+        ]);
+    }
+
+    return redirect()
+        ->route('home')
+        ->with('error', 'Es wurde keine Shopauswahl gefunden.');
+}
 
         if (! is_array($shops) || count($shops) === 0) {
             return redirect()

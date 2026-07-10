@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\ShopUrl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class ShopShowController extends Controller
 {
-    public function __invoke(Request $request, string $shopSlug)
+    public function __invoke(Request $request, string $citySlug, string $shopSlugWithId)
     {
+        $shopSlug = ShopUrl::apiSlugFromUrlSlug($shopSlugWithId);
         $apiUrl = config('services.justdeliver.kioskheld_api_url');
         $apiKey = config('services.justdeliver.kioskheld_api_key');
 
@@ -44,7 +46,7 @@ class ShopShowController extends Controller
 
         try {
             $shopResponse = Http::timeout(5)
-                ->when(app()->environment('local'), fn ($http) => $http->withoutVerifying())
+                ->when(app()->environment('local'), fn($http) => $http->withoutVerifying())
                 ->withHeaders([
                     'X-Kioskheld-Api-Key' => $apiKey,
                     'Accept' => 'application/json',
@@ -66,7 +68,7 @@ class ShopShowController extends Controller
             }
 
             $catalogResponse = Http::timeout(8)
-                ->when(app()->environment('local'), fn ($http) => $http->withoutVerifying())
+                ->when(app()->environment('local'), fn($http) => $http->withoutVerifying())
                 ->withHeaders([
                     'X-Kioskheld-Api-Key' => $apiKey,
                     'Accept' => 'application/json',
@@ -109,12 +111,12 @@ class ShopShowController extends Controller
             $this->storeSelectedShopInSession($request, $shop, $sessionShops);
 
             $groupedCatalog = collect($catalog)
-                ->groupBy(fn ($product) => $product['category']['name'] ?? 'Weitere Produkte')
-                ->map(fn ($products) => $products->values())
+                ->groupBy(fn($product) => $product['category']['name'] ?? 'Weitere Produkte')
+                ->map(fn($products) => $products->values())
                 ->toArray();
 
             $productsByCategoryId = collect($catalog)
-                ->groupBy(fn ($product) => $product['category']['id'] ?? 'unknown')
+                ->groupBy(fn($product) => $product['category']['id'] ?? 'unknown')
                 ->toArray();
 
             return view('shops.show', [
@@ -150,7 +152,7 @@ class ShopShowController extends Controller
 
         if ($mode === 'multiple') {
             return collect($sessionShops)
-                ->contains(fn ($shop) => ($shop['slug'] ?? null) === $shopSlug);
+                ->contains(fn($shop) => ($shop['slug'] ?? null) === $shopSlug);
         }
 
         return false;

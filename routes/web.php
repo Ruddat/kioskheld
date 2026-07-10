@@ -28,8 +28,17 @@ Route::post('/warenkorb/pruefen', CartValidationController::class)
 Route::get('/shops/auswahl', ShopSelectionController::class)
     ->name('shops.selection');
 
-Route::get('/shops/{shopSlug}', ShopShowController::class)
+Route::get('/kiosk/{citySlug}/{shopSlugWithId}', ShopShowController::class)
     ->name('shops.show');
+
+Route::get('/shops/{shopSlug}', function (string $shopSlug) {
+    return redirect()->route('shops.show', [
+        'citySlug' => 'deine-naehe',
+        'shopSlugWithId' => $shopSlug,
+    ]);
+})->name('shops.legacy');
+
+
 
 Route::get('/kasse', CheckoutController::class)
     ->name('checkout.show');

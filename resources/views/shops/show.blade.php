@@ -23,92 +23,92 @@
             <x-marketing.nav />
         </div>
 
-<section class="shop-app-hero">
-    <div class="shop-app-hero-bg" aria-hidden="true"></div>
+        <section class="shop-app-hero">
+            <div class="shop-app-hero-bg" aria-hidden="true"></div>
 
-    <div class="container shop-app-hero-inner">
-        <a href="{{ route('shops.selection') }}" class="shop-app-back">
-            <span>←</span>
-            Kioskauswahl
-        </a>
+            <div class="container shop-app-hero-inner">
+                <a href="{{ route('shops.selection') }}" class="shop-app-back">
+                    <span>←</span>
+                    Kioskauswahl
+                </a>
 
-        <div class="shop-app-hero-grid">
-            <div class="shop-app-hero-content">
-                <p class="shop-powered">Kioskheld Shop</p>
+                <div class="shop-app-hero-grid">
+                    <div class="shop-app-hero-content">
+                        <p class="shop-powered">Kioskheld Shop</p>
 
-                <h1>
-                    <span>{{ $shop['name'] ?? 'Kioskheld' }}</span>
-                    <strong>direkt zu dir.</strong>
-                </h1>
+                        <h1>
+                            <span>{{ $shop['name'] ?? 'Kioskheld' }}</span>
+                            <strong>direkt zu dir.</strong>
+                        </h1>
 
-                <p class="shop-hero-subline">
-                    Snacks, Getränke, Süßes, Eis und Kiosk-Bundles online bestellen.
-                    Dein Warenkorb wird vor dem Checkout noch einmal geprüft.
-                </p>
+                        <p class="shop-hero-subline">
+                            Snacks, Getränke, Süßes, Eis und Kiosk-Bundles online bestellen.
+                            Dein Warenkorb wird vor dem Checkout noch einmal geprüft.
+                        </p>
 
-                <div class="shop-open-status">
-                    <span></span>
-                    Geöffnet
-                </div>
-
-                <div class="shop-hero-facts">
-                    @if ($estimatedMinutes)
-                        <div>
-                            <small>Lieferzeit</small>
-                            <strong>{{ $estimatedMinutes }} Min.</strong>
+                        <div class="shop-open-status">
+                            <span></span>
+                            Geöffnet
                         </div>
-                    @endif
 
-                    @if ($minimumOrderValue)
-                        <div>
-                            <small>Mindestbestellwert</small>
-                            <strong>ab {{ number_format((float) $minimumOrderValue, 2, ',', '.') }} €</strong>
+                        <div class="shop-hero-facts">
+                            @if ($estimatedMinutes)
+                                <div>
+                                    <small>Lieferzeit</small>
+                                    <strong>{{ $estimatedMinutes }} Min.</strong>
+                                </div>
+                            @endif
+
+                            @if ($minimumOrderValue)
+                                <div>
+                                    <small>Mindestbestellwert</small>
+                                    <strong>ab {{ number_format((float) $minimumOrderValue, 2, ',', '.') }} €</strong>
+                                </div>
+                            @endif
+
+                            @if ($deliveryFee !== null)
+                                <div>
+                                    <small>Liefergebühr</small>
+                                    <strong>{{ number_format((float) $deliveryFee, 2, ',', '.') }} €</strong>
+                                </div>
+                            @endif
+
+                            @if ($freeDeliveryFrom)
+                                <div>
+                                    <small>Kostenlos ab</small>
+                                    <strong>{{ number_format((float) $freeDeliveryFrom, 2, ',', '.') }} €</strong>
+                                </div>
+                            @endif
                         </div>
-                    @endif
 
-                    @if ($deliveryFee !== null)
-                        <div>
-                            <small>Liefergebühr</small>
-                            <strong>{{ number_format((float) $deliveryFee, 2, ',', '.') }} €</strong>
-                        </div>
-                    @endif
-
-                    @if ($freeDeliveryFrom)
-                        <div>
-                            <small>Kostenlos ab</small>
-                            <strong>{{ number_format((float) $freeDeliveryFrom, 2, ',', '.') }} €</strong>
-                        </div>
-                    @endif
-                </div>
-
-                @if (!empty($postcode))
-                    <div class="shop-app-postcode">
-                        <span>📍</span>
-                        Lieferung nach <strong>PLZ {{ $postcode }}</strong>
+                        @if (!empty($postcode))
+                            <div class="shop-app-postcode">
+                                <span>📍</span>
+                                Lieferung nach <strong>PLZ {{ $postcode }}</strong>
+                            </div>
+                        @endif
                     </div>
-                @endif
-            </div>
 
-            <div class="shop-app-hero-card">
-                <div class="shop-app-hero-card-inner">
-                    <span class="shop-app-hero-badge">Schnell bestellen</span>
+                    <div class="shop-app-hero-card">
+                        <div class="shop-app-hero-card-inner">
+                            <span class="shop-app-hero-badge">Schnell bestellen</span>
 
-                    <h2>Kiosk-Produkte ohne Umweg.</h2>
+                            <h2>Kiosk-Produkte ohne Umweg.</h2>
 
-                    <p>
-                        Sortiment ansehen, Produkte wählen und direkt zur Kasse.
-                        Preise und Lieferbarkeit werden serverseitig geprüft.
-                    </p>
+                            <p>
+                                Sortiment ansehen, Produkte wählen und direkt zur Kasse.
+                                Preise und Lieferbarkeit werden serverseitig geprüft.
+                            </p>
 
-                    <a href="#catalog" class="shop-app-hero-button">
-                        Sortiment ansehen
-                        <span>↓</span>
-                    </a>
+                            <a href="#catalog" class="shop-app-hero-button">
+                                Sortiment ansehen
+                                <span>↓</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
         <section class="shop-app-content" id="catalog">
             <div class="container">
@@ -241,13 +241,22 @@
                                             $imageUrl = $product['image_url'] ?? null;
                                             $hasPlaceholderImage =
                                                 $imageUrl && str_contains($imageUrl, 'no-image-placeholder');
+
                                             $variantId = $variant['id'] ?? null;
 
                                             $productAvailable = ($product['is_available'] ?? false) === true;
                                             $variantAvailable = ($variant['is_available'] ?? true) === true;
 
-                                            $isAvailable = $productAvailable && $variantAvailable;
                                             $availableQuantity = $variant['available_quantity'] ?? null;
+
+                                            $hasManagedStock = $availableQuantity !== null && $availableQuantity !== '';
+
+                                            $hasStock = !$hasManagedStock || (int) $availableQuantity > 0;
+
+                                            $isAvailable = $productAvailable && $variantAvailable && $hasStock;
+
+                                            $stockIsLow =
+                                                $isAvailable && $hasManagedStock && (int) $availableQuantity <= 10;
                                         @endphp
 
                                         <article class="shop-product-card {{ !$isAvailable ? 'is-disabled' : '' }}">
@@ -262,6 +271,22 @@
 
                                             <div class="shop-product-body">
                                                 <h3>{{ $product['name'] ?? 'Produkt' }}</h3>
+
+                                                <div class="shop-product-stock">
+                                                    @if (!$isAvailable)
+                                                        <span class="shop-product-stock-status is-unavailable">
+                                                            Aktuell nicht verfügbar
+                                                        </span>
+                                                    @elseif ($stockIsLow)
+                                                        <span class="shop-product-stock-status is-low">
+                                                            Nur noch {{ (int) $availableQuantity }} verfügbar
+                                                        </span>
+                                                    @elseif ($hasManagedStock)
+                                                        <span class="shop-product-stock-status is-available">
+                                                            {{ (int) $availableQuantity }} verfügbar
+                                                        </span>
+                                                    @endif
+                                                </div>
 
                                                 <div class="shop-product-bottom">
                                                     <strong>
@@ -414,19 +439,19 @@
         <x-marketing.footer />
     </main>
 
-<script>
-    window.KioskheldShop = {
-        cartValidateUrl: @json(route('cart.validate')),
-        csrfToken: @json(csrf_token()),
-        shopId: @json($shop['id'] ?? null),
-        postcode: @json($postcode ?? null),
-        catalog: @json($catalog),
-        menus: @json($menus),
-        productsByCategoryId: @json($productsByCategoryId),
-    };
-</script>
+    <script>
+        window.KioskheldShop = {
+            cartValidateUrl: @json(route('cart.validate')),
+            csrfToken: @json(csrf_token()),
+            shopId: @json($shop['id'] ?? null),
+            postcode: @json($postcode ?? null),
+            catalog: @json($catalog),
+            menus: @json($menus),
+            productsByCategoryId: @json($productsByCategoryId),
+        };
+    </script>
 
-@vite(['resources/js/shop-cart.js'])
+    @vite(['resources/js/shop-cart.js'])
 
 
 

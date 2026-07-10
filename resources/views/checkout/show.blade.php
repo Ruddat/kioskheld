@@ -4,9 +4,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta
+        name="robots"
+        content="{{ \App\Support\Seo\SeoRobots::content() }}"
+    >
+
     <title>Kasse · Kioskheld</title>
 
-    @vite(['resources/css/marketing.css', 'resources/js/marketing-home.js'])
+    @vite([
+        'resources/css/marketing.css',
+        'resources/js/marketing-home.js',
+    ])
 </head>
 
 <body>

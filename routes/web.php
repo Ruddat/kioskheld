@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\PartnerOnboardingAdminController;
 use App\Http\Controllers\Admin\PartnerOnboardingImportController;
 use App\Http\Controllers\Admin\PartnerOnboardingStatusController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Seo\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +17,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', '/de');
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])
+    ->name('seo.sitemap.index');
+
+Route::get(
+    '/sitemaps/{locale}.xml',
+    [SitemapController::class, 'locale']
+)
+    ->whereIn('locale', config('localization.supported'))
+    ->name('seo.sitemap.locale');
+
+
+Route::permanentRedirect('/', '/de');
 
 /*
 |--------------------------------------------------------------------------

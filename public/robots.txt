@@ -1,2 +1,21 @@
 User-agent: *
-Disallow:
+Allow: /
+
+Disallow: /admin
+Disallow: /admin/
+Disallow: /portal
+Disallow: /portal/
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password/
+
+Disallow: /*/plz/pruefen
+Disallow: /*/warenkorb/pruefen
+Disallow: /*/shops/auswahl
+Disallow: /*/kasse
+Disallow: /*/bestellung/danke
+Disallow: /*/partner/onboarding/
+Disallow: /*/partner/danke

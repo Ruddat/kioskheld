@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AddSeoRobotsHeader;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\EnsureUserIsVendor;
 use App\Http\Middleware\SetLocale;
@@ -15,7 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->alias([
+
+        $middleware->appendToGroup(
+        'web',
+        AddSeoRobotsHeader::class
+    );
+    $middleware->alias([
             'admin' => EnsureUserIsAdmin::class,
             'vendor' => EnsureUserIsVendor::class,
                 'locale' => SetLocale::class,

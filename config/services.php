@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+'justdeliver' => [
+    'kioskheld_api_url' => env('JUSTDELIVER_KIOSKHELD_API_URL'),
+    'kioskheld_api_key' => env('JUSTDELIVER_KIOSKHELD_API_KEY'),
+    'kioskheld_verify_ssl' => env('JUSTDELIVER_KIOSKHELD_VERIFY_SSL', true),
+],
+
+
 ];

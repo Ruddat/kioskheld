@@ -14,9 +14,14 @@
                     </p>
                 </div>
 
-                <a href="{{ route('partner.index') }}" class="btn btn-secondary" target="_blank">
-                    Partnerseite ansehen
-                </a>
+<a
+    href="{{ route('partner.index', ['locale' => config('app.locale', 'de')]) }}"
+    class="btn btn-secondary"
+    target="_blank"
+    rel="noopener"
+>
+    Partnerseite ansehen
+</a>
             </div>
 
             <div class="admin-card">
@@ -94,7 +99,9 @@
                                     </td>
 
                                     <td>
-                                        <a href="{{ route('admin.partner-leads.show', $lead) }}" class="admin-link">
+                                        <a href="{{ route('admin.partner-leads.show', [
+    'partnerLead' => $lead,
+]) }}" class="admin-link">
                                             Details
                                         </a>
                                     </td>

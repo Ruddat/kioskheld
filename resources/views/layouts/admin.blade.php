@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +8,7 @@
 
     @vite(['resources/css/admin.css', 'resources/js/app.js'])
 </head>
+
 <body>
     <div class="admin-shell">
         <aside class="admin-sidebar">
@@ -27,7 +29,7 @@
                     Partner-Anfragen
                 </a>
 
-                <a href="{{ route('home') }}" target="_blank">
+                <a href="{{ route('home', ['locale' => config('app.locale', 'de')]) }}" target="_blank" rel="noopener">
                     Website ansehen
                 </a>
             </nav>
@@ -55,4 +57,5 @@
         </div>
     </div>
 </body>
+
 </html>

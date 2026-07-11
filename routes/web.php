@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\PartnerOnboardingImportController;
 use App\Http\Controllers\Admin\PartnerOnboardingStatusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Seo\SitemapController;
+use App\Http\Middleware\SetLocale;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -77,42 +78,47 @@ Route::middleware('auth')->group(function () {
 |
 */
 
-Route::middleware(['auth', 'admin'])
-    ->prefix('admin')
-    ->name('admin.')
+Route::prefix('{locale}')
+    ->whereIn('locale', config('localization.supported', ['de', 'en', 'tr']))
+    ->middleware(SetLocale::class)
     ->group(function () {
-        Route::view('/', 'admin.dashboard')
-            ->name('dashboard');
+        Route::middleware(['auth', 'admin'])
+            ->prefix('admin')
+            ->name('admin.')
+            ->group(function () {
+                Route::view('/', 'admin.dashboard')
+                    ->name('dashboard');
 
-        Route::get(
-            '/partner-leads',
-            [PartnerLeadAdminController::class, 'index']
-        )->name('partner-leads.index');
+                Route::get(
+                    '/partner-leads',
+                    [PartnerLeadAdminController::class, 'index']
+                )->name('partner-leads.index');
 
-        Route::get(
-            '/partner-leads/{partnerLead}',
-            [PartnerLeadAdminController::class, 'show']
-        )->name('partner-leads.show');
+                Route::get(
+                    '/partner-leads/{partnerLead}',
+                    [PartnerLeadAdminController::class, 'show']
+                )->name('partner-leads.show');
 
-        Route::patch(
-            '/partner-leads/{partnerLead}/status',
-            [PartnerLeadAdminController::class, 'updateStatus']
-        )->name('partner-leads.update-status');
+                Route::patch(
+                    '/partner-leads/{partnerLead}/status',
+                    [PartnerLeadAdminController::class, 'updateStatus']
+                )->name('partner-leads.update-status');
 
-        Route::post(
-            '/partner-leads/{partnerLead}/onboarding',
-            [PartnerOnboardingAdminController::class, 'store']
-        )->name('partner-leads.onboarding.store');
+                Route::post(
+                    '/partner-leads/{partnerLead}/onboarding',
+                    [PartnerOnboardingAdminController::class, 'store']
+                )->name('partner-leads.onboarding.store');
 
-        Route::post(
-            '/partner-onboardings/{partnerOnboarding}/import',
-            PartnerOnboardingImportController::class
-        )->name('partner-onboardings.import');
+                Route::post(
+                    '/partner-onboardings/{partnerOnboarding}/import',
+                    PartnerOnboardingImportController::class
+                )->name('partner-onboardings.import');
 
-        Route::post(
-            '/partner-onboardings/{partnerOnboarding}/status',
-            PartnerOnboardingStatusController::class
-        )->name('partner-onboardings.status');
+                Route::post(
+                    '/partner-onboardings/{partnerOnboarding}/status',
+                    PartnerOnboardingStatusController::class
+                )->name('partner-onboardings.status');
+            });
     });
 
 /*

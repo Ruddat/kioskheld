@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartValidatedTotals = document.querySelector('#cartValidatedTotals');
     const cartValidatedItemsTotal = document.querySelector('#cartValidatedItemsTotal');
     const cartValidatedDeliveryFee = document.querySelector('#cartValidatedDeliveryFee');
+
+    const cartValidatedDepositRow = document.querySelector('#cartValidatedDepositRow');
+    const cartValidatedDepositTotal = document.querySelector('#cartValidatedDepositTotal');
+
     const cartValidatedGrandTotal = document.querySelector('#cartValidatedGrandTotal');
     const cartValidatedMinimum = document.querySelector('#cartValidatedMinimum');
     const cartValidatedMissing = document.querySelector('#cartValidatedMissing');
@@ -129,7 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const getCartTotal = () => {
         return [...cart.values()].reduce((sum, item) => {
-            return sum + (item.price * item.quantity);
+            const merchandiseTotal = Number(item.price || 0) * Number(item.quantity || 0);
+            const depositTotal = Number(item.depositAmount || 0) * Number(item.quantity || 0);
+
+            return sum + merchandiseTotal + depositTotal;
         }, 0);
     };
 
@@ -631,15 +638,43 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const itemsTotal = Number(totals.items_total ?? 0);
-        const deliveryFee = Number(totals.delivery_fee ?? 0);
-        const grandTotal = Number(totals.grand_total ?? 0);
+        const merchandiseTotal = Number(
+            totals.merchandise_total
+            ?? totals.items_total
+            ?? 0
+        );
+
+        const depositTotal = Number(
+            totals.deposit_total
+            ?? 0
+        );
+
+        const deliveryFee = Number(
+            totals.delivery_fee
+            ?? 0
+        );
+
+        const grandTotal = Number(
+            totals.grand_total
+            ?? merchandiseTotal + depositTotal + deliveryFee
+        );
+
         const minimumOrderValue = totals.minimum_order_value;
         const missingMinimumOrderValue = totals.missing_minimum_order_value;
 
-        cartValidatedItemsTotal.textContent = formatter.format(itemsTotal);
+        cartValidatedItemsTotal.textContent = formatter.format(merchandiseTotal);
         cartValidatedDeliveryFee.textContent = formatter.format(deliveryFee);
         cartValidatedGrandTotal.textContent = formatter.format(grandTotal);
+
+        if (cartValidatedDepositRow && cartValidatedDepositTotal) {
+            if (depositTotal > 0) {
+                cartValidatedDepositRow.hidden = false;
+                cartValidatedDepositTotal.textContent = formatter.format(depositTotal);
+            } else {
+                cartValidatedDepositRow.hidden = true;
+                cartValidatedDepositTotal.textContent = formatter.format(0);
+            }
+        }
 
         if (minimumOrderValue !== null && minimumOrderValue !== undefined) {
             cartMinimumRow.hidden = false;
@@ -654,7 +689,9 @@ document.addEventListener('DOMContentLoaded', () => {
             Number(missingMinimumOrderValue) > 0
         ) {
             cartMissingRow.hidden = false;
-            cartValidatedMissing.textContent = formatter.format(Number(missingMinimumOrderValue));
+            cartValidatedMissing.textContent = formatter.format(
+                Number(missingMinimumOrderValue)
+            );
         } else {
             cartMissingRow.hidden = true;
         }
@@ -704,9 +741,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 `<img src="${item.imageUrl}" alt="">` :
                 `<span>${item.name.charAt(0)}</span>`;
 
-            const meta = item.type === 'menu' && item.choiceSummary ?
-                item.choiceSummary :
-                `${formatter.format(item.price)} · ${formatter.format(item.price * item.quantity)}`;
+            const merchandiseLineTotal =
+                Number(item.price || 0) * Number(item.quantity || 0);
+
+            const depositLineTotal =
+                Number(item.depositAmount || 0) * Number(item.quantity || 0);
+
+            let meta;
+
+            if (item.type === 'menu' && item.choiceSummary) {
+                meta = item.choiceSummary;
+            } else {
+                meta = `${formatter.format(item.price)} · ${formatter.format(merchandiseLineTotal)}`;
+
+                if (depositLineTotal > 0) {
+                    meta += `<br><small>zzgl. ${formatter.format(depositLineTotal)} ${item.depositLabel || 'Pfand'}</small>`;
+                }
+            }
 
             const badge = item.type === 'menu' ?
                 `<em class="cart-item-badge">Sparpaket</em>` :
@@ -879,7 +930,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.totals?.missing_minimum_order_value > 0) {
                 setValidationMessage(
                     'warning',
-                    `Der Mindestbestellwert ist noch nicht erreicht. Es fehlen ${formatter.format(Number(data.totals.missing_minimum_order_value))}.`
+                    `Der Mindestbestellwert ist noch nicht erreicht. Es fehlen ${formatter.format(Number(data.totals.missing_minimum_order_value))} Warenwert. Pfand zählt nicht zum Mindestbestellwert.`
                 );
             } else {
                 setValidationMessage('error', message);
@@ -957,6 +1008,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     productId: button.dataset.productId,
                     name: button.dataset.productName || 'Produkt',
                     price: Number(button.dataset.price || 0),
+                    depositAmount: Number(button.dataset.depositAmount || 0),
+                    depositLabel: button.dataset.depositLabel || 'Pfand',
                     imageUrl: button.dataset.imageUrl || '',
                     availableQuantity,
                     quantity: 1,
@@ -1022,12 +1075,12 @@ document.addEventListener('DOMContentLoaded', () => {
             cart.delete(cartKey);
         }
 
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-        closeCart();
-        closeMenuChoiceDrawer();
-    }
-});
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeCart();
+                closeMenuChoiceDrawer();
+            }
+        });
 
 
         renderCart();

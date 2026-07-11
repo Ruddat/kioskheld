@@ -238,6 +238,10 @@
 
                                             $price = $variant['price'] ?? ($product['lowest_price'] ?? null);
 
+                                            $deposit = $variant['deposit'] ?? null;
+                                            $depositAmount = (float) ($deposit['amount'] ?? 0);
+                                            $depositLabel = $deposit['label'] ?? 'Pfand';
+
                                             $imageUrl = $product['image_url'] ?? null;
                                             $hasPlaceholderImage =
                                                 $imageUrl && str_contains($imageUrl, 'no-image-placeholder');
@@ -289,19 +293,30 @@
                                                 </div>
 
                                                 <div class="shop-product-bottom">
-                                                    <strong>
-                                                        @if ($price !== null)
-                                                            {{ number_format((float) $price, 2, ',', '.') }} €
-                                                        @else
-                                                            Preis folgt
+                                                    <div class="shop-product-price">
+                                                        <strong>
+                                                            @if ($price !== null)
+                                                                {{ number_format((float) $price, 2, ',', '.') }} €
+                                                            @else
+                                                                Preis folgt
+                                                            @endif
+                                                        </strong>
+
+                                                        @if ($depositAmount > 0)
+                                                            <small>
+                                                                zzgl. {{ number_format($depositAmount, 2, ',', '.') }} €
+                                                                {{ $depositLabel }}
+                                                            </small>
                                                         @endif
-                                                    </strong>
+                                                    </div>
 
                                                     <button type="button" class="shop-product-plus add-to-cart"
                                                         @disabled(!$isAvailable || empty($variantId)) data-variant-id="{{ $variantId }}"
                                                         data-product-id="{{ $product['id'] ?? '' }}"
                                                         data-product-name="{{ $product['name'] ?? '' }}"
                                                         data-price="{{ $price ?? '' }}"
+                                                        data-deposit-amount="{{ $depositAmount }}"
+                                                        data-deposit-label="{{ $depositLabel }}"
                                                         data-image-url="{{ $imageUrl ?? '' }}"
                                                         data-is-available="{{ $isAvailable ? '1' : '0' }}"
                                                         data-available-quantity="{{ $availableQuantity ?? '' }}">
@@ -362,8 +377,13 @@
 
                     <div class="cart-validated-totals" id="cartValidatedTotals" hidden>
                         <div>
-                            <span>Artikel</span>
+                            <span>Warenwert</span>
                             <strong id="cartValidatedItemsTotal">0,00 €</strong>
+                        </div>
+
+                        <div id="cartValidatedDepositRow" hidden>
+                            <span>Pfand</span>
+                            <strong id="cartValidatedDepositTotal">0,00 €</strong>
                         </div>
 
                         <div>

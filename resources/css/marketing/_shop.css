@@ -1763,3 +1763,29 @@
         font-size: 0.7rem;
     }
 }
+.shop-product-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.shop-product-price strong {
+    line-height: 1.1;
+}
+
+.shop-product-price small {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #6b7280;
+}
+
+.checkout-item-payable {
+    margin-top: 3px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.checkout-minimum-missing {
+    color: #b45309;
+}

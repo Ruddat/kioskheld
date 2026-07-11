@@ -5,17 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta
-        name="robots"
-        content="{{ \App\Support\Seo\SeoRobots::content() }}"
-    >
+    <meta name="robots" content="{{ \App\Support\Seo\SeoRobots::content() }}">
 
     <title>Kasse · Kioskheld</title>
 
-    @vite([
-        'resources/css/marketing.css',
-        'resources/js/marketing-home.js',
-    ])
+    @vite(['resources/css/marketing.css', 'resources/js/marketing-home.js'])
 </head>
 
 <body>
@@ -106,20 +100,42 @@
             return (int) ($item['quantity'] ?? ($item['qty'] ?? 1));
         };
 
-        $getLineTotal = function (array $item) {
-            return $item['line_total'] ?? ($item['total'] ?? ($item['total_price'] ?? null));
+        $getMerchandiseLineTotal = function (array $item) {
+            return $item['merchandise_line_total'] ??
+                ($item['line_total'] ?? ($item['total'] ?? ($item['total_price'] ?? null)));
         };
 
         $getUnitPrice = function (array $item) {
             return $item['unit_price'] ?? ($item['price'] ?? ($item['item_price'] ?? null));
         };
 
+        $getDepositTotal = function (array $item): float {
+            return (float) ($item['deposit_total'] ?? 0);
+        };
+
+        $getPayableLineTotal = function (array $item) {
+            if (array_key_exists('payable_line_total', $item)) {
+                return $item['payable_line_total'];
+            }
+
+            $merchandiseLineTotal = $item['merchandise_line_total'] ?? ($item['line_total'] ?? null);
+
+            if ($merchandiseLineTotal === null) {
+                return null;
+            }
+
+            return (float) $merchandiseLineTotal + (float) ($item['deposit_total'] ?? 0);
+        };
+
         $getChoices = function (array $item): array {
             return $item['choices'] ?? ($item['selected_options'] ?? ($item['options'] ?? []));
         };
 
-        $itemsTotal =
-            $displayTotals['items_total'] ?? ($displayTotals['subtotal'] ?? ($displayTotals['products_total'] ?? 0));
+        $merchandiseTotal =
+            $displayTotals['merchandise_total'] ??
+            ($displayTotals['items_total'] ?? ($displayTotals['subtotal'] ?? ($displayTotals['products_total'] ?? 0)));
+
+        $depositTotal = (float) ($displayTotals['deposit_total'] ?? 0);
 
         $deliveryFee =
             $displayTotals['delivery_fee'] ??
@@ -134,7 +150,15 @@
         $tipAmount = $displayTotals['tip_amount'] ?? 0;
 
         $grandTotal =
-            $displayTotals['grand_total'] ?? ($displayTotals['total'] ?? ($displayTotals['order_total'] ?? 0));
+            $displayTotals['grand_total'] ??
+            ($displayTotals['total'] ??
+                ($displayTotals['order_total'] ??
+                    (float) $merchandiseTotal +
+                        $depositTotal +
+                        (float) $deliveryFee +
+                        (float) $customerFee +
+                        (float) $paymentFee +
+                        (float) $tipAmount));
 
         $minimumOrderValue = $displayTotals['minimum_order_value'] ?? ($validatedCart['minimum_order_value'] ?? null);
 
@@ -352,7 +376,10 @@
                                         $itemName = $getItemName($item);
                                         $variantText = $getVariantText($item);
                                         $unitPrice = $getUnitPrice($item);
-                                        $lineTotal = $getLineTotal($item);
+                                        $merchandiseLineTotal = $getMerchandiseLineTotal($item);
+                                        $itemDepositTotal = $getDepositTotal($item);
+                                        $payableLineTotal = $getPayableLineTotal($item);
+                                        $depositLabel = $item['deposit_label'] ?? 'Pfand';
                                         $choices = $getChoices($item);
                                     @endphp
 
@@ -414,8 +441,8 @@
                                         <div class="checkout-item-price">
                                             <span>{{ $quantity }}×</span>
 
-                                            @if ($lineTotal !== null)
-                                                <strong>{{ $formatMoney($lineTotal) }}</strong>
+                                            @if ($merchandiseLineTotal !== null)
+                                                <strong>{{ $formatMoney($merchandiseLineTotal) }}</strong>
                                             @elseif ($unitPrice !== null)
                                                 <strong>{{ $formatMoney((float) $unitPrice * $quantity) }}</strong>
                                             @else
@@ -425,6 +452,20 @@
                                             @if ($unitPrice !== null)
                                                 <small>{{ $formatMoney($unitPrice) }} / Stück</small>
                                             @endif
+
+                                            @if ($itemDepositTotal > 0)
+                                                <small>
+                                                    zzgl. {{ $formatMoney($itemDepositTotal) }}
+                                                    {{ $depositLabel }}
+                                                </small>
+                                            @endif
+
+                                            @if ($itemDepositTotal > 0 && $payableLineTotal !== null)
+                                                <small class="checkout-item-payable">
+                                                    Position gesamt:
+                                                    {{ $formatMoney($payableLineTotal) }}
+                                                </small>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -433,12 +474,19 @@
 
                         <div class="checkout-totals">
                             <div>
-                                <span>Artikel</span>
-                                <strong>{{ $formatMoney($itemsTotal) }}</strong>
+                                <span>Warenwert</span>
+                                <strong>{{ $formatMoney($merchandiseTotal) }}</strong>
                             </div>
 
+                            @if ($depositTotal > 0)
+                                <div>
+                                    <span>Pfand</span>
+                                    <strong>{{ $formatMoney($depositTotal) }}</strong>
+                                </div>
+                            @endif
+
                             <div>
-                                <span>Lieferung</span>
+                                <span>Liefergebühr</span>
                                 <strong>{{ $formatMoney($deliveryFee) }}</strong>
                             </div>
 
@@ -469,7 +517,12 @@
                                     <strong>{{ $formatMoney($minimumOrderValue) }}</strong>
                                 </div>
                             @endif
-
+                            @if ($missingMinimumOrderValue !== null && (float) $missingMinimumOrderValue > 0)
+                                <div class="checkout-minimum-missing">
+                                    <span>Fehlender Warenwert</span>
+                                    <strong>{{ $formatMoney($missingMinimumOrderValue) }}</strong>
+                                </div>
+                            @endif
                             <div class="checkout-total-final">
                                 <span>Gesamt</span>
                                 <strong>{{ $formatMoney($grandTotal) }}</strong>

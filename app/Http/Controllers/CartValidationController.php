@@ -197,28 +197,28 @@ class CartValidationController extends Controller
 
             $isValid = ($data['valid'] ?? false) === true;
 
-$reservation = data_get($data, 'reservation');
+            $reservation = data_get($data, 'reservation');
 
-$reservationRequested = data_get($reservation, 'requested') === true;
-$reservationReserved = data_get($reservation, 'reserved') === true;
+            $reservationRequested = data_get($reservation, 'requested') === true;
+            $reservationReserved = data_get($reservation, 'reserved') === true;
 
-if ($isValid && $reservationRequested && ! $reservationReserved) {
-    $request->session()->forget('kioskheld.cart');
+            if ($isValid && $reservationRequested && ! $reservationReserved) {
+                $request->session()->forget('kioskheld.cart');
 
-    Log::warning('Kioskheld cart reservation failed', [
-        'shop_id' => $shopId,
-        'postcode' => $postcode,
-        'reservation' => $reservation,
-        'items' => $items,
-    ]);
+                Log::warning('Kioskheld cart reservation failed', [
+                    'shop_id' => $shopId,
+                    'postcode' => $postcode,
+                    'reservation' => $reservation,
+                    'items' => $items,
+                ]);
 
-    return response()->json([
-        'ok' => true,
-        'message' => 'Ein oder mehrere Artikel konnten nicht reserviert werden. Bitte prüfe deinen Warenkorb erneut.',
-        'data' => $data,
-        'checkout_url' => null,
-    ]);
-}
+                return response()->json([
+                    'ok' => true,
+                    'message' => 'Ein oder mehrere Artikel konnten nicht reserviert werden. Bitte prüfe deinen Warenkorb erneut.',
+                    'data' => $data,
+                    'checkout_url' => null,
+                ]);
+            }
 
 
 
@@ -259,7 +259,9 @@ if ($isValid && $reservationRequested && ! $reservationReserved) {
                     ?? 'Der Warenkorb wurde geprüft, ist aber noch nicht gültig.';
 
                 if ($missingMinimum > 0) {
-                    $message = 'Noch ' . number_format($missingMinimum, 2, ',', '.') . ' € bis zum Mindestbestellwert.';
+                    $message = 'Noch '
+                        . number_format($missingMinimum, 2, ',', '.')
+                        . ' € Warenwert bis zum Mindestbestellwert. Pfand zählt nicht zum Mindestbestellwert.';
 
                     if ($minimumOrderValue > 0) {
                         $message .= ' Mindestbestellwert: ' . number_format($minimumOrderValue, 2, ',', '.') . ' €.';

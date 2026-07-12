@@ -1,0 +1,10 @@
+In routes/console.php ergänzen:
+
+use Illuminate\Support\Facades\Schedule;
+
+Schedule::command('kioskheld:catalog-sync')
+    ->everyFourHours()
+    ->withoutOverlapping();
+
+onOneServer() erst ergänzen, wenn in Produktion ein gemeinsamer Cache-Treiber
+wie Redis oder Database verwendet wird.

@@ -1,0 +1,4 @@
+Den Inhalt aus routes/catalog-snippet.php in routes/web.php übernehmen.
+
+Die use-Anweisungen nach oben zu den bestehenden Controller-Imports setzen.
+Die Routen vor require __DIR__.'/auth.php'; einfügen.

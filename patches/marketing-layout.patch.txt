@@ -1,0 +1,7 @@
+In resources/views/layouts/marketing.blade.php direkt nach meta description ergänzen:
+
+@yield('canonical')
+
+Direkt vor </head> ergänzen:
+
+@yield('structured_data')

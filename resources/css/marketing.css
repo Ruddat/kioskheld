@@ -21,3 +21,8 @@
 @import "./marketing/_partner-onboarding.css";
 @import "./marketing/_partner-onboarding-thank-you.css";
 @import "./marketing/_language.css";
+@import "./marketing/catalog/_categories-index.css";
+@import "./marketing/catalog/_category-show.css";
+@import "./marketing/catalog/_products-index.css";
+@import "./marketing/catalog/_products-show.css";
+@import "./marketing/partials/_product-card.css";

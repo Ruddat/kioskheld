@@ -2,15 +2,14 @@
     <div class="container footer-grid">
         <x-marketing.logo :show-crown="false" />
 
-        <nav
-            class="footer-links"
-            aria-label="{{ __('navigation.footer.navigation') }}"
-        >
+        <nav class="footer-links" aria-label="{{ __('navigation.footer.navigation') }}">
             <a href="{{ route('home') }}#find">
                 {{ __('navigation.footer.find_kiosk') }}
             </a>
 
-            <a href="{{ route('home') }}#bundles">
+            <a href="{{ route('catalog.categories.index', [
+                'locale' => app()->getLocale(),
+            ]) }}">
                 {{ __('navigation.footer.assortment') }}
             </a>
 

@@ -35,11 +35,15 @@ return [
         ],
     ],
 
-'justdeliver' => [
-    'kioskheld_api_url' => env('JUSTDELIVER_KIOSKHELD_API_URL'),
-    'kioskheld_api_key' => env('JUSTDELIVER_KIOSKHELD_API_KEY'),
-    'kioskheld_verify_ssl' => env('JUSTDELIVER_KIOSKHELD_VERIFY_SSL', true),
-],
+    'justdeliver' => [
+        'kioskheld_api_url' => env('JUSTDELIVER_KIOSKHELD_API_URL'),
+        'kioskheld_api_key' => env('JUSTDELIVER_KIOSKHELD_API_KEY'),
+        'kioskheld_verify_ssl' => env('JUSTDELIVER_KIOSKHELD_VERIFY_SSL', true),
+        'catalog_sync_enabled' => env('JUSTDELIVER_CATALOG_SYNC_ENABLED', true),
+        'catalog_sync_per_page' => env('JUSTDELIVER_CATALOG_SYNC_PER_PAGE', 100),
+        'catalog_timeout' => env('JUSTDELIVER_CATALOG_TIMEOUT', 20),
+        'catalog_connect_timeout' => env('JUSTDELIVER_CATALOG_CONNECT_TIMEOUT', 5),
+    ],
 
 
 ];

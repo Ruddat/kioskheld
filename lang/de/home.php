@@ -99,4 +99,22 @@ return [
         'payment_title' => 'Sicher bezahlen',
         'payment_text' => '100 % geschützt',
     ],
+
+
+'catalog' => [
+    'kicker' => 'Sortiment entdecken',
+    'title' => 'Typische Kioskprodukte.',
+    'title_accent' => 'Schnell gefunden.',
+    'description' => 'Entdecke Snacks, Getränke, Süßes und weitere Produkte aus dem Kioskheld-Katalog.',
+    'category_label' => 'Kategorie',
+    'product' => 'Produkt',
+    'products' => 'Produkte',
+    'show_categories' => 'Alle Kategorien',
+    'show_products' => 'Alle Produkte',
+    'availability_notice' => 'Welche Produkte, Preise und Liefermöglichkeiten an deiner Adresse gelten, siehst du nach der PLZ-Prüfung.',
+    'empty_title' => 'Der Katalog wird gerade aufgebaut.',
+    'empty_text' => 'Prüfe über deine Postleitzahl, welche Kioske in deiner Nähe bereits verfügbar sind.',
+],
+
+
 ];

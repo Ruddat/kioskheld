@@ -4,8 +4,15 @@ use App\Http\Controllers\Admin\PartnerLeadAdminController;
 use App\Http\Controllers\Admin\PartnerOnboardingAdminController;
 use App\Http\Controllers\Admin\PartnerOnboardingImportController;
 use App\Http\Controllers\Admin\PartnerOnboardingStatusController;
+use App\Http\Controllers\Catalog\CategoryIndexController;
+use App\Http\Controllers\Catalog\CategoryShowController;
+use App\Http\Controllers\Catalog\ProductIndexController;
+use App\Http\Controllers\Catalog\ProductShowController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Seo\SitemapController;
+use App\Http\Controllers\Sitemap\CategorySitemapController;
+use App\Http\Controllers\Sitemap\ProductSitemapController;
+use App\Http\Controllers\Sitemap\SitemapIndexController;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Support\Facades\Route;
 
@@ -120,6 +127,37 @@ Route::prefix('{locale}')
                 )->name('partner-onboardings.status');
             });
     });
+
+
+
+Route::get('/sitemap.xml', SitemapIndexController::class)
+    ->name('sitemap');
+
+Route::get('/sitemaps/products.xml', ProductSitemapController::class)
+    ->name('sitemaps.products');
+
+Route::get('/sitemaps/categories.xml', CategorySitemapController::class)
+    ->name('sitemaps.categories');
+
+Route::prefix('{locale}')
+    ->whereIn('locale', config('localization.supported'))
+    ->middleware('locale')
+    ->group(function (): void {
+        Route::get('/produkte', ProductIndexController::class)
+            ->name('catalog.products.index');
+
+        Route::get('/produkte/{productSlug}', ProductShowController::class)
+            ->name('catalog.products.show');
+
+        Route::get('/kategorien', CategoryIndexController::class)
+            ->name('catalog.categories.index');
+
+        Route::get('/kategorien/{categorySlug}', CategoryShowController::class)
+            ->name('catalog.categories.show');
+    });
+
+
+
 
 /*
 |--------------------------------------------------------------------------

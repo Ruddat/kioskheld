@@ -1,0 +1,6 @@
+In config/services.php innerhalb von 'justdeliver' ergänzen:
+
+'catalog_sync_enabled' => env('JUSTDELIVER_CATALOG_SYNC_ENABLED', true),
+'catalog_sync_per_page' => env('JUSTDELIVER_CATALOG_SYNC_PER_PAGE', 100),
+'catalog_timeout' => env('JUSTDELIVER_CATALOG_TIMEOUT', 20),
+'catalog_connect_timeout' => env('JUSTDELIVER_CATALOG_CONNECT_TIMEOUT', 5),

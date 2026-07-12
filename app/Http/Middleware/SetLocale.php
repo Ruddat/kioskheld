@@ -13,7 +13,7 @@ class SetLocale
     /**
      * Handle an incoming request.
      *
-     * @param  Closure(Request): Response  $next
+     * @param Closure(Request): Response $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -36,10 +36,8 @@ class SetLocale
         ]);
 
         /*
-         * Der Locale-Parameter wird nicht an Controller weitergereicht.
-         *
-         * Dadurch können bestehende Controller weiterhin beispielsweise nur
-         * $citySlug und $shopSlugWithId entgegennehmen.
+         * Locale wird für die URL-Generierung als Default gespeichert,
+         * aber nicht als Argument an bestehende Controller weitergereicht.
          */
         $request->route()?->forgetParameter('locale');
 

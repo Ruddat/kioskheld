@@ -5,6 +5,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CheckoutCustomerController;
 use App\Http\Controllers\CheckoutOrderController;
 use App\Http\Controllers\CheckoutPaypalController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderThankYouController;
 use App\Http\Controllers\Partner\PartnerLeadController;
 use App\Http\Controllers\Partner\PartnerOnboardingController;
@@ -14,7 +15,7 @@ use App\Http\Controllers\ShopSelectionController;
 use App\Http\Controllers\ShopShowController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'pages.home')
+Route::get('/', HomeController::class)
     ->name('home');
 
 Route::get('/plz/pruefen', PostcodeAvailabilityController::class)

@@ -1,0 +1,7 @@
+In bootstrap/app.php oben ergänzen:
+
+use App\Http\Middleware\SetLocale;
+
+Im alias-Array ergänzen:
+
+'locale' => SetLocale::class,

@@ -6,4 +6,12 @@
         <loc>{{ route('seo.sitemap.locale', ['locale' => $locale]) }}</loc>
     </sitemap>
 @endforeach
+
+    <sitemap>
+        <loc>{{ route('seo.sitemap.products') }}</loc>
+    </sitemap>
+
+    <sitemap>
+        <loc>{{ route('seo.sitemap.categories') }}</loc>
+    </sitemap>
 </sitemapindex>

@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\CartValidationController;
+use App\Http\Controllers\Catalog\CategoryIndexController;
+use App\Http\Controllers\Catalog\CategoryShowController;
+use App\Http\Controllers\Catalog\ProductIndexController;
+use App\Http\Controllers\Catalog\ProductShowController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CheckoutCustomerController;
 use App\Http\Controllers\CheckoutOrderController;
@@ -84,6 +88,19 @@ Route::view('/agb', 'pages.legal.terms')
 
 Route::view('/faq', 'pages.faq')
     ->name('faq');
+
+Route::get('/produkte', ProductIndexController::class)
+    ->name('catalog.products.index');
+
+Route::get('/produkte/{productSlug}', ProductShowController::class)
+    ->name('catalog.products.show');
+
+Route::get('/kategorien', CategoryIndexController::class)
+    ->name('catalog.categories.index');
+
+Route::get('/kategorien/{categorySlug}', CategoryShowController::class)
+    ->name('catalog.categories.show');
+
 
 Route::get('/partner/onboarding/{token}', [PartnerOnboardingController::class, 'show'])
     ->name('partner.onboarding.show');

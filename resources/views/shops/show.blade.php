@@ -234,13 +234,83 @@
                                 <div class="shop-product-row">
                                     @foreach ($products as $product)
                                         @php
-                                            $variant = $product['variants'][0] ?? null;
+                                            $variants = $product['variants'] ?? [];
+
+                                            $variantCount = is_countable($variants) ? count($variants) : 0;
+
+                                            $variant =
+                                                collect($variants)->first(
+                                                    fn(array $variant): bool => ($variant['size']['is_default'] ??
+                                                        false) ===
+                                                        true,
+                                                ) ??
+                                                ($variants[0] ?? null);
 
                                             $price = $variant['price'] ?? ($product['lowest_price'] ?? null);
 
                                             $deposit = $variant['deposit'] ?? null;
                                             $depositAmount = (float) ($deposit['amount'] ?? 0);
                                             $depositLabel = $deposit['label'] ?? 'Pfand';
+
+                                            $variantName = trim((string) ($variant['name'] ?? ''));
+                                            $variantDescription = trim((string) ($variant['description'] ?? ''));
+                                            $sizeLabel = trim((string) ($variant['size']['label'] ?? ''));
+
+$variantParts = collect([
+    $sizeLabel,
+    $variantName,
+    $variantDescription,
+])
+    ->filter(fn (string $value): bool =>
+        $value !== ''
+        && !in_array(mb_strtolower($value), [
+            'standard',
+            'standart',
+            'default',
+            'normal',
+        ], true)
+    )
+    ->values();
+
+$variantParts = $variantParts->reduce(function ($carry, string $value) {
+    $normalizedValue = mb_strtolower($value);
+
+    foreach ($carry as $existing) {
+        $normalizedExisting = mb_strtolower($existing);
+
+        if (
+            str_contains($normalizedExisting, $normalizedValue)
+            || str_contains($normalizedValue, $normalizedExisting)
+        ) {
+            return $carry;
+        }
+    }
+
+    $carry[] = $value;
+
+    return $carry;
+}, []);
+
+$variantLabel = collect($variantParts)
+    ->unique()
+    ->implode(' · ');
+
+                                            $hasMultipleVariants = $variantCount > 1;
+
+                                            $minimumAge =
+                                                (int) ($variant['min_age'] ??
+                                                    ($variant['minimum_age'] ??
+                                                        ($variant['age_restriction']['min_age'] ??
+                                                            ($variant['age_restriction']['minimum_age'] ??
+                                                                ($product['min_age'] ??
+                                                                    ($product['minimum_age'] ??
+                                                                        ($product['age_restriction']['min_age'] ??
+                                                                            ($product['age_restriction'][
+                                                                                'minimum_age'
+                                                                            ] ??
+                                                                                0))))))));
+
+                                            $ageRestrictionLabel = $minimumAge > 0 ? 'ab ' . $minimumAge : null;
 
                                             $imageUrl = $product['image_url'] ?? null;
                                             $hasPlaceholderImage =
@@ -263,6 +333,35 @@
                                                 $isAvailable && $hasManagedStock && (int) $availableQuantity <= 10;
                                         @endphp
 
+                                        @if (config('app.apipreview'))
+                                            <pre
+                                                style="font-size:11px; white-space:pre-wrap; background:#111; color:#0f0; padding:10px; border-radius:10px; overflow:auto;">
+{{ json_encode(
+    [
+        'product_id' => $product['id'] ?? null,
+        'product_name' => $product['name'] ?? null,
+
+        'product_min_age' => $product['min_age'] ?? null,
+        'product_minimum_age' => $product['minimum_age'] ?? null,
+        'product_age_restriction' => $product['age_restriction'] ?? null,
+
+        'selected_variant_id' => $variant['id'] ?? null,
+        'selected_variant_name' => $variant['name'] ?? null,
+        'selected_variant_min_age' => $variant['min_age'] ?? null,
+        'selected_variant_minimum_age' => $variant['minimum_age'] ?? null,
+        'selected_variant_age_restriction' => $variant['age_restriction'] ?? null,
+
+        'computed_minimum_age' => $minimumAge ?? null,
+        'computed_age_label' => $ageRestrictionLabel ?? null,
+
+        'variants' => $variants,
+    ],
+    JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE,
+) }}
+    </pre>
+                                        @endif
+
+
                                         <article class="shop-product-card {{ !$isAvailable ? 'is-disabled' : '' }}">
                                             <div class="shop-product-image">
                                                 @if ($imageUrl && !$hasPlaceholderImage)
@@ -271,11 +370,29 @@
                                                 @else
                                                     <span>{{ mb_substr($product['name'] ?? 'P', 0, 1) }}</span>
                                                 @endif
+
                                             </div>
 
                                             <div class="shop-product-body">
                                                 <h3>{{ $product['name'] ?? 'Produkt' }}</h3>
 
+                                                @if ($variantLabel !== '')
+                                                    <p class="shop-product-variant">
+                                                        {{ $variantLabel }}
+                                                        @if ($hasMultipleVariants)
+                                                            <span>· {{ $variantCount }} Größen</span>
+                                                        @endif
+                                                    </p>
+                                                @elseif ($hasMultipleVariants)
+                                                    <p class="shop-product-variant">
+                                                        {{ $variantCount }} Größen verfügbar
+                                                    </p>
+                                                @endif
+@if ($ageRestrictionLabel)
+    <p class="shop-product-age-line">
+        {{ ucfirst($ageRestrictionLabel) }}
+    </p>
+@endif
                                                 <div class="shop-product-stock">
                                                     @if (!$isAvailable)
                                                         <span class="shop-product-stock-status is-unavailable">
@@ -314,9 +431,15 @@
                                                         @disabled(!$isAvailable || empty($variantId)) data-variant-id="{{ $variantId }}"
                                                         data-product-id="{{ $product['id'] ?? '' }}"
                                                         data-product-name="{{ $product['name'] ?? '' }}"
+                                                        data-variant-name="{{ $variantName }}"
+                                                        data-variant-label="{{ $variantLabel }}"
+                                                        data-has-multiple-variants="{{ $hasMultipleVariants ? '1' : '0' }}"
+                                                        data-variants='@json($variants)'
                                                         data-price="{{ $price ?? '' }}"
                                                         data-deposit-amount="{{ $depositAmount }}"
                                                         data-deposit-label="{{ $depositLabel }}"
+                                                        data-minimum-age="{{ $minimumAge }}"
+                                                        data-age-restriction-label="{{ $ageRestrictionLabel ?? '' }}"
                                                         data-image-url="{{ $imageUrl ?? '' }}"
                                                         data-is-available="{{ $isAvailable ? '1' : '0' }}"
                                                         data-available-quantity="{{ $availableQuantity ?? '' }}">
@@ -420,6 +543,35 @@
         </aside>
 
         <div class="cart-backdrop" id="cartBackdrop"></div>
+
+        <aside class="variant-choice-drawer" id="variantChoiceDrawer" aria-hidden="true">
+            <div class="variant-choice-panel">
+                <div class="variant-choice-head">
+                    <div>
+                        <p class="eyebrow">Größe auswählen</p>
+                        <h2 id="variantChoiceTitle">Produkt</h2>
+                    </div>
+
+                    <button type="button" class="variant-choice-close" id="variantChoiceCloseButton">
+                        ×
+                    </button>
+                </div>
+
+                <div class="variant-choice-body">
+                    <div class="variant-choice-intro">
+                        <p id="variantChoiceDescription"></p>
+                    </div>
+
+                    <div class="variant-choice-options" id="variantChoiceOptions"></div>
+
+                    <div class="variant-choice-message" id="variantChoiceMessage" hidden></div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="variant-choice-backdrop" id="variantChoiceBackdrop"></div>
+
+
 
         <aside class="menu-choice-drawer" id="menuChoiceDrawer" aria-hidden="true">
             <div class="menu-choice-panel">

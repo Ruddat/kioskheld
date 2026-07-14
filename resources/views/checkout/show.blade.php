@@ -96,6 +96,17 @@
             return $item['variant_name'] ?? ($item['unit_name'] ?? null);
         };
 
+        $getMinimumAge = function (array $item): int {
+            return (int) ($item['min_age'] ??
+                ($item['minimum_age'] ??
+                    (data_get($item, 'age_restriction.min_age') ??
+                        (data_get($item, 'age_restriction.minimum_age') ??
+                            (data_get($item, 'product.min_age') ??
+                                (data_get($item, 'product.minimum_age') ??
+                                    (data_get($item, 'variant.min_age') ??
+                                        (data_get($item, 'variant.minimum_age') ?? 0))))))));
+        };
+
         $getQuantity = function (array $item): int {
             return (int) ($item['quantity'] ?? ($item['qty'] ?? 1));
         };
@@ -169,6 +180,15 @@
         $postcode = $deliveryLocation['postal_code'] ?? ($cart['postcode'] ?? '');
 
         $city = $deliveryLocation['city'] ?? ($cart['city'] ?? '');
+
+        $minimumAgeInCart = collect($displayItems)->map(fn(array $item): int => $getMinimumAge($item))->max() ?? 0;
+
+        $requiresAgeConfirmation = $minimumAgeInCart >= 16;
+
+        $ageConfirmationText =
+            $minimumAgeInCart >= 18
+                ? 'Ich bestätige, dass ich mindestens 18 Jahre alt bin. Mir ist bewusst, dass der Fahrer bei Übergabe einen Altersnachweis verlangen kann.'
+                : 'Ich bestätige, dass ich mindestens 16 Jahre alt bin. Mir ist bewusst, dass der Fahrer bei Übergabe einen Altersnachweis verlangen kann.';
     @endphp
 
     <main class="checkout-page">
@@ -340,6 +360,31 @@
                         </div>
                     </div>
 
+                    @if ($requiresAgeConfirmation)
+                        <div class="checkout-card checkout-age-card">
+                            <div class="checkout-card-head">
+                                <div>
+                                    <span class="checkout-step">!</span>
+                                </div>
+
+                                <div>
+                                    <h2>Altersprüfung</h2>
+                                    <p>Dein Warenkorb enthält Artikel mit Altersbeschränkung.</p>
+                                </div>
+                            </div>
+
+                            <label class="checkout-checkbox checkout-age-confirmation">
+                                <input type="checkbox" name="age_confirmed" value="1" @checked(old('age_confirmed', $customer['age_confirmed'] ?? false))
+                                    required>
+
+                                <span>
+                                    <strong>Altersbestätigung erforderlich</strong>
+                                    <small>{{ $ageConfirmationText }}</small>
+                                </span>
+                            </label>
+                        </div>
+                    @endif
+
                     <button type="submit"
                         class="checkout-submit @if (!empty($customer)) checkout-submit-secondary @endif">
                         @if (!empty($customer))
@@ -375,6 +420,7 @@
                                         $quantity = $getQuantity($item);
                                         $itemName = $getItemName($item);
                                         $variantText = $getVariantText($item);
+                                        $itemMinimumAge = $getMinimumAge($item);
                                         $unitPrice = $getUnitPrice($item);
                                         $merchandiseLineTotal = $getMerchandiseLineTotal($item);
                                         $itemDepositTotal = $getDepositTotal($item);
@@ -382,13 +428,23 @@
                                         $depositLabel = $item['deposit_label'] ?? 'Pfand';
                                         $choices = $getChoices($item);
                                     @endphp
-
+                                    @if (config('app.apipreview', false))
+                                        <pre
+                                            style="font-size:11px; white-space:pre-wrap; background:#111; color:#0f0; padding:10px; border-radius:10px; overflow:auto;">
+{{ json_encode($item, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}
+    </pre>
+                                    @endif
                                     <div class="checkout-item">
                                         <div class="checkout-item-main">
                                             <strong>{{ $itemName }}</strong>
 
                                             @if ($variantText)
                                                 <span>{{ $variantText }}</span>
+                                            @endif
+                                            @if ($itemMinimumAge > 0)
+                                                <span class="checkout-age-badge">
+                                                    Ab {{ $itemMinimumAge }}
+                                                </span>
                                             @endif
 
                                             @if (!empty($choices))
@@ -419,6 +475,9 @@
                                                                 ? $choice['line_total'] ?? null
                                                                 : null;
                                                         @endphp
+
+
+
 
                                                         @if ($choiceLabel)
                                                             <small>

@@ -834,3 +834,78 @@
         width: 100%;
     }
 }
+
+
+.checkout-age-card {
+    border: 1px solid rgba(16, 16, 16, 0.08);
+    background:
+        linear-gradient(135deg, rgba(255, 214, 10, 0.16), rgba(255, 255, 255, 0) 42%),
+        #ffffff;
+}
+
+.checkout-age-card .checkout-card-head {
+    margin-bottom: 18px;
+}
+
+.checkout-age-card .checkout-step {
+    background: #101010;
+    color: #ffd60a;
+}
+
+.checkout-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px;
+    border: 1px solid rgba(16, 16, 16, 0.08);
+    border-radius: 18px;
+    background: rgba(255, 214, 10, 0.08);
+    cursor: pointer;
+}
+
+.checkout-checkbox:hover {
+    border-color: rgba(255, 214, 10, 0.72);
+    background: rgba(255, 214, 10, 0.14);
+}
+
+.checkout-checkbox input {
+    flex: 0 0 auto;
+    width: 21px;
+    height: 21px;
+    margin-top: 2px;
+    accent-color: #101010;
+    cursor: pointer;
+}
+
+.checkout-checkbox span {
+    display: grid;
+    gap: 5px;
+}
+
+.checkout-checkbox strong {
+    color: #101010;
+    font-size: 0.96rem;
+    font-weight: 950;
+    line-height: 1.2;
+}
+
+.checkout-checkbox small {
+    color: rgba(16, 16, 16, 0.64);
+    font-size: 0.84rem;
+    font-weight: 750;
+    line-height: 1.42;
+}
+
+.checkout-age-badge {
+    display: inline-flex;
+    width: fit-content;
+    margin-top: 6px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(255, 214, 10, 0.42);
+    color: #101010;
+    font-size: 0.72rem;
+    font-weight: 950;
+    line-height: 1;
+    white-space: nowrap;
+}

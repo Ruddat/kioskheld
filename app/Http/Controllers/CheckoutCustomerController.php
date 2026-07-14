@@ -67,26 +67,56 @@ class CheckoutCustomerController extends Controller
                 ->with('status', 'Deine Warenkorb-Prüfung ist abgelaufen. Bitte prüfe erneut.');
         }
 
-        $customer = $request->validate([
-            'customer_name' => ['required', 'string', 'min:2', 'max:120'],
-            'customer_phone' => ['required', 'string', 'min:5', 'max:40'],
-            'customer_email' => ['nullable', 'email', 'max:160'],
 
-            'street' => ['required', 'string', 'min:2', 'max:160'],
-            'house_number' => ['required', 'string', 'max:30'],
-            'delivery_note' => ['nullable', 'string', 'max:500'],
 
-            'payment_method' => ['required', 'string', Rule::in($allowedPaymentMethods)],
-        ], [
-            'customer_name.required' => 'Bitte gib deinen Namen ein.',
-            'customer_phone.required' => 'Bitte gib deine Telefonnummer ein.',
-            'customer_email.email' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
-            'street.required' => 'Bitte gib deine Straße ein.',
-            'house_number.required' => 'Bitte gib deine Hausnummer ein.',
-            'payment_method.required' => 'Bitte wähle eine Zahlungsart.',
-            'payment_method.in' => 'Diese Zahlungsart ist für diese Bestellung nicht verfügbar.',
-        ]);
+$items = $validated['items'] ?? [];
 
+$minimumAgeInCart = collect($items)
+    ->map(function (array $item): int {
+        return (int) (
+            $item['min_age']
+            ?? $item['minimum_age']
+            ?? data_get($item, 'age_restriction.min_age')
+            ?? data_get($item, 'age_restriction.minimum_age')
+            ?? data_get($item, 'product.min_age')
+            ?? data_get($item, 'product.minimum_age')
+            ?? data_get($item, 'variant.min_age')
+            ?? data_get($item, 'variant.minimum_age')
+            ?? 0
+        );
+    })
+    ->max();
+
+$requiresAgeConfirmation = ((int) $minimumAgeInCart) >= 16;
+
+$rules = [
+    'customer_name' => ['required', 'string', 'min:2', 'max:120'],
+    'customer_phone' => ['required', 'string', 'min:5', 'max:40'],
+    'customer_email' => ['nullable', 'email', 'max:160'],
+
+    'street' => ['required', 'string', 'min:2', 'max:160'],
+    'house_number' => ['required', 'string', 'max:30'],
+    'delivery_note' => ['nullable', 'string', 'max:500'],
+
+    'payment_method' => ['required', 'string', Rule::in($allowedPaymentMethods)],
+];
+
+if ($requiresAgeConfirmation) {
+    $rules['age_confirmed'] = ['accepted'];
+}
+
+$customer = $request->validate($rules, [
+    'customer_name.required' => 'Bitte gib deinen Namen ein.',
+    'customer_phone.required' => 'Bitte gib deine Telefonnummer ein.',
+    'customer_email.email' => 'Bitte gib eine gültige E-Mail-Adresse ein.',
+    'street.required' => 'Bitte gib deine Straße ein.',
+    'house_number.required' => 'Bitte gib deine Hausnummer ein.',
+    'payment_method.required' => 'Bitte wähle eine Zahlungsart.',
+    'payment_method.in' => 'Diese Zahlungsart ist für diese Bestellung nicht verfügbar.',
+    'age_confirmed.accepted' => 'Bitte bestätige dein Alter für Artikel mit Altersbeschränkung.',
+]);
+
+$customer['minimum_age_confirmed'] = $requiresAgeConfirmation ? (int) $minimumAgeInCart : 0;
 
 if (($customer['payment_method'] ?? null) === 'paypal') {
     $apiUrl = config('services.justdeliver.kioskheld_api_url');

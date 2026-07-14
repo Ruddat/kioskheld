@@ -41,6 +41,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuChoiceMessage = document.querySelector('#menuChoiceMessage');
     const menuChoiceAddButton = document.querySelector('#menuChoiceAddButton');
 
+    const variantChoiceDrawer = document.querySelector('#variantChoiceDrawer');
+    const variantChoiceBackdrop = document.querySelector('#variantChoiceBackdrop');
+    const variantChoiceCloseButton = document.querySelector('#variantChoiceCloseButton');
+    const variantChoiceTitle = document.querySelector('#variantChoiceTitle');
+    const variantChoiceDescription = document.querySelector('#variantChoiceDescription');
+    const variantChoiceOptions = document.querySelector('#variantChoiceOptions');
+    const variantChoiceMessage = document.querySelector('#variantChoiceMessage');
+
     const formatter = new Intl.NumberFormat('de-DE', {
         style: 'currency',
         currency: 'EUR',
@@ -50,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const config = window.KioskheldShop || {};
 
-    const catalogProducts = config.catalog || [];
     const catalogMenus = config.menus || [];
     const productsByCategoryId = config.productsByCategoryId || {};
 
@@ -70,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let activeMenu = null;
     let activeMenuSelections = new Map();
+    let activeVariantProduct = null;
     let lastValidation = null;
     let isValidating = false;
     let checkoutUrl = null;
@@ -303,6 +311,202 @@ document.addEventListener('DOMContentLoaded', () => {
         setMenuChoiceMessage('');
     };
 
+    const setVariantChoiceMessage = (message) => {
+        if (!variantChoiceMessage) {
+            return;
+        }
+
+        if (!message) {
+            variantChoiceMessage.hidden = true;
+            variantChoiceMessage.textContent = '';
+            return;
+        }
+
+        variantChoiceMessage.hidden = false;
+        variantChoiceMessage.textContent = message;
+    };
+
+    const openVariantChoiceDrawer = () => {
+        if (!variantChoiceDrawer || !variantChoiceBackdrop) {
+            return;
+        }
+
+        variantChoiceDrawer.classList.add('is-open');
+        variantChoiceDrawer.setAttribute('aria-hidden', 'false');
+        variantChoiceBackdrop.classList.add('is-visible');
+    };
+
+    const closeVariantChoiceDrawer = () => {
+        if (!variantChoiceDrawer || !variantChoiceBackdrop) {
+            return;
+        }
+
+        variantChoiceDrawer.classList.remove('is-open');
+        variantChoiceDrawer.setAttribute('aria-hidden', 'true');
+        variantChoiceBackdrop.classList.remove('is-visible');
+        activeVariantProduct = null;
+        setVariantChoiceMessage('');
+    };
+
+    const getVariantLabel = (variant) => {
+        const values = [
+            variant?.size?.label,
+            variant?.name,
+            variant?.description,
+        ];
+
+        return values
+            .map((value) => String(value || '').trim())
+            .filter((value) => value !== '')
+            .filter((value) => !['standard', 'standart', 'default', 'normal'].includes(value.toLowerCase()))
+            .filter((value, index, array) => array.indexOf(value) === index)
+            .join(' · ');
+    };
+
+    const addProductVariantToCart = ({
+        variantId,
+        productId,
+        productName,
+        variantName = '',
+        variantLabel = '',
+        price = 0,
+        depositAmount = 0,
+        depositLabel = 'Pfand',
+        imageUrl = '',
+        availableQuantity = null,
+    }) => {
+        if (!variantId) {
+            return;
+        }
+
+        resetValidationUi();
+
+        const cartKey = `product:${variantId}`;
+        const existing = cart.get(cartKey);
+
+        const currentQuantity = existing?.quantity || 0;
+        const hasFrontendLimit = availableQuantity !== null &&
+            availableQuantity !== undefined &&
+            availableQuantity !== '' &&
+            Number(availableQuantity) > 0;
+
+        if (hasFrontendLimit && currentQuantity >= Number(availableQuantity)) {
+            openCart();
+            setValidationMessage(
+                'warning',
+                `Von diesem Artikel sind aktuell nur ${Number(availableQuantity)} verfügbar.`
+            );
+            return;
+        }
+
+        if (existing) {
+            existing.quantity += 1;
+            cart.set(cartKey, existing);
+        } else {
+            cart.set(cartKey, {
+                cartKey,
+                type: 'product',
+                variantId,
+                productId,
+                name: productName || 'Produkt',
+                variantName,
+                variantLabel,
+                price: Number(price || 0),
+                depositAmount: Number(depositAmount || 0),
+                depositLabel: depositLabel || 'Pfand',
+                imageUrl: imageUrl || '',
+                availableQuantity,
+                quantity: 1,
+            });
+        }
+
+        renderCart();
+        closeVariantChoiceDrawer();
+        openCart();
+    };
+
+    const renderVariantChoiceDrawer = () => {
+        if (!activeVariantProduct || !variantChoiceOptions) {
+            return;
+        }
+
+        const variants = activeVariantProduct.variants || [];
+
+        variantChoiceTitle.textContent = activeVariantProduct.name || 'Produkt';
+        variantChoiceDescription.textContent = 'Bitte wähle eine Größe aus.';
+
+        variantChoiceOptions.innerHTML = variants.map((variant) => {
+            const variantId = String(variant.id || '');
+            const label = getVariantLabel(variant) || 'Auswahl';
+            const price = Number(variant.price || 0);
+            const depositAmount = Number(variant.deposit?.amount || 0);
+            const depositLabel = variant.deposit?.label || 'Pfand';
+            const isAvailable = variant.is_available !== false;
+            const availableQuantity = variant.available_quantity ?? null;
+
+            const hasFrontendLimit = availableQuantity !== null &&
+                availableQuantity !== undefined &&
+                Number(availableQuantity) > 0;
+
+            const availabilityInfo = !isAvailable ?
+                'Aktuell nicht verfügbar' :
+                hasFrontendLimit ?
+                    `Noch ${Number(availableQuantity)} verfügbar` :
+                    '';
+
+            const depositInfo = depositAmount > 0 ?
+                `<small>zzgl. ${formatter.format(depositAmount)} ${depositLabel}</small>` :
+                '';
+
+            return `
+                <button
+                    type="button"
+                    class="variant-choice-option ${!isAvailable ? 'is-disabled' : ''}"
+                    data-variant-choice-id="${variantId}"
+                    ${!isAvailable ? 'disabled' : ''}
+                >
+                    <span>
+                        <strong>${label}</strong>
+                        ${availabilityInfo ? `<em>${availabilityInfo}</em>` : ''}
+                    </span>
+
+                    <span>
+                        <b>${formatter.format(price)}</b>
+                        ${depositInfo}
+                    </span>
+                </button>
+            `;
+        }).join('');
+
+        setVariantChoiceMessage('');
+    };
+
+    const openProductVariantChoice = (button) => {
+        let variants = [];
+
+        try {
+            variants = JSON.parse(button.dataset.variants || '[]');
+        } catch (error) {
+            variants = [];
+        }
+
+        if (!Array.isArray(variants) || variants.length === 0) {
+            setValidationMessage('error', 'Für dieses Produkt konnten keine Größen geladen werden.');
+            openCart();
+            return;
+        }
+
+        activeVariantProduct = {
+            productId: button.dataset.productId || '',
+            name: button.dataset.productName || 'Produkt',
+            imageUrl: button.dataset.imageUrl || '',
+            variants,
+        };
+
+        renderVariantChoiceDrawer();
+        openVariantChoiceDrawer();
+    };
+
     const buildMenuChoiceSummary = (choices) => {
         if (!choices.length) {
             return '';
@@ -377,42 +581,42 @@ document.addEventListener('DOMContentLoaded', () => {
                         '';
 
                 return `
-                        <div class="menu-choice-option ${!isAvailable ? 'is-disabled' : ''}" data-choice-group-id="${groupId}" data-variant-id="${variantId}">
-                            <div class="menu-choice-option-image">
-                                ${image}
-                            </div>
-
-                            <div class="menu-choice-option-main">
-                                <h3>${product.name || variant.name || 'Produkt'}</h3>
-                                <p>${variant.name || ''} · ${priceInfo}</p>
-                                ${availabilityInfo ? `<small>${availabilityInfo}</small>` : ''}
-                            </div>
-
-                            <div class="menu-choice-option-controls">
-                                <button type="button" data-menu-choice-action="decrease" data-choice-group-id="${groupId}" data-variant-id="${variantId}" ${quantity <= 0 ? 'disabled' : ''}>−</button>
-                                <span>${quantity}</span>
-                                <button type="button" data-menu-choice-action="increase" data-choice-group-id="${groupId}" data-variant-id="${variantId}" ${!isAvailable ? 'disabled' : ''}>+</button>
-                            </div>
+                    <div class="menu-choice-option ${!isAvailable ? 'is-disabled' : ''}" data-choice-group-id="${groupId}" data-variant-id="${variantId}">
+                        <div class="menu-choice-option-image">
+                            ${image}
                         </div>
-                    `;
+
+                        <div class="menu-choice-option-main">
+                            <h3>${product.name || variant.name || 'Produkt'}</h3>
+                            <p>${variant.name || ''} · ${priceInfo}</p>
+                            ${availabilityInfo ? `<small>${availabilityInfo}</small>` : ''}
+                        </div>
+
+                        <div class="menu-choice-option-controls">
+                            <button type="button" data-menu-choice-action="decrease" data-choice-group-id="${groupId}" data-variant-id="${variantId}" ${quantity <= 0 ? 'disabled' : ''}>−</button>
+                            <span>${quantity}</span>
+                            <button type="button" data-menu-choice-action="increase" data-choice-group-id="${groupId}" data-variant-id="${variantId}" ${!isAvailable ? 'disabled' : ''}>+</button>
+                        </div>
+                    </div>
+                `;
             }).join('');
 
             return `
-                    <section class="menu-choice-group">
-                        <div class="menu-choice-group-head">
-                            <div>
-                                <h3>${group.label || 'Auswahl'}</h3>
-                                <p>${selectedQuantity} von ${maxQuantity || minQuantity} gewählt</p>
-                            </div>
-
-                            <strong>${minQuantity}${maxQuantity !== minQuantity ? `–${maxQuantity}` : ''}×</strong>
+                <section class="menu-choice-group">
+                    <div class="menu-choice-group-head">
+                        <div>
+                            <h3>${group.label || 'Auswahl'}</h3>
+                            <p>${selectedQuantity} von ${maxQuantity || minQuantity} gewählt</p>
                         </div>
 
-                        <div class="menu-choice-options">
-                            ${optionsHtml || `<div class="menu-choice-empty">Für diese Auswahl sind aktuell keine passenden Produkte verfügbar.</div>`}
-                        </div>
-                    </section>
-                `;
+                        <strong>${minQuantity}${maxQuantity !== minQuantity ? `–${maxQuantity}` : ''}×</strong>
+                    </div>
+
+                    <div class="menu-choice-options">
+                        ${optionsHtml || `<div class="menu-choice-empty">Für diese Auswahl sind aktuell keine passenden Produkte verfügbar.</div>`}
+                    </div>
+                </section>
+            `;
         }).join('');
 
         setMenuChoiceMessage('');
@@ -723,10 +927,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (items.length === 0) {
             cartItems.innerHTML = `
-                    <div class="cart-empty">
-                        Dein Warenkorb ist noch leer.
-                    </div>
-                `;
+                <div class="cart-empty">
+                    Dein Warenkorb ist noch leer.
+                </div>
+            `;
 
             resetValidationUi();
 
@@ -752,7 +956,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (item.type === 'menu' && item.choiceSummary) {
                 meta = item.choiceSummary;
             } else {
-                meta = `${formatter.format(item.price)} · ${formatter.format(merchandiseLineTotal)}`;
+                const variantInfo = item.variantLabel || item.variantName || '';
+
+                meta = variantInfo ?
+                    `${variantInfo}<br>${formatter.format(item.price)} · ${formatter.format(merchandiseLineTotal)}` :
+                    `${formatter.format(item.price)} · ${formatter.format(merchandiseLineTotal)}`;
 
                 if (depositLineTotal > 0) {
                     meta += `<br><small>zzgl. ${formatter.format(depositLineTotal)} ${item.depositLabel || 'Pfand'}</small>`;
@@ -764,25 +972,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 '';
 
             return `
-        <div class="cart-item" data-cart-key="${encodedCartKey}" data-variant-id="${item.variantId || ''}" data-menu-id="${item.menuId || ''}">
-            <div class="cart-item-image">
-                ${image}
-            </div>
+                <div class="cart-item" data-cart-key="${encodedCartKey}" data-variant-id="${item.variantId || ''}" data-menu-id="${item.menuId || ''}">
+                    <div class="cart-item-image">
+                        ${image}
+                    </div>
 
-            <div class="cart-item-main">
-                ${badge}
-                <h3>${item.name}</h3>
-                <p>${meta}</p>
+                    <div class="cart-item-main">
+                        ${badge}
+                        <h3>${item.name}</h3>
+                        <p>${meta}</p>
 
-                <div class="cart-item-controls">
-                    <button type="button" data-action="decrease" data-cart-key="${encodedCartKey}">−</button>
-                    <span>${item.quantity}</span>
-                    <button type="button" data-action="increase" data-cart-key="${encodedCartKey}">+</button>
-                    <button type="button" class="cart-remove" data-action="remove" data-cart-key="${encodedCartKey}">×</button>
+                        <div class="cart-item-controls">
+                            <button type="button" data-action="decrease" data-cart-key="${encodedCartKey}">−</button>
+                            <span>${item.quantity}</span>
+                            <button type="button" data-action="increase" data-cart-key="${encodedCartKey}">+</button>
+                            <button type="button" class="cart-remove" data-action="remove" data-cart-key="${encodedCartKey}">×</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    `;
+            `;
         }).join('');
 
         if (lastValidation) {
@@ -866,20 +1074,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch(cartValidateUrl, {
+const payload = {
+    shop_id: shopId,
+    payment_method: 'cash',
+    items,
+};
 
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                body: JSON.stringify({
-                    shop_id: shopId,
-                    payment_method: 'cash',
-                    items,
-                }),
-            });
+console.log('Kioskheld cart validate payload', {
+    payload,
+    cart: [...cart.values()],
+});
+
+const response = await fetch(cartValidateUrl, {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+    },
+    body: JSON.stringify(payload),
+});
 
             const result = await response.json().catch(() => ({
                 ok: false,
@@ -963,6 +1177,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.add-to-cart').forEach((button) => {
         button.addEventListener('click', () => {
+            const hasMultipleVariants = button.dataset.hasMultipleVariants === '1';
+
+            if (hasMultipleVariants) {
+                openProductVariantChoice(button);
+                return;
+            }
+
             const variantId = button.dataset.variantId;
             const isAvailable = button.dataset.isAvailable !== '0';
             const availableQuantityRaw = button.dataset.availableQuantity;
@@ -978,46 +1199,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            resetValidationUi();
-
-            const cartKey = `product:${variantId}`;
-            const existing = cart.get(cartKey);
-
-            const currentQuantity = existing?.quantity || 0;
-            const hasFrontendLimit = availableQuantity !== null &&
-                availableQuantity !== undefined &&
-                availableQuantity > 0;
-
-            if (hasFrontendLimit && currentQuantity >= availableQuantity) {
-                openCart();
-                setValidationMessage(
-                    'warning',
-                    `Von diesem Artikel sind aktuell nur ${availableQuantity} verfügbar.`
-                );
-                return;
-            }
-
-            if (existing) {
-                existing.quantity += 1;
-                cart.set(cartKey, existing);
-            } else {
-                cart.set(cartKey, {
-                    cartKey,
-                    type: 'product',
-                    variantId,
-                    productId: button.dataset.productId,
-                    name: button.dataset.productName || 'Produkt',
-                    price: Number(button.dataset.price || 0),
-                    depositAmount: Number(button.dataset.depositAmount || 0),
-                    depositLabel: button.dataset.depositLabel || 'Pfand',
-                    imageUrl: button.dataset.imageUrl || '',
-                    availableQuantity,
-                    quantity: 1,
-                });
-            }
-
-            renderCart();
-            openCart();
+            addProductVariantToCart({
+                variantId,
+                productId: button.dataset.productId,
+                productName: button.dataset.productName || 'Produkt',
+                variantName: button.dataset.variantName || '',
+                variantLabel: button.dataset.variantLabel || '',
+                price: Number(button.dataset.price || 0),
+                depositAmount: Number(button.dataset.depositAmount || 0),
+                depositLabel: button.dataset.depositLabel || 'Pfand',
+                imageUrl: button.dataset.imageUrl || '',
+                availableQuantity,
+            });
         });
     });
 
@@ -1057,6 +1250,21 @@ document.addEventListener('DOMContentLoaded', () => {
         resetValidationUi();
 
         if (action === 'increase') {
+            const availableQuantity = item.availableQuantity;
+            const hasFrontendLimit = availableQuantity !== null &&
+                availableQuantity !== undefined &&
+                availableQuantity !== '' &&
+                Number(availableQuantity) > 0;
+
+            if (hasFrontendLimit && item.quantity >= Number(availableQuantity)) {
+                setValidationMessage(
+                    'warning',
+                    `Von diesem Artikel sind aktuell nur ${Number(availableQuantity)} verfügbar.`
+                );
+                renderCart();
+                return;
+            }
+
             item.quantity += 1;
             cart.set(cartKey, item);
         }
@@ -1075,16 +1283,48 @@ document.addEventListener('DOMContentLoaded', () => {
             cart.delete(cartKey);
         }
 
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                closeCart();
-                closeMenuChoiceDrawer();
-            }
-        });
-
-
         renderCart();
     });
+
+    if (variantChoiceOptions) {
+        variantChoiceOptions.addEventListener('click', (event) => {
+            const button = event.target.closest('button[data-variant-choice-id]');
+
+            if (!button || !activeVariantProduct) {
+                return;
+            }
+
+            const variantId = button.dataset.variantChoiceId;
+            const variant = (activeVariantProduct.variants || [])
+                .find((item) => String(item.id) === String(variantId));
+
+            if (!variant) {
+                setVariantChoiceMessage('Diese Größe konnte nicht geladen werden.');
+                return;
+            }
+
+            if (variant.is_available === false) {
+                setVariantChoiceMessage('Diese Größe ist aktuell nicht verfügbar.');
+                return;
+            }
+
+            const variantLabel = getVariantLabel(variant);
+            const availableQuantity = variant.available_quantity ?? null;
+
+            addProductVariantToCart({
+                variantId: variant.id,
+                productId: activeVariantProduct.productId,
+                productName: activeVariantProduct.name,
+                variantName: variant.name || '',
+                variantLabel,
+                price: Number(variant.price || 0),
+                depositAmount: Number(variant.deposit?.amount || 0),
+                depositLabel: variant.deposit?.label || 'Pfand',
+                imageUrl: activeVariantProduct.imageUrl || '',
+                availableQuantity,
+            });
+        });
+    }
 
     cartFloatingButton.addEventListener('click', openCart);
     cartCloseButton.addEventListener('click', closeCart);
@@ -1117,6 +1357,24 @@ document.addEventListener('DOMContentLoaded', () => {
             button.dataset.variantId,
             button.dataset.menuChoiceAction
         );
+    });
+
+    if (variantChoiceCloseButton) {
+        variantChoiceCloseButton.addEventListener('click', closeVariantChoiceDrawer);
+    }
+
+    if (variantChoiceBackdrop) {
+        variantChoiceBackdrop.addEventListener('click', closeVariantChoiceDrawer);
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') {
+            return;
+        }
+
+        closeCart();
+        closeMenuChoiceDrawer();
+        closeVariantChoiceDrawer();
     });
 
     renderCart();

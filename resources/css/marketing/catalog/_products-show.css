@@ -1,19 +1,19 @@
 /*
 |--------------------------------------------------------------------------
-| Catalog Product Show
+| Catalog Product Show — cream / green brand palette
 |--------------------------------------------------------------------------
 |
 | Seite:
 | resources/views/catalog/products/show.blade.php
 |
-| Die einzelnen Produktkarten im Bereich „Weitere Produkte“
+| Die einzelnen Produktkarten im Bereich "Weitere Produkte"
 | werden separat über product-card.css gestaltet.
 |
 */
 
 .catalog-page {
     min-height: 100vh;
-    background: #f7f7f5;
+    background: var(--kh-cream);
 }
 
 /*
@@ -27,10 +27,10 @@
     background:
         radial-gradient(
             circle at 84% 18%,
-            rgba(255, 215, 0, 0.18),
+            rgba(255, 255, 255, 0.06),
             transparent 30%
         ),
-        #0a0a0a;
+        var(--kh-green);
     color: #ffffff;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .catalog-breadcrumb a:hover {
-    color: #ffd700;
+    color: var(--kh-yellow);
 }
 
 .catalog-breadcrumb > span:last-child {
@@ -97,10 +97,10 @@
     justify-content: center;
     overflow: hidden;
     padding: 34px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 30px;
     background: #ffffff;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
 }
 
 .catalog-product-detail-image {
@@ -121,10 +121,10 @@
     background:
         linear-gradient(
             145deg,
-            rgba(255, 215, 0, 0.2),
-            rgba(255, 255, 255, 0.92)
+            rgba(26, 60, 52, 0.08),
+            rgba(255, 255, 255, 0.96)
         );
-    color: #0a0a0a;
+    color: var(--kh-green);
     font-size: clamp(6rem, 14vw, 11rem);
     font-weight: 900;
     line-height: 1;
@@ -136,7 +136,7 @@
 
 .catalog-product-detail-brand {
     margin: 0 0 14px;
-    color: #ffd700;
+    color: var(--kh-yellow);
     font-size: 0.82rem;
     font-weight: 900;
     letter-spacing: 0.12em;
@@ -156,7 +156,7 @@
 .catalog-product-detail-lead {
     max-width: 610px;
     margin: 26px 0 0;
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 255, 255, 0.78);
     font-size: 1.08rem;
     line-height: 1.75;
 }
@@ -177,7 +177,7 @@
 }
 
 .catalog-product-detail-price strong {
-    color: #ffd700;
+    color: var(--kh-yellow);
     font-size: clamp(2rem, 4vw, 3.2rem);
     font-weight: 900;
     line-height: 1;
@@ -193,22 +193,22 @@
 .catalog-product-detail-notice {
     margin-top: 32px;
     padding: 20px 22px;
-    border: 1px solid rgba(255, 215, 0, 0.28);
+    border: 1px solid rgba(26, 60, 52, 0.3);
     border-radius: 18px;
-    background: rgba(255, 215, 0, 0.08);
+    background: rgba(26, 60, 52, 0.15);
 }
 
 .catalog-product-detail-notice strong {
     display: block;
     margin-bottom: 7px;
-    color: #ffd700;
+    color: var(--kh-yellow);
     font-size: 0.95rem;
     font-weight: 900;
 }
 
 .catalog-product-detail-notice p {
     margin: 0;
-    color: rgba(255, 255, 255, 0.68);
+    color: rgba(255, 255, 255, 0.72);
     font-size: 0.92rem;
     line-height: 1.65;
 }
@@ -246,9 +246,9 @@
 }
 
 .catalog-detail-primary {
-    border: 1px solid #ffd700;
-    background: #ffd700;
-    color: #0a0a0a;
+    border: 1px solid var(--kh-yellow);
+    background: var(--kh-yellow);
+    color: var(--kh-black);
 }
 
 .catalog-detail-primary:hover {
@@ -267,7 +267,7 @@
     transform: translateY(-2px);
     border-color: #ffffff;
     background: #ffffff;
-    color: #0a0a0a;
+    color: var(--kh-green);
 }
 
 /*
@@ -289,10 +289,10 @@
 
 .catalog-product-info-card,
 .catalog-product-facts {
-    border: 1px solid rgba(10, 10, 10, 0.08);
+    border: 1px solid var(--kh-border);
     border-radius: 26px;
     background: #ffffff;
-    box-shadow: 0 18px 50px rgba(10, 10, 10, 0.05);
+    box-shadow: var(--kh-shadow-soft);
 }
 
 .catalog-product-info-card {
@@ -305,7 +305,7 @@
 
 .catalog-section-kicker {
     margin: 0 0 12px;
-    color: #a88300;
+    color: var(--kh-green);
     font-size: 0.78rem;
     font-weight: 900;
     letter-spacing: 0.12em;
@@ -315,7 +315,7 @@
 .catalog-product-info-card h2,
 .catalog-product-facts h2 {
     margin: 0;
-    color: #0a0a0a;
+    color: var(--kh-black);
     font-size: clamp(1.6rem, 3vw, 2.4rem);
     font-weight: 900;
     line-height: 1.1;
@@ -324,7 +324,7 @@
 
 .catalog-product-description-copy {
     margin-top: 22px;
-    color: #555555;
+    color: var(--kh-muted);
     font-size: 1rem;
     line-height: 1.8;
     overflow-wrap: anywhere;
@@ -345,7 +345,7 @@
     grid-template-columns: minmax(90px, 0.7fr) minmax(0, 1.3fr);
     gap: 16px;
     padding: 16px 0;
-    border-top: 1px solid rgba(10, 10, 10, 0.08);
+    border-top: 1px solid var(--kh-border);
 }
 
 .catalog-product-facts dl > div:first-child {
@@ -354,14 +354,14 @@
 }
 
 .catalog-product-facts dt {
-    color: #7b7b7b;
+    color: var(--kh-muted);
     font-size: 0.84rem;
     font-weight: 800;
 }
 
 .catalog-product-facts dd {
     margin: 0;
-    color: #0a0a0a;
+    color: var(--kh-black);
     font-size: 0.92rem;
     font-weight: 800;
     text-align: right;
@@ -371,12 +371,12 @@
 .catalog-product-facts dd a {
     color: inherit;
     text-decoration: underline;
-    text-decoration-color: rgba(10, 10, 10, 0.25);
+    text-decoration-color: rgba(26, 60, 52, 0.25);
     text-underline-offset: 3px;
 }
 
 .catalog-product-facts dd a:hover {
-    text-decoration-color: #ffd700;
+    text-decoration-color: var(--kh-green);
 }
 
 /*
@@ -395,7 +395,7 @@
 
 .catalog-section-heading h2 {
     margin: 0;
-    color: #0a0a0a;
+    color: var(--kh-black);
     font-size: clamp(1.7rem, 3vw, 2.6rem);
     font-weight: 900;
     line-height: 1.08;
@@ -405,7 +405,7 @@
 .catalog-section-heading > p {
     max-width: 480px;
     margin: 0;
-    color: #737373;
+    color: var(--kh-muted);
     line-height: 1.65;
 }
 
@@ -427,15 +427,15 @@
 
 .catalog-variant-card {
     padding: 24px;
-    border: 1px solid rgba(10, 10, 10, 0.08);
+    border: 1px solid var(--kh-border);
     border-radius: 20px;
     background: #ffffff;
-    box-shadow: 0 12px 34px rgba(10, 10, 10, 0.04);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.04);
 }
 
 .catalog-variant-card h3 {
     margin: 0;
-    color: #0a0a0a;
+    color: var(--kh-black);
     font-size: 1.02rem;
     font-weight: 900;
     line-height: 1.3;
@@ -443,7 +443,7 @@
 
 .catalog-variant-card p {
     margin: 10px 0 0;
-    color: #737373;
+    color: var(--kh-muted);
     font-size: 0.9rem;
     line-height: 1.6;
 }
@@ -462,7 +462,7 @@
     display: inline-flex;
     flex-shrink: 0;
     align-items: center;
-    color: #0a0a0a;
+    color: var(--kh-black);
     font-size: 0.88rem;
     font-weight: 900;
     text-decoration: none;
@@ -471,7 +471,7 @@
 .catalog-related-link::after {
     content: '→';
     margin-left: 8px;
-    color: #c7a500;
+    color: var(--kh-green);
     transition: transform 160ms ease;
 }
 
@@ -507,10 +507,10 @@
     background:
         radial-gradient(
             circle at 88% 28%,
-            rgba(255, 215, 0, 0.23),
+            rgba(255, 255, 255, 0.05),
             transparent 32%
         ),
-        #0a0a0a;
+        var(--kh-green);
     color: #ffffff;
 }
 
@@ -522,7 +522,7 @@
 
 .catalog-cta-kicker {
     margin: 0 0 12px;
-    color: #ffd700;
+    color: var(--kh-yellow);
     font-size: 0.78rem;
     font-weight: 900;
     letter-spacing: 0.12em;
@@ -541,7 +541,7 @@
 .catalog-cta p:not(.catalog-cta-kicker) {
     max-width: 650px;
     margin: 18px 0 0;
-    color: rgba(255, 255, 255, 0.68);
+    color: rgba(255, 255, 255, 0.72);
     line-height: 1.7;
 }
 
@@ -555,8 +555,8 @@
     justify-content: center;
     padding: 0 24px;
     border-radius: 999px;
-    background: #ffd700;
-    color: #0a0a0a;
+    background: var(--kh-yellow);
+    color: var(--kh-black);
     font-size: 0.9rem;
     font-weight: 900;
     text-decoration: none;

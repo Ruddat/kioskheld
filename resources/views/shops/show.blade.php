@@ -16,6 +16,48 @@
         $minimumOrderValue = $rule['min_order_value'] ?? null;
         $deliveryFee = $rule['delivery_fee'] ?? null;
         $freeDeliveryFrom = $rule['free_delivery_from'] ?? null;
+
+$menusForJavascript = collect($menus)
+    ->map(function (array $menu): array {
+        $menu['id'] = isset($menu['id'])
+            ? (int) $menu['id']
+            : null;
+
+        $menu['choice_groups'] = collect($menu['choice_groups'] ?? [])
+            ->map(function (array $group): array {
+                $group['id'] = isset($group['id'])
+                    ? (string) $group['id']
+                    : '';
+
+                $group['options'] = collect($group['options'] ?? [])
+                    ->map(function (array $option): array {
+                        /*
+                         * Options-ID ist bei deinem aktuellen API-Modell
+                         * offenbar die variant_id und kann Integer bleiben.
+                         */
+                        if (isset($option['id'])) {
+                            $option['id'] = (int) $option['id'];
+                        }
+
+                        if (isset($option['variant_id'])) {
+                            $option['variant_id'] = (int) $option['variant_id'];
+                        }
+
+                        return $option;
+                    })
+                    ->values()
+                    ->all();
+
+                return $group;
+            })
+            ->values()
+            ->all();
+
+        return $menu;
+    })
+    ->values()
+    ->all();
+
     @endphp
 
     <main class="shop-app-page" data-shop-id="{{ $shop['id'] ?? '' }}" data-postcode="{{ $postcode ?? '' }}">
@@ -618,7 +660,7 @@ $variantLabel = collect($variantParts)
             shopId: @json($shop['id'] ?? null),
             postcode: @json($postcode ?? null),
             catalog: @json($catalog),
-            menus: @json($menus),
+            menus: @json($menusForJavascript),
             productsByCategoryId: @json($productsByCategoryId),
         };
     </script>

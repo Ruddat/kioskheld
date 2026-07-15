@@ -83,45 +83,50 @@ document.addEventListener('DOMContentLoaded', () => {
     let checkoutUrl = null;
     let validatedCartFingerprint = null;
 
-    const buildCartFingerprint = () => {
-        return JSON.stringify(
-            [...cart.values()]
-                .map((item) => {
-                    if (item.type === 'menu') {
-                        return {
-                            type: 'menu',
-                            menu_id: Number(item.menuId),
-                            quantity: Number(item.quantity),
-                            choices: (item.choices || [])
-                                .map((choice) => ({
-                                    choice_group_id: Number(choice.choice_group_id),
-                                    variant_id: Number(choice.variant_id),
-                                    quantity: Number(choice.quantity),
-                                }))
-                                .sort((a, b) => {
-                                    if (a.choice_group_id !== b.choice_group_id) {
-                                        return a.choice_group_id - b.choice_group_id;
-                                    }
-
-                                    return a.variant_id - b.variant_id;
-                                }),
-                        };
-                    }
-
+const buildCartFingerprint = () => {
+    return JSON.stringify(
+        [...cart.values()]
+            .map((item) => {
+                if (item.type === 'menu') {
                     return {
-                        type: 'product',
-                        variant_id: Number(item.variantId),
+                        type: 'menu',
+                        menu_id: Number(item.menuId),
                         quantity: Number(item.quantity),
-                    };
-                })
-                .sort((a, b) => {
-                    const left = `${a.type}:${a.variant_id || a.menu_id}`;
-                    const right = `${b.type}:${b.variant_id || b.menu_id}`;
+                        choices: (item.choices || [])
+                            .map((choice) => ({
+                                choice_group_id: String(choice.choice_group_id),
+                                variant_id: Number(choice.variant_id),
+                                quantity: Number(choice.quantity),
+                            }))
+                            .sort((a, b) => {
+                                const groupComparison =
+                                    a.choice_group_id.localeCompare(
+                                        b.choice_group_id
+                                    );
 
-                    return left.localeCompare(right);
-                })
-        );
-    };
+                                if (groupComparison !== 0) {
+                                    return groupComparison;
+                                }
+
+                                return a.variant_id - b.variant_id;
+                            }),
+                    };
+                }
+
+                return {
+                    type: 'product',
+                    variant_id: Number(item.variantId),
+                    quantity: Number(item.quantity),
+                };
+            })
+            .sort((a, b) => {
+                const left = `${a.type}:${a.variant_id ?? a.menu_id}`;
+                const right = `${b.type}:${b.variant_id ?? b.menu_id}`;
+
+                return left.localeCompare(right);
+            })
+    );
+};
 
     const openCart = () => {
         cartDrawer.classList.add('is-open');
@@ -517,23 +522,27 @@ document.addEventListener('DOMContentLoaded', () => {
             .join(', ');
     };
 
-    const buildMenuCartKey = (menuId, choices) => {
-        const normalizedChoices = choices
-            .map((choice) => ({
-                choice_group_id: Number(choice.choice_group_id),
-                variant_id: Number(choice.variant_id),
-                quantity: Number(choice.quantity),
-            }))
-            .sort((a, b) => {
-                if (a.choice_group_id !== b.choice_group_id) {
-                    return a.choice_group_id - b.choice_group_id;
-                }
+const buildMenuCartKey = (menuId, choices) => {
+    const normalizedChoices = choices
+        .map((choice) => ({
+            choice_group_id: String(choice.choice_group_id),
+            variant_id: Number(choice.variant_id),
+            quantity: Number(choice.quantity),
+        }))
+        .sort((a, b) => {
+            const groupComparison = a.choice_group_id.localeCompare(
+                b.choice_group_id
+            );
 
-                return a.variant_id - b.variant_id;
-            });
+            if (groupComparison !== 0) {
+                return groupComparison;
+            }
 
-        return `menu:${menuId}:${JSON.stringify(normalizedChoices)}`;
-    };
+            return a.variant_id - b.variant_id;
+        });
+
+    return `menu:${menuId}:${JSON.stringify(normalizedChoices)}`;
+};
 
     const renderMenuChoiceDrawer = () => {
         if (!activeMenu) {
@@ -702,36 +711,40 @@ document.addEventListener('DOMContentLoaded', () => {
         renderMenuChoiceDrawer();
     };
 
-    const getSelectedMenuChoices = () => {
-        if (!activeMenu) {
-            return [];
+const getSelectedMenuChoices = () => {
+    if (!activeMenu) {
+        return [];
+    }
+
+    const choices = [];
+
+    (activeMenu.choice_groups || []).forEach((group) => {
+        const groupSelection = activeMenuSelections.get(String(group.id));
+
+        if (!groupSelection) {
+            return;
         }
 
-        const choices = [];
+        groupSelection.forEach((selection) => {
+            const options = getChoiceGroupProducts(group);
 
-        (activeMenu.choice_groups || []).forEach((group) => {
-            const groupSelection = activeMenuSelections.get(String(group.id));
+            const selectedOption = options.find(
+                ({ variant }) =>
+                    String(variant.id) === String(selection.variantId)
+            );
 
-            if (!groupSelection) {
-                return;
-            }
-
-            groupSelection.forEach((selection) => {
-                const options = getChoiceGroupProducts(group);
-                const selectedOption = options.find(({ variant }) => Number(variant.id) === Number(selection.variantId));
-
-                choices.push({
-                    choice_group_id: Number(group.id),
-                    variant_id: Number(selection.variantId),
-                    quantity: Number(selection.quantity),
-                    product_name: selectedOption?.product?.name || 'Produkt',
-                    variant_name: selectedOption?.variant?.name || '',
-                });
+            choices.push({
+                choice_group_id: String(group.id),
+                variant_id: Number(selection.variantId),
+                quantity: Number(selection.quantity),
+                product_name: selectedOption?.product?.name || 'Produkt',
+                variant_name: selectedOption?.variant?.name || '',
             });
         });
+    });
 
-        return choices;
-    };
+    return choices;
+};
 
     const validateActiveMenuChoices = () => {
         if (!activeMenu) {
@@ -998,28 +1011,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const buildValidationPayloadItems = () => {
-        return [...cart.values()].map((item) => {
-            if (item.type === 'menu') {
-                return {
-                    type: 'menu',
-                    menu_id: Number(item.menuId),
-                    quantity: Number(item.quantity),
-                    choices: (item.choices || []).map((choice) => ({
-                        choice_group_id: Number(choice.choice_group_id),
-                        variant_id: Number(choice.variant_id),
-                        quantity: Number(choice.quantity),
-                    })),
-                };
-            }
-
+const buildValidationPayloadItems = () => {
+    return [...cart.values()].map((item) => {
+        if (item.type === 'menu') {
             return {
-                type: 'product',
-                variant_id: Number(item.variantId),
+                type: 'menu',
+                menu_id: Number(item.menuId),
                 quantity: Number(item.quantity),
+                choices: (item.choices || []).map((choice) => ({
+                    choice_group_id: String(choice.choice_group_id),
+                    variant_id: Number(choice.variant_id),
+                    quantity: Number(choice.quantity),
+                })),
             };
-        });
-    };
+        }
+
+        return {
+            type: 'product',
+            variant_id: Number(item.variantId),
+            quantity: Number(item.quantity),
+        };
+    });
+};
 
     const extractValidationErrorMessage = (result, data) => {
         const firstError = Array.isArray(data.errors) && data.errors.length > 0 ?

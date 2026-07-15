@@ -24,10 +24,26 @@ class CartValidationController extends Controller
             'items.*.variant_id' => ['nullable', 'integer', 'min:1'],
             'items.*.menu_id' => ['nullable', 'integer', 'min:1'],
 
-            'items.*.choices' => ['nullable', 'array'],
-            'items.*.choices.*.choice_group_id' => ['required_with:items.*.choices', 'integer', 'min:1'],
-            'items.*.choices.*.variant_id' => ['required_with:items.*.choices', 'integer', 'min:1'],
-            'items.*.choices.*.quantity' => ['required_with:items.*.choices', 'integer', 'min:1', 'max:99'],
+'items.*.choices' => ['nullable', 'array'],
+
+'items.*.choices.*.choice_group_id' => [
+    'required_with:items.*.choices',
+    'string',
+    'regex:/^\d+$/',
+],
+
+'items.*.choices.*.variant_id' => [
+    'required_with:items.*.choices',
+    'integer',
+    'min:1',
+],
+
+'items.*.choices.*.quantity' => [
+    'required_with:items.*.choices',
+    'integer',
+    'min:1',
+    'max:99',
+],
         ], [
             'items.required' => 'Dein Warenkorb ist leer.',
             'items.array' => 'Der Warenkorb konnte nicht korrekt gelesen werden.',
@@ -97,32 +113,33 @@ class CartValidationController extends Controller
             ], 409);
         }
 
-        $items = collect($request->input('items', []))
-            ->map(function (array $item) {
-                if (($item['type'] ?? null) === 'menu') {
-                    return [
-                        'type' => 'menu',
-                        'menu_id' => (int) $item['menu_id'],
-                        'quantity' => (int) $item['quantity'],
-                        'choices' => collect($item['choices'] ?? [])
-                            ->map(fn(array $choice) => [
-                                'choice_group_id' => (int) $choice['choice_group_id'],
-                                'variant_id' => (int) $choice['variant_id'],
-                                'quantity' => (int) $choice['quantity'],
-                            ])
-                            ->values()
-                            ->all(),
-                    ];
-                }
+$items = collect($request->input('items', []))
+    ->map(function (array $item) {
+        if (($item['type'] ?? null) === 'menu') {
+            return [
+                'type' => 'menu',
+                'menu_id' => (int) $item['menu_id'],
+                'quantity' => (int) $item['quantity'],
 
-                return [
-                    'type' => 'product',
-                    'variant_id' => (int) $item['variant_id'],
-                    'quantity' => (int) $item['quantity'],
-                ];
-            })
-            ->values()
-            ->all();
+                'choices' => collect($item['choices'] ?? [])
+                    ->map(fn (array $choice) => [
+                        'choice_group_id' => (string) $choice['choice_group_id'],
+                        'variant_id' => (int) $choice['variant_id'],
+                        'quantity' => (int) $choice['quantity'],
+                    ])
+                    ->values()
+                    ->all(),
+            ];
+        }
+
+        return [
+            'type' => 'product',
+            'variant_id' => (int) $item['variant_id'],
+            'quantity' => (int) $item['quantity'],
+        ];
+    })
+    ->values()
+    ->all();
 
         $payload = [
             'shop_id' => (int) $shopId,

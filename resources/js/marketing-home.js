@@ -1,4 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
+    /* ═══════════════════════════════════════════
+       NAV SCROLL BEHAVIOUR
+       ═══════════════════════════════════════════ */
+    const nav = document.querySelector('.nav');
+    if (nav) {
+        const onScroll = () => {
+            nav.classList.toggle('scrolled', window.scrollY > 20);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    }
+
     const form = document.querySelector('#postcodeForm');
     const input = document.querySelector('#postcode');
     const toast = document.querySelector('#toast');
@@ -110,6 +122,72 @@ document.addEventListener('DOMContentLoaded', () => {
         return url;
     };
 
+    /* ═══════════════════════════════════════════
+       NEARBY KIOSKS RENDERING (neu)
+       ═══════════════════════════════════════════ */
+    const nearbyGrid = document.querySelector('#nearbyKiosksGrid');
+    const nearbyEmpty = document.querySelector('#nearbyKiosksEmpty');
+
+    const renderNearbyKiosks = (shops) => {
+        if (!nearbyGrid || !Array.isArray(shops) || shops.length === 0) {
+            return;
+        }
+
+        /* Remove empty state */
+        if (nearbyEmpty) {
+            nearbyEmpty.remove();
+        }
+
+        /* Remove previously rendered cards */
+        nearbyGrid.querySelectorAll('.nearby-kiosk-card').forEach((card) => card.remove());
+
+        shops.forEach((shop) => {
+            const shopName = shop.name || 'Kiosk';
+            const shopCity = shop.city || '';
+            const shopAddress = shop.address || '';
+            const shopSlug = shop.slug || '';
+            const deliveryTime = shop.delivery_time || shop.delivery_minutes || '';
+            const minimumOrder = shop.minimum_order || '';
+
+            const card = document.createElement('article');
+            card.className = 'nearby-kiosk-card';
+
+            const shopImgUrl = shop.image_url || shop.image || '';
+
+            card.innerHTML = `
+                <a class="nearby-kiosk-card__link" href="${shopSlug ? shopLegacyUrl.replace('__SHOP_SLUG__', encodeURIComponent(shopSlug)) : '#'}">
+                    <div class="nearby-kiosk-card__media">
+                        ${shopImgUrl
+                            ? `<img class="nearby-kiosk-card__image" src="${shopImgUrl}" alt="" loading="lazy">`
+                            : `<span class="nearby-kiosk-card__placeholder">${shopName.charAt(0).toUpperCase()}</span>`
+                        }
+                    </div>
+                    <div class="nearby-kiosk-card__body">
+                        <h3 class="nearby-kiosk-card__name">${shopName}</h3>
+                        <p class="nearby-kiosk-card__address">${[shopAddress, shopCity].filter(Boolean).join(', ')}</p>
+                        <div class="nearby-kiosk-card__meta">
+                            ${deliveryTime ? `<span class="nearby-kiosk-card__meta-item"><strong>${deliveryTime}</strong> Min.</span>` : ''}
+                            ${minimumOrder ? `<span class="nearby-kiosk-card__meta-item">ab <strong>${minimumOrder}</strong></span>` : ''}
+                        </div>
+                        <span class="nearby-kiosk-card__cta">Jetzt bestellen →</span>
+                    </div>
+                </a>
+            `;
+
+            nearbyGrid.appendChild(card);
+        });
+
+        /* Scroll to section */
+        const section = document.querySelector('#nearby-kiosks');
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
+    /* ═══════════════════════════════════════════
+       AVAILABILITY RESPONSE HANDLER
+       (bestehende Logik + Nearby-Kiosks-Erweiterung)
+       ═══════════════════════════════════════════ */
     const handleAvailabilityResponse = (data) => {
         if (!data || typeof data !== 'object') {
             showToast('Die Antwort der PLZ-Prüfung war ungültig.');
@@ -130,8 +208,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (data.mode === 'single' && Array.isArray(data.shops) && data.shops.length === 1) {
-            const shop = data.shops[0];
+        const shops = Array.isArray(data.shops) ? data.shops : [];
+
+        /* ── Nearby Kiosks: Karten rendern ── */
+        renderNearbyKiosks(shops);
+
+        if (data.mode === 'single' && shops.length === 1) {
+            const shop = shops[0];
 
             if (!shop || !shop.slug) {
                 showToast('Der gefundene Kiosk konnte nicht korrekt geladen werden.');
@@ -150,13 +233,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (data.mode === 'multiple' && Array.isArray(data.shops) && data.shops.length > 1) {
-            showToast(`${data.shops.length} Kioske gefunden. Bitte wähle deinen Shop.`);
-
-            window.setTimeout(() => {
-                window.location.href = shopSelectionUrl;
-            }, 700);
-
+        if (data.mode === 'multiple' && shops.length > 1) {
+            /* Karten werden angezeigt statt redirect — User wählt direkt */
+            showToast(`${shops.length} Kioske gefunden. Wähle deinen Shop:`);
             return;
         }
 
@@ -217,9 +296,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.querySelectorAll('.plus').forEach((button) => {
-        button.addEventListener('click', () => {
-            showToast('Demo: Bundle wurde vorgemerkt.');
-        });
-    });
 });

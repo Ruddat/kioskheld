@@ -2,13 +2,13 @@
 
 return [
     'meta' => [
-        'title' => 'Kioskheld – Your local kiosk, delivered in minutes.',
+        'title' => 'Kioskheld – Find your local kiosk nearby.',
         'description' => 'Kioskheld delivers snacks, drinks, sweets and bundles quickly to your door. Enter your postcode and find a nearby kiosk.',
     ],
 
     'hero' => [
-        'headline' => 'Your local kiosk.',
-        'headline_accent' => 'Delivered in minutes.',
+        'headline' => 'Find your local kiosk',
+        'headline_accent' => 'nearby.',
         'subline' => 'Snacks, drinks, sweets and more – delivered quickly, simply and reliably.',
         'postcode_placeholder' => 'Enter your postcode',
         'submit' => 'Find a kiosk',
@@ -24,15 +24,11 @@ return [
         'payment_value' => 'Pay online',
     ],
 
-    'categories' => [
-        'aria_label' => 'Product categories',
-        'drinks' => 'Drinks',
-        'energy' => 'Energy',
-        'snacks' => 'Chips & snacks',
-        'sweets' => 'Sweets',
-        'ice_cream' => 'Ice cream',
-        'bundles' => 'Bundles',
-        'offers' => 'Offers',
+    'nearby' => [
+        'kicker' => 'Near you',
+        'title' => 'Available kiosks',
+        'description' => 'Enter your postcode above and discover kiosks that deliver directly to you.',
+        'empty_text' => 'Enter your postcode above to see available kiosks in your area.',
     ],
 
     'how' => [
@@ -98,5 +94,20 @@ return [
 
         'payment_title' => 'Secure payments',
         'payment_text' => '100% protected',
+    ],
+
+    'catalog' => [
+        'kicker' => 'Discover our range',
+        'title' => 'Typical kiosk products.',
+        'title_accent' => 'Found quickly.',
+        'description' => 'Discover snacks, drinks, sweets and more from the Kioskheld catalogue.',
+        'category_label' => 'Category',
+        'product' => 'Product',
+        'products' => 'Products',
+        'show_categories' => 'All categories',
+        'show_products' => 'All products',
+        'availability_notice' => 'Which products, prices and delivery options are available at your address will be shown after the postcode check.',
+        'empty_title' => 'The catalogue is currently being set up.',
+        'empty_text' => 'Check your postcode to see which kiosks are already available near you.',
     ],
 ];

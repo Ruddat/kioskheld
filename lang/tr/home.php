@@ -2,13 +2,13 @@
 
 return [
     'meta' => [
-        'title' => 'Kioskheld – Mahallenizdeki büfe dakikalar içinde kapınızda.',
+        'title' => 'Kioskheld – Mahallenizdeki büfeyi bulun.',
         'description' => 'Kioskheld atıştırmalık, içecek, tatlı ve paketleri hızlıca kapınıza getirir. Posta kodunuzu girin ve yakınınızdaki büfeyi bulun.',
     ],
 
     'hero' => [
-        'headline' => 'Mahallenizdeki büfe.',
-        'headline_accent' => 'Dakikalar içinde kapınızda.',
+        'headline' => 'Yakınınızdaki büfeyi',
+        'headline_accent' => 'bulun.',
         'subline' => 'Atıştırmalıklar, içecekler, tatlılar ve daha fazlası – hızlı, kolay ve güvenilir teslimat.',
         'postcode_placeholder' => 'Posta kodunuzu girin',
         'submit' => 'Büfe bul',
@@ -24,15 +24,11 @@ return [
         'payment_value' => 'Online ödeme',
     ],
 
-    'categories' => [
-        'aria_label' => 'Ürün kategorileri',
-        'drinks' => 'İçecekler',
-        'energy' => 'Enerji içecekleri',
-        'snacks' => 'Cips ve atıştırmalıklar',
-        'sweets' => 'Tatlılar',
-        'ice_cream' => 'Dondurma',
-        'bundles' => 'Paketler',
-        'offers' => 'Kampanyalar',
+    'nearby' => [
+        'kicker' => 'Yakınınızda',
+        'title' => 'Mevcut büfeler',
+        'description' => 'Yukarıya posta kodunuzu girin ve doğrudan size teslimat yapan büfeleri keşfedin.',
+        'empty_text' => 'Yakınınızdaki mevcut büfeleri görmek için yukarıya posta kodunuzu girin.',
     ],
 
     'how' => [
@@ -87,7 +83,7 @@ return [
     ],
 
     'benefits' => [
-        'products_title' => '1.000’den fazla ürün',
+        'products_title' => '1.000\'den fazla ürün',
         'products_text' => 'sevdiğiniz markalardan',
 
         'local_title' => 'Bölgesel ve yerel',
@@ -98,5 +94,20 @@ return [
 
         'payment_title' => 'Güvenli ödeme',
         'payment_text' => '%100 korumalı',
+    ],
+
+    'catalog' => [
+        'kicker' => 'Ürünlerimizi keşfedin',
+        'title' => 'Tipik büfe ürünleri.',
+        'title_accent' => 'Hızlıca bulun.',
+        'description' => 'Kioskheld kataloğundan atıştırmalık, içecek, tatlı ve daha fazlasını keşfedin.',
+        'category_label' => 'Kategori',
+        'product' => 'Ürün',
+        'products' => 'Ürünler',
+        'show_categories' => 'Tüm kategoriler',
+        'show_products' => 'Tüm ürünler',
+        'availability_notice' => 'Adresinizde hangi ürünlerin, fiyatların ve teslimat seçeneklerinin geçerli olduğunu posta kodu kontrolünden sonra görebilirsiniz.',
+        'empty_title' => 'Katalog şu anda hazırlanıyor.',
+        'empty_text' => 'Yakınınızdaki büfeleri görmek için posta kodunuzu kontrol edin.',
     ],
 ];

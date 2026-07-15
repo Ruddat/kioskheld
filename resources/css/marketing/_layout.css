@@ -1,12 +1,28 @@
+/* ═══════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════ */
+
 .nav {
-    position: relative;
-    z-index: 2;
+    position: sticky;
+    top: 0;
+    z-index: 100;
     display: flex;
     height: 92px;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
+    background: rgba(250, 248, 242, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: background 200ms ease, box-shadow 200ms ease;
 }
+
+.nav.scrolled {
+    background: rgba(250, 248, 242, 0.96);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Logo ── */
 
 .logo {
     display: inline-flex;
@@ -14,6 +30,7 @@
     font-weight: 950;
     line-height: 0.86;
     letter-spacing: -0.06em;
+    color: var(--kh-black);
 }
 
 .logo .brand {
@@ -21,12 +38,12 @@
 }
 
 .logo .brand span {
-    color: var(--kh-yellow);
+    color: var(--kh-green);
 }
 
 .logo .powered {
     margin-top: 8px;
-    color: rgba(255, 255, 255, 0.82);
+    color: var(--kh-muted);
     font-size: 10px;
     letter-spacing: 0.08em;
 }
@@ -38,34 +55,68 @@
     letter-spacing: 0;
 }
 
+/* ── Nav Links ── */
+
 .nav-links {
     display: flex;
     align-items: center;
     gap: 34px;
+    color: var(--kh-black);
     font-size: 15px;
     font-weight: 800;
 }
+
+.nav-links a {
+    transition: color 160ms ease;
+}
+
+.nav-links a:hover {
+    color: var(--kh-green);
+}
+
+/* ── Partner CTA Button ── */
 
 .partner-btn {
     display: inline-flex;
     align-items: center;
     gap: 9px;
     padding: 13px 22px;
-    color: var(--kh-yellow);
-    border: 2px solid var(--kh-yellow);
+    color: var(--kh-green);
+    border: 2px solid var(--kh-green);
     border-radius: 999px;
+    background: transparent;
     white-space: nowrap;
+    font-weight: 800;
+    font-size: 15px;
+    transition:
+        background 160ms ease,
+        color 160ms ease,
+        transform 160ms ease;
 }
+
+.partner-btn:hover {
+    color: #ffffff;
+    background: var(--kh-green);
+    transform: translateY(-1px);
+}
+
+/* ── Mobile Menu Toggle ── */
 
 .mobile-menu {
     display: none;
     font-size: 30px;
+    color: var(--kh-black);
+    cursor: pointer;
 }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════ */
 
 footer {
     padding: 34px 0;
     color: #ffffff;
-    background: #050505;
+    background: var(--kh-green);
     border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
@@ -77,13 +128,33 @@ footer {
     gap: 24px;
 }
 
+.footer-grid .logo {
+    color: #ffffff;
+}
+
+.footer-grid .logo .brand span {
+    color: var(--kh-yellow);
+}
+
+.footer-grid .logo .powered {
+    color: rgba(255, 255, 255, 0.6);
+}
+
 .footer-links {
     display: flex;
     flex-wrap: wrap;
     gap: 24px;
-    color: rgba(255, 255, 255, 0.78);
+    color: rgba(255, 255, 255, 0.82);
     font-size: 14px;
     font-weight: 700;
+}
+
+.footer-links a {
+    transition: color 160ms ease;
+}
+
+.footer-links a:hover {
+    color: var(--kh-yellow);
 }
 
 .footer-logo-link {
@@ -96,6 +167,10 @@ footer {
     text-decoration: none;
 }
 
+/* ═══════════════════════════════════════════
+   TOAST
+   ═══════════════════════════════════════════ */
+
 .toast {
     position: fixed;
     z-index: 99;
@@ -104,7 +179,7 @@ footer {
     padding: 15px 20px;
     color: #ffffff;
     font-weight: 800;
-    background: #111111;
+    background: var(--kh-green);
     border-radius: 999px;
     box-shadow: var(--kh-shadow);
     opacity: 0;

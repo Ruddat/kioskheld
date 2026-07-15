@@ -5,6 +5,9 @@
 @section('meta_description', __('home.meta.description'))
 
 @section('content')
+    {{-- ═══════════════════════════════════════════
+         HERO
+         ═══════════════════════════════════════════ --}}
     <header class="hero">
         <x-marketing.nav />
 
@@ -19,6 +22,7 @@
                     {{ __('home.hero.subline') }}
                 </p>
 
+                {{-- PLZ-Suchformular: UNVERÄNDERT (alle data-Attribute, IDs, Klassen) --}}
                 <form class="postcode-form" id="postcodeForm" data-postcode-check-url="{{ route('postcode.check') }}"
                     data-shop-selection-url="{{ route('shops.selection') }}"
                     data-shop-legacy-url="{{ route('shops.legacy', ['shopSlug' => '__SHOP_SLUG__']) }}" novalidate>
@@ -72,134 +76,147 @@
     </header>
 
     <main>
-        <div class="container category-panel">
-            <div class="category-card" aria-label="{{ __('home.categories.aria_label') }}">
-                <a class="category" href="#bundles">
-                    <span class="cat-icon">
-                        <img src="{{ asset('images/marketing/categories/getraenke.png') }}" alt="">
-                    </span>
+        {{-- ═══════════════════════════════════════════
+             NEARBY KIOSKS (neu – dynamisch via JS)
+             ═══════════════════════════════════════════ --}}
+        <section class="nearby-kiosks" id="nearby-kiosks">
+            <div class="container">
+                <div class="nearby-kiosks-heading">
+                    <p class="nearby-kiosks-kicker">
+                        {{ __('home.nearby.kicker') }}
+                    </p>
 
-                    <span>{{ __('home.categories.drinks') }}</span>
-                </a>
+                    <h2>
+                        {{ __('home.nearby.title') }}
+                    </h2>
 
-                <a class="category" href="#bundles">
-                    <span class="cat-icon">
-                        <img src="{{ asset('images/marketing/categories/energy.png') }}" alt="">
-                    </span>
+                    <p class="nearby-kiosks-description">
+                        {{ __('home.nearby.description') }}
+                    </p>
+                </div>
 
-                    <span>{{ __('home.categories.energy') }}</span>
-                </a>
-
-                <a class="category" href="#bundles">
-                    <span class="cat-icon">
-                        <img src="{{ asset('images/marketing/categories/chips.png') }}" alt="">
-                    </span>
-
-                    <span>{{ __('home.categories.snacks') }}</span>
-                </a>
-
-                <a class="category" href="#bundles">
-                    <span class="cat-icon">
-                        <img src="{{ asset('images/marketing/categories/suesses.png') }}" alt="">
-                    </span>
-
-                    <span>{{ __('home.categories.sweets') }}</span>
-                </a>
-
-                <a class="category" href="#bundles">
-                    <span class="cat-icon">
-                        <img src="{{ asset('images/marketing/categories/eis.png') }}" alt="">
-                    </span>
-
-                    <span>{{ __('home.categories.ice_cream') }}</span>
-                </a>
-
-                <a class="category" href="#bundles">
-                    <span class="cat-icon">
-                        <img src="{{ asset('images/marketing/categories/bundles.png') }}" alt="">
-                    </span>
-
-                    <span>{{ __('home.categories.bundles') }}</span>
-                </a>
-
-                <a class="category" href="#bundles">
-                    <span class="cat-icon">
-                        <img src="{{ asset('images/marketing/categories/angebote.png') }}" alt="">
-                    </span>
-
-                    <span>{{ __('home.categories.offers') }}</span>
-                </a>
+                <div class="nearby-kiosks-grid" id="nearbyKiosksGrid">
+                    <div class="nearby-kiosks-empty" id="nearbyKiosksEmpty">
+                        <div class="nearby-kiosks-empty__icon" aria-hidden="true">⌖</div>
+                        <p>{{ __('home.nearby.empty_text') }}</p>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
 
+        {{-- ═══════════════════════════════════════════
+             HOW IT WORKS
+             ═══════════════════════════════════════════ --}}
         <section class="how-section" id="how">
             <div class="container">
                 <h2 class="how-title">
                     {{ __('home.how.title') }}
                 </h2>
 
-                <div class="how-steps">
+                <div class="how-timeline">
+                    <div class="how-timeline__line" aria-hidden="true"></div>
+
                     <article class="how-step">
+                        <div class="how-step__dot">
+                            <span>1</span>
+                        </div>
+
                         <div class="how-icon">
                             <img src="{{ asset('images/marketing/how/plz.png') }}" alt="">
                         </div>
 
-                        <div class="how-label">
-                            <span>1</span>
+                        <div class="how-step__content">
                             <strong>{{ __('home.how.postcode_title') }}</strong>
+                            <p>{{ __('home.how.postcode_text') }}</p>
                         </div>
-
-                        <p>{{ __('home.how.postcode_text') }}</p>
                     </article>
 
-                    <div class="how-arrow" aria-hidden="true">→</div>
-
                     <article class="how-step">
+                        <div class="how-step__dot">
+                            <span>2</span>
+                        </div>
+
                         <div class="how-icon">
                             <img src="{{ asset('images/marketing/how/kiosk.png') }}" alt="">
                         </div>
 
-                        <div class="how-label">
-                            <span>2</span>
+                        <div class="how-step__content">
                             <strong>{{ __('home.how.shop_title') }}</strong>
+                            <p>{{ __('home.how.shop_text') }}</p>
                         </div>
-
-                        <p>{{ __('home.how.shop_text') }}</p>
                     </article>
 
-                    <div class="how-arrow" aria-hidden="true">→</div>
-
                     <article class="how-step">
+                        <div class="how-step__dot">
+                            <span>3</span>
+                        </div>
+
                         <div class="how-icon">
                             <img src="{{ asset('images/marketing/how/cart.png') }}" alt="">
                         </div>
 
-                        <div class="how-label">
-                            <span>3</span>
+                        <div class="how-step__content">
                             <strong>{{ __('home.how.order_title') }}</strong>
+                            <p>{{ __('home.how.order_text') }}</p>
                         </div>
-
-                        <p>{{ __('home.how.order_text') }}</p>
                     </article>
 
-                    <div class="how-arrow" aria-hidden="true">→</div>
-
                     <article class="how-step">
+                        <div class="how-step__dot">
+                            <span>4</span>
+                        </div>
+
                         <div class="how-icon">
                             <img src="{{ asset('images/marketing/how/delivery.png') }}" alt="">
                         </div>
 
-                        <div class="how-label">
-                            <span>4</span>
+                        <div class="how-step__content">
                             <strong>{{ __('home.how.delivery_title') }}</strong>
+                            <p>{{ __('home.how.delivery_text') }}</p>
                         </div>
-
-                        <p>{{ __('home.how.delivery_text') }}</p>
                     </article>
                 </div>
             </div>
         </section>
 
+        {{-- ═══════════════════════════════════════════
+             PARTNER CTA
+             ═══════════════════════════════════════════ --}}
+        <section class="partner-cta" id="partner">
+            <div class="container">
+                <div class="partner-banner">
+                    <div class="partner-banner__content">
+                        <h2>
+                            {{ __('home.partner.headline_before') }}
+                            <span>{{ __('home.partner.kiosk') }}</span>
+
+                            {{ __('home.partner.or') }}
+
+                            <br>
+
+                            <span>{{ __('home.partner.beverage_service') }}</span>
+                        </h2>
+
+                        <p>
+                            {{ __('home.partner.description') }}
+                        </p>
+
+                        <a class="partner-banner__button" href="{{ route('partner.index') }}">
+                            {{ __('home.partner.button') }}
+                        </a>
+                    </div>
+
+                    <div class="partner-banner__badge" aria-hidden="true">
+                        <span class="partner-banner__crown">♛</span>
+                        <strong>KIOSK<br>HELD</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {{-- ═══════════════════════════════════════════
+             CATALOG / CATEGORIES
+             ═══════════════════════════════════════════ --}}
         <section class="home-catalog" id="sortiment">
             <div class="container">
                 <div class="home-catalog-heading">
@@ -233,9 +250,9 @@
                                             <img class="home-catalog-card__image" src="{{ $category->image_url }}"
                                                 alt="" loading="lazy" decoding="async"
                                                 onerror="
-                this.hidden = true;
-                this.nextElementSibling.hidden = false;
-            ">
+                                                this.hidden = true;
+                                                this.nextElementSibling.hidden = false;
+                                            ">
 
                                             <span class="home-catalog-card__placeholder" hidden aria-hidden="true">
                                                 {{ mb_strtoupper(mb_substr($category->name, 0, 1)) }}
@@ -304,38 +321,9 @@
             </div>
         </section>
 
-        <section class="partner-cta" id="partner">
-            <div class="container">
-                <div class="partner-banner">
-                    <div class="partner-banner__content">
-                        <h2>
-                            {{ __('home.partner.headline_before') }}
-                            <span>{{ __('home.partner.kiosk') }}</span>
-
-                            {{ __('home.partner.or') }}
-
-                            <br>
-
-                            <span>{{ __('home.partner.beverage_service') }}</span>
-                        </h2>
-
-                        <p>
-                            {{ __('home.partner.description') }}
-                        </p>
-
-                        <a class="partner-banner__button" href="{{ route('partner.index') }}">
-                            {{ __('home.partner.button') }}
-                        </a>
-                    </div>
-
-                    <div class="partner-banner__badge" aria-hidden="true">
-                        <span class="partner-banner__crown">♛</span>
-                        <strong>KIOSK<br>HELD</strong>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+        {{-- ═══════════════════════════════════════════
+             BENEFITS
+             ═══════════════════════════════════════════ --}}
         <section class="benefits" id="about">
             <div class="container benefit-grid">
                 <div class="benefit">

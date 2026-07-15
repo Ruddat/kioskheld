@@ -213,7 +213,7 @@
 
     <meta
         name="theme-color"
-        content="#050505"
+        content="#1a3c34"
     >
 
     @stack('structured_data')

@@ -2,16 +2,16 @@
 
 return [
     'meta' => [
-        'title' => 'Kioskheld – Dein Kiosk. Geliefert in Minuten.',
+        'title' => 'Kioskheld – Finde deinen Kiosk in der Nähe.',
         'description' => 'Kioskheld liefert Snacks, Getränke, Süßes und Bundles schnell zu dir. Einfach PLZ eingeben und Kioskheld in deiner Nähe finden.',
     ],
 
     'hero' => [
-        'headline' => 'Dein Kiosk.',
-        'headline_accent' => 'Geliefert in Minuten.',
-        'subline' => 'Snacks, Getränke, Süßes & mehr – schnell, einfach und zuverlässig zu dir.',
+        'headline' => 'Finde deinen Kiosk',
+        'headline_accent' => 'in der Nähe.',
+        'subline' => 'Snacks, Getränke, Süßes & mehr – schnell, einfach und zuverlässig zu dir geliefert.',
         'postcode_placeholder' => 'Deine Postleitzahl eingeben',
-        'submit' => 'Kioskheld finden',
+        'submit' => 'Kiosk finden',
         'postcode_example' => 'z. B. 31224, 38100, 38102',
     ],
 
@@ -24,15 +24,11 @@ return [
         'payment_value' => 'Online bezahlen',
     ],
 
-    'categories' => [
-        'aria_label' => 'Sortiment Kategorien',
-        'drinks' => 'Getränke',
-        'energy' => 'Energy',
-        'snacks' => 'Chips & Snacks',
-        'sweets' => 'Süßes',
-        'ice_cream' => 'Eis',
-        'bundles' => 'Bundles',
-        'offers' => 'Angebote',
+    'nearby' => [
+        'kicker' => 'In deiner Nähe',
+        'title' => 'Verfügbare Kioske',
+        'description' => 'Gib oben deine Postleitzahl ein und entdecke Kioske, die direkt zu dir liefern.',
+        'empty_text' => 'Gib oben deine Postleitzahl ein, um verfügbare Kioske in deiner Nähe zu sehen.',
     ],
 
     'how' => [
@@ -100,21 +96,18 @@ return [
         'payment_text' => '100 % geschützt',
     ],
 
-
-'catalog' => [
-    'kicker' => 'Sortiment entdecken',
-    'title' => 'Typische Kioskprodukte.',
-    'title_accent' => 'Schnell gefunden.',
-    'description' => 'Entdecke Snacks, Getränke, Süßes und weitere Produkte aus dem Kioskheld-Katalog.',
-    'category_label' => 'Kategorie',
-    'product' => 'Produkt',
-    'products' => 'Produkte',
-    'show_categories' => 'Alle Kategorien',
-    'show_products' => 'Alle Produkte',
-    'availability_notice' => 'Welche Produkte, Preise und Liefermöglichkeiten an deiner Adresse gelten, siehst du nach der PLZ-Prüfung.',
-    'empty_title' => 'Der Katalog wird gerade aufgebaut.',
-    'empty_text' => 'Prüfe über deine Postleitzahl, welche Kioske in deiner Nähe bereits verfügbar sind.',
-],
-
-
+    'catalog' => [
+        'kicker' => 'Sortiment entdecken',
+        'title' => 'Typische Kioskprodukte.',
+        'title_accent' => 'Schnell gefunden.',
+        'description' => 'Entdecke Snacks, Getränke, Süßes und weitere Produkte aus dem Kioskheld-Katalog.',
+        'category_label' => 'Kategorie',
+        'product' => 'Produkt',
+        'products' => 'Produkte',
+        'show_categories' => 'Alle Kategorien',
+        'show_products' => 'Alle Produkte',
+        'availability_notice' => 'Welche Produkte, Preise und Liefermöglichkeiten an deiner Adresse gelten, siehst du nach der PLZ-Prüfung.',
+        'empty_title' => 'Der Katalog wird gerade aufgebaut.',
+        'empty_text' => 'Prüfe über deine Postleitzahl, welche Kioske in deiner Nähe bereits verfügbar sind.',
+    ],
 ];

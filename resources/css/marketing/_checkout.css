@@ -849,7 +849,7 @@
 
 .checkout-age-card .checkout-step {
     background: #101010;
-    color: #ffd60a;
+    color: var(--kh-yellow);
 }
 
 .checkout-checkbox {

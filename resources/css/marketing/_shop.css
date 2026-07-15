@@ -1135,11 +1135,9 @@
     flex-direction: column;
     width: min(520px, 100%);
     height: 100%;
-    background:
-        radial-gradient(circle at top left, rgba(26, 60, 52, 0.15), transparent 22rem),
-        #101010;
-    color: #ffffff;
-    box-shadow: -30px 0 80px rgba(0, 0, 0, 0.5);
+    background: var(--kh-cream);
+    color: var(--kh-black);
+    box-shadow: -30px 0 80px rgba(0, 0, 0, 0.12);
     transform: translateX(105%);
     transition: transform 180ms ease;
 }
@@ -1171,7 +1169,7 @@
     justify-content: space-between;
     gap: 18px;
     padding: 26px 24px 22px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--kh-border);
 }
 
 .menu-choice-head .eyebrow {
@@ -1185,7 +1183,7 @@
 
 .menu-choice-head h2 {
     margin: 0;
-    color: #ffffff;
+    color: var(--kh-green);
     font-size: 32px;
     line-height: 0.98;
     font-weight: 1000;
@@ -1199,17 +1197,18 @@
     width: 42px;
     height: 42px;
     place-items: center;
-    border: 0;
+    border: 1px solid var(--kh-border);
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+    background: #ffffff;
+    color: var(--kh-black);
     font-size: 30px;
     line-height: 1;
     cursor: pointer;
 }
 
 .menu-choice-close:hover {
-    background: rgba(255, 255, 255, 0.16);
+    background: var(--kh-green-50);
+    border-color: var(--kh-green);
 }
 
 .menu-choice-body {
@@ -1223,14 +1222,14 @@
     gap: 8px;
     margin-bottom: 18px;
     padding: 16px;
-    border: 1px solid rgba(26, 60, 52, 0.3);
+    border: 1px solid var(--kh-green);
     border-radius: 20px;
-    background: rgba(26, 60, 52, 0.15);
+    background: var(--kh-green-50);
 }
 
 .menu-choice-intro p {
     margin: 0;
-    color: rgba(255, 255, 255, 0.68);
+    color: var(--kh-muted);
     font-size: 13px;
     line-height: 1.45;
     font-weight: 800;
@@ -1262,14 +1261,14 @@
 
 .menu-choice-group-head h3 {
     margin: 0;
-    color: #ffffff;
+    color: var(--kh-black);
     font-size: 18px;
     font-weight: 1000;
 }
 
 .menu-choice-group-head p {
     margin: 4px 0 0;
-    color: rgba(255, 255, 255, 0.58);
+    color: var(--kh-muted);
     font-size: 13px;
     font-weight: 800;
 }
@@ -1291,9 +1290,9 @@
     align-items: center;
     gap: 12px;
     padding: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.075);
+    border: 1px solid var(--kh-border);
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.055);
+    background: #ffffff;
 }
 
 .menu-choice-option-image {
@@ -1301,7 +1300,8 @@
     width: 54px;
     height: 54px;
     border-radius: 15px;
-    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--kh-border);
+    background: #ffffff;
 }
 
 .menu-choice-option-image img {
@@ -1327,7 +1327,7 @@
 
 .menu-choice-option-main h3 {
     margin: 0;
-    color: #ffffff;
+    color: var(--kh-black);
     font-size: 14px;
     line-height: 1.25;
     font-weight: 950;
@@ -1335,7 +1335,7 @@
 
 .menu-choice-option-main p {
     margin: 4px 0 0;
-    color: rgba(255, 255, 255, 0.54);
+    color: var(--kh-muted);
     font-size: 12px;
     font-weight: 800;
 }
@@ -1351,21 +1351,22 @@
     width: 31px;
     height: 31px;
     place-items: center;
-    border: 0;
+    border: 1px solid var(--kh-border);
     border-radius: 11px;
-    background: rgba(255, 255, 255, 0.11);
-    color: #ffffff;
+    background: #ffffff;
+    color: var(--kh-black);
     font-weight: 1000;
     cursor: pointer;
 }
 
 .menu-choice-option-controls button:hover {
-    background: rgba(255, 255, 255, 0.17);
+    background: var(--kh-green-50);
+    border-color: var(--kh-green);
 }
 
 .menu-choice-option-controls span {
     min-width: 22px;
-    color: #ffffff;
+    color: var(--kh-black);
     text-align: center;
     font-weight: 1000;
 }
@@ -1374,8 +1375,9 @@
 .menu-choice-message {
     padding: 13px 14px;
     border-radius: 16px;
-    background: rgba(26, 60, 52, 0.2);
-    color: var(--kh-green-light);
+    border: 1px solid var(--kh-green);
+    background: var(--kh-green-50);
+    color: var(--kh-green);
     font-size: 13px;
     line-height: 1.4;
     font-weight: 900;
@@ -1387,8 +1389,8 @@
 
 .menu-choice-footer {
     padding: 18px 22px 22px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--kh-border);
+    background: #ffffff;
 }
 
 .menu-choice-add-button {

@@ -1,6 +1,6 @@
 /*
 |--------------------------------------------------------------------------
-| Catalog Products Index
+| Catalog Products Index — cream / green brand palette
 |--------------------------------------------------------------------------
 |
 | Seite:
@@ -13,7 +13,7 @@
 
 .catalog-page {
     min-height: 100vh;
-    background: #f7f7f5;
+    background: var(--kh-cream);
 }
 
 /*
@@ -27,10 +27,10 @@
     background:
         radial-gradient(
             circle at 82% 25%,
-            rgba(255, 215, 0, 0.17),
+            rgba(255, 255, 255, 0.06),
             transparent 30%
         ),
-        #0a0a0a;
+        var(--kh-green);
     color: #ffffff;
 }
 
@@ -40,7 +40,7 @@
 
 .catalog-eyebrow {
     margin: 0 0 18px;
-    color: #ffd700;
+    color: var(--kh-yellow);
     font-size: 0.82rem;
     font-weight: 800;
     letter-spacing: 0.12em;
@@ -57,13 +57,13 @@
 }
 
 .catalog-hero h1 span {
-    color: #ffd700;
+    color: var(--kh-yellow);
 }
 
 .catalog-hero-copy {
     max-width: 760px;
     margin: 28px 0 0;
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 255, 255, 0.78);
     font-size: 1.08rem;
     line-height: 1.75;
 }
@@ -91,10 +91,10 @@
     gap: 28px;
     margin-bottom: 34px;
     padding: 20px 22px;
-    border: 1px solid rgba(10, 10, 10, 0.08);
+    border: 1px solid var(--kh-border);
     border-radius: 20px;
     background: #ffffff;
-    box-shadow: 0 14px 40px rgba(10, 10, 10, 0.05);
+    box-shadow: var(--kh-shadow-soft);
 }
 
 .catalog-toolbar-copy {
@@ -104,13 +104,13 @@
 }
 
 .catalog-toolbar-copy strong {
-    color: #0a0a0a;
+    color: var(--kh-black);
     font-size: 1rem;
     font-weight: 900;
 }
 
 .catalog-toolbar-copy span {
-    color: #737373;
+    color: var(--kh-muted);
     font-size: 0.9rem;
     line-height: 1.45;
 }
@@ -128,9 +128,9 @@
     align-items: center;
     justify-content: center;
     padding: 0 18px;
-    border: 1px solid #0a0a0a;
+    border: 1px solid var(--kh-green);
     border-radius: 999px;
-    background: #0a0a0a;
+    background: var(--kh-green);
     color: #ffffff;
     font-size: 0.86rem;
     font-weight: 800;
@@ -144,19 +144,19 @@
 
 .catalog-toolbar-link:hover {
     transform: translateY(-2px);
-    background: #ffd700;
-    border-color: #ffd700;
-    color: #0a0a0a;
+    background: var(--kh-yellow);
+    border-color: var(--kh-yellow);
+    color: var(--kh-black);
 }
 
 .catalog-toolbar-link-secondary {
     background: transparent;
-    color: #0a0a0a;
+    color: var(--kh-black);
 }
 
 .catalog-toolbar-link-secondary:hover {
-    background: #0a0a0a;
-    border-color: #0a0a0a;
+    background: var(--kh-green);
+    border-color: var(--kh-green);
     color: #ffffff;
 }
 
@@ -180,7 +180,7 @@
 
 .catalog-empty {
     padding: 72px 32px;
-    border: 1px solid rgba(10, 10, 10, 0.08);
+    border: 1px solid var(--kh-border);
     border-radius: 24px;
     background: #ffffff;
     text-align: center;
@@ -188,7 +188,7 @@
 
 .catalog-empty h2 {
     margin: 0 0 12px;
-    color: #0a0a0a;
+    color: var(--kh-black);
     font-size: 1.7rem;
     font-weight: 900;
     letter-spacing: -0.025em;
@@ -197,7 +197,7 @@
 .catalog-empty p {
     max-width: 600px;
     margin: 0 auto;
-    color: #737373;
+    color: var(--kh-muted);
     line-height: 1.7;
 }
 
@@ -236,24 +236,25 @@
     min-height: 42px;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(10, 10, 10, 0.1);
+    border: 1px solid var(--kh-border);
     border-radius: 12px;
     background: #ffffff;
-    color: #0a0a0a;
+    color: var(--kh-black);
     font-size: 0.88rem;
     font-weight: 800;
     text-decoration: none;
 }
 
 .catalog-pagination span[aria-current='page'] > span {
-    border-color: #0a0a0a;
-    background: #0a0a0a;
-    color: #ffd700;
+    border-color: var(--kh-green);
+    background: var(--kh-green);
+    color: #ffffff;
 }
 
 .catalog-pagination a:hover {
-    border-color: #ffd700;
-    background: #ffd700;
+    border-color: var(--kh-green);
+    background: var(--kh-green);
+    color: #ffffff;
 }
 
 /*
@@ -278,10 +279,10 @@
     background:
         radial-gradient(
             circle at 88% 28%,
-            rgba(255, 215, 0, 0.23),
+            rgba(255, 255, 255, 0.05),
             transparent 32%
         ),
-        #0a0a0a;
+        var(--kh-green);
     color: #ffffff;
 }
 
@@ -293,7 +294,7 @@
 
 .catalog-cta-kicker {
     margin: 0 0 12px;
-    color: #ffd700;
+    color: var(--kh-yellow);
     font-size: 0.78rem;
     font-weight: 900;
     letter-spacing: 0.12em;
@@ -312,7 +313,7 @@
 .catalog-cta p:not(.catalog-cta-kicker) {
     max-width: 650px;
     margin: 18px 0 0;
-    color: rgba(255, 255, 255, 0.68);
+    color: rgba(255, 255, 255, 0.72);
     line-height: 1.7;
 }
 
@@ -326,8 +327,8 @@
     justify-content: center;
     padding: 0 24px;
     border-radius: 999px;
-    background: #ffd700;
-    color: #0a0a0a;
+    background: var(--kh-yellow);
+    color: var(--kh-black);
     font-size: 0.9rem;
     font-weight: 900;
     text-decoration: none;

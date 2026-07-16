@@ -1,4 +1,12 @@
-.language-switcher {
+/* ── Language switcher lives beside .nav-links (direct child of .nav) ── */
+.nav > .language-switcher {
+    position: relative;
+    flex: 0 0 auto;
+    margin-left: 12px;
+}
+
+/* Fallback if still nested inside .nav-links (legacy) */
+.nav-links > .language-switcher {
     position: relative;
     flex: 0 0 auto;
 }
@@ -10,15 +18,16 @@
     gap: 7px;
     min-height: 42px;
     padding: 0 13px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid var(--kh-border);
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #ffffff;
+    background: #ffffff;
+    color: var(--kh-black);
     font: inherit;
     font-size: 13px;
     font-weight: 800;
     line-height: 1;
     cursor: pointer;
+    box-shadow: var(--kh-shadow-soft);
     transition:
         background-color 160ms ease,
         border-color 160ms ease,
@@ -27,8 +36,8 @@
 
 .language-switcher-trigger:hover,
 .language-switcher:focus-within .language-switcher-trigger {
-    border-color: rgba(255, 255, 255, 0.35);
-    background: rgba(255, 255, 255, 0.14);
+    border-color: var(--kh-green);
+    background: var(--kh-green-50);
 }
 
 .language-switcher-trigger:active {
@@ -58,12 +67,12 @@
     display: grid;
     min-width: 190px;
     padding: 8px;
-    border: 1px solid rgba(15, 23, 42, 0.1);
+    border: 1px solid var(--kh-border);
     border-radius: 16px;
-    background: #1a1a1a;
+    background: #ffffff;
     box-shadow:
-        0 20px 50px rgba(15, 23, 42, 0.18),
-        0 6px 18px rgba(15, 23, 42, 0.08);
+        0 20px 50px rgba(0, 0, 0, 0.12),
+        0 6px 18px rgba(0, 0, 0, 0.06);
     opacity: 0;
     visibility: hidden;
     transform: translateY(-6px);
@@ -95,7 +104,7 @@
     min-height: 44px;
     padding: 8px 10px;
     border-radius: 10px;
-    color: #1a1a1a;
+    color: var(--kh-black);
     text-decoration: none;
     transition:
         background-color 140ms ease,
@@ -104,21 +113,25 @@
 
 .language-switcher-option:hover,
 .language-switcher-option:focus-visible {
-    background: #44484e;
-    color: #050505;
+    background: var(--kh-green-50);
+    color: var(--kh-green);
     outline: none;
 }
 
 .language-switcher-option.is-active {
-    background: #a1945a;
-    color: #111111;
+    background: var(--kh-green);
+    color: #ffffff;
 }
 
 .language-switcher-code {
     font-size: 11px;
     font-weight: 900;
     letter-spacing: 0.07em;
-    color: #6b7280;
+    color: var(--kh-muted);
+}
+
+.language-switcher-option.is-active .language-switcher-code {
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .language-switcher-name {
@@ -127,8 +140,43 @@
 }
 
 .language-switcher-check {
-    color: #111111;
+    color: #ffffff;
     font-size: 14px;
     font-weight: 900;
     text-align: right;
+}
+
+/* ── Mobile: compact trigger next to hamburger ── */
+
+@media (max-width: 920px) {
+    .nav > .language-switcher {
+        margin-left: 8px;
+    }
+
+    .language-switcher-trigger {
+        min-height: 38px;
+        padding: 0 10px;
+        font-size: 12px;
+        gap: 5px;
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 620px) {
+    .nav > .language-switcher {
+        margin-left: 6px;
+    }
+
+    .language-switcher-trigger {
+        min-height: 34px;
+        padding: 0 8px;
+        font-size: 11px;
+        gap: 4px;
+        border-radius: 8px;
+    }
+
+    .language-switcher-menu {
+        right: -8px;
+        min-width: 170px;
+    }
 }

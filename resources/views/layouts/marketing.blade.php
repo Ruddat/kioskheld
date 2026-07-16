@@ -213,7 +213,7 @@
 
     <meta
         name="theme-color"
-        content="#050505"
+        content="#1a3c34"
     >
 
     @stack('structured_data')
@@ -224,6 +224,7 @@
     @vite([
         'resources/css/marketing.css',
         'resources/js/marketing-home.js',
+        'resources/js/language-switcher.js',
     ])
 </head>
 

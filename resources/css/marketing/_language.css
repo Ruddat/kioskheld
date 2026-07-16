@@ -1,4 +1,12 @@
-.language-switcher {
+/* ── Language switcher lives beside .nav-links (direct child of .nav) ── */
+.nav > .language-switcher {
+    position: relative;
+    flex: 0 0 auto;
+    margin-left: 12px;
+}
+
+/* Fallback if still nested inside .nav-links (legacy) */
+.nav-links > .language-switcher {
     position: relative;
     flex: 0 0 auto;
 }
@@ -136,4 +144,39 @@
     font-size: 14px;
     font-weight: 900;
     text-align: right;
+}
+
+/* ── Mobile: compact trigger next to hamburger ── */
+
+@media (max-width: 920px) {
+    .nav > .language-switcher {
+        margin-left: 8px;
+    }
+
+    .language-switcher-trigger {
+        min-height: 38px;
+        padding: 0 10px;
+        font-size: 12px;
+        gap: 5px;
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 620px) {
+    .nav > .language-switcher {
+        margin-left: 6px;
+    }
+
+    .language-switcher-trigger {
+        min-height: 34px;
+        padding: 0 8px;
+        font-size: 11px;
+        gap: 4px;
+        border-radius: 8px;
+    }
+
+    .language-switcher-menu {
+        right: -8px;
+        min-width: 170px;
+    }
 }

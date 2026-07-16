@@ -24,12 +24,12 @@
             {{ __('navigation.about') }}
         </a>
 
-        <x-marketing.language-switcher />
-
         <a class="partner-btn" href="{{ route('partner.register') }}">
             👤 {{ __('navigation.become_partner') }}
         </a>
     </div>
+
+    <x-marketing.language-switcher />
 
     <div class="mobile-menu" aria-hidden="true">☰</div>
 </nav>

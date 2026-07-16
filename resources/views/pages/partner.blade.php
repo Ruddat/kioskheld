@@ -1,6 +1,6 @@
 @extends('layouts.marketing')
 
-@section('title', 'Kioskheld Partner werden')
+@section('title', __('partner.landing.meta_title'))
 
 @section('content')
     <main class="partner-page">
@@ -11,46 +11,45 @@
         <section class="partner-hero">
             <div class="container partner-hero-grid">
                 <div class="partner-hero-content">
-                    <p class="eyebrow">Für Kioske, Spätis & Getränkemärkte</p>
+                    <p class="eyebrow">{{ __('partner.landing.hero.eyebrow') }}</p>
 
                     <h1>
-                        Dein Kiosk.
-                        <span>Online sichtbar.</span>
-                        <strong>Bestellungen direkt zu dir.</strong>
+                        {{ __('partner.landing.hero.headline') }}
+                        <span>{{ __('partner.landing.hero.headline_accent') }}</span>
+                        <strong>{{ __('partner.landing.hero.headline_strong') }}</strong>
                     </h1>
 
                     <p class="lead">
-                        Kioskheld bringt deinen Kiosk online – mit eigener Bestellseite, PLZ-Suche,
-                        vorbereitetem Sortiment und einfacher Verwaltung über Foodzwerge.
+                        {{ __('partner.landing.hero.lead') }}
                     </p>
 
                     <div class="hero-actions">
                         <a href="{{ route('partner.register') }}" class="btn btn-primary">
-                            Kostenlos Partner werden
+                            {{ __('partner.landing.hero.btn_primary') }}
                         </a>
 
                         <a href="#how-it-works" class="btn btn-secondary">
-                            So läuft der Start
+                            {{ __('partner.landing.hero.btn_secondary') }}
                         </a>
                     </div>
 
                     <div class="partner-hero-facts" aria-label="Kioskheld Partner Vorteile">
                         <div>
                             <span>⚡</span>
-                            <strong>Schneller Start</strong>
-                            <small>Grundstruktur vorbereitet</small>
+                            <strong>{{ __('partner.landing.hero.fact_1_title') }}</strong>
+                            <small>{{ __('partner.landing.hero.fact_1_text') }}</small>
                         </div>
 
                         <div>
                             <span>🛒</span>
-                            <strong>Online verkaufen</strong>
-                            <small>Snacks, Getränke & mehr</small>
+                            <strong>{{ __('partner.landing.hero.fact_2_title') }}</strong>
+                            <small>{{ __('partner.landing.hero.fact_2_text') }}</small>
                         </div>
 
                         <div>
                             <span>📍</span>
-                            <strong>Regional gefunden</strong>
-                            <small>über PLZ und Standort</small>
+                            <strong>{{ __('partner.landing.hero.fact_3_title') }}</strong>
+                            <small>{{ __('partner.landing.hero.fact_3_text') }}</small>
                         </div>
                     </div>
                 </div>
@@ -58,37 +57,37 @@
                 <aside class="partner-hero-panel" aria-label="Partner Startpaket">
                     <div class="partner-bag-card">
                         <div class="partner-bag-top">
-                            <span class="mini-label">Kioskheld Startpaket</span>
-                            <span class="badge">3 %</span>
+                            <span class="mini-label">{{ __('partner.landing.hero.panel_label') }}</span>
+                            <span class="badge">{{ __('partner.landing.hero.panel_badge') }}</span>
                         </div>
 
-                        <h2>Alles vorbereitet für deinen digitalen Kiosk.</h2>
+                        <h2>{{ __('partner.landing.hero.panel_title') }}</h2>
 
                         <ul>
                             <li>
                                 <span>✓</span>
-                                Shop-Grundstruktur
+                                {{ __('partner.landing.hero.panel_item_1') }}
                             </li>
                             <li>
                                 <span>✓</span>
-                                Kiosk-Sortiment als Vorlage
+                                {{ __('partner.landing.hero.panel_item_2') }}
                             </li>
                             <li>
                                 <span>✓</span>
-                                Öffnungszeiten & Liefergebiet
+                                {{ __('partner.landing.hero.panel_item_3') }}
                             </li>
                             <li>
                                 <span>✓</span>
-                                Barzahlung und Kartenzahlung erfassen
+                                {{ __('partner.landing.hero.panel_item_4') }}
                             </li>
                             <li>
                                 <span>✓</span>
-                                spätere Freischaltung nach Prüfung
+                                {{ __('partner.landing.hero.panel_item_5') }}
                             </li>
                         </ul>
 
                         <a href="{{ route('partner.register') }}" class="partner-panel-link">
-                            Anfrage starten →
+                            {{ __('partner.landing.hero.panel_link') }}
                         </a>
                     </div>
                 </aside>
@@ -100,37 +99,37 @@
                 <div class="partner-category-card">
                     <div>
                         <span>🥤</span>
-                        <strong>Getränke</strong>
+                        <strong>{{ __('partner.landing.categories.cat_1') }}</strong>
                     </div>
 
                     <div>
                         <span>⚡</span>
-                        <strong>Energy</strong>
+                        <strong>{{ __('partner.landing.categories.cat_2') }}</strong>
                     </div>
 
                     <div>
                         <span>🍟</span>
-                        <strong>Snacks</strong>
+                        <strong>{{ __('partner.landing.categories.cat_3') }}</strong>
                     </div>
 
                     <div>
                         <span>🍬</span>
-                        <strong>Süßes</strong>
+                        <strong>{{ __('partner.landing.categories.cat_4') }}</strong>
                     </div>
 
                     <div>
                         <span>🍦</span>
-                        <strong>Eis</strong>
+                        <strong>{{ __('partner.landing.categories.cat_5') }}</strong>
                     </div>
 
                     <div>
                         <span>🎁</span>
-                        <strong>Bundles</strong>
+                        <strong>{{ __('partner.landing.categories.cat_6') }}</strong>
                     </div>
 
                     <div>
                         <span>％</span>
-                        <strong>Angebote</strong>
+                        <strong>{{ __('partner.landing.categories.cat_7') }}</strong>
                     </div>
                 </div>
             </div>
@@ -139,47 +138,43 @@
         <section class="partner-section" id="how-it-works">
             <div class="container">
                 <div class="section-heading">
-                    <p class="eyebrow">So funktioniert der Partnerstart</p>
-                    <h2>Aus einer Anfrage wird dein Kioskheld-Shop.</h2>
+                    <p class="eyebrow">{{ __('partner.landing.how.eyebrow') }}</p>
+                    <h2>{{ __('partner.landing.how.title') }}</h2>
                     <p>
-                        Erst simpel registrieren. Danach bekommst du einen persönlichen Startlink,
-                        mit dem du Sortiment, Öffnungszeiten, Liefergebiet und Zahlungsarten ergänzen kannst.
+                        {{ __('partner.landing.how.description') }}
                     </p>
                 </div>
 
                 <div class="steps-grid">
                     <article>
                         <span>1</span>
-                        <h3>Anfrage senden</h3>
+                        <h3>{{ __('partner.landing.how.step_1_title') }}</h3>
                         <p>
-                            Du trägst nur Kioskname, Kontakt, PLZ und Telefonnummer ein.
-                            Mehr braucht es für den ersten Schritt nicht.
+                            {{ __('partner.landing.how.step_1_text') }}
                         </p>
                     </article>
 
                     <article>
                         <span>2</span>
-                        <h3>Startformular ausfüllen</h3>
+                        <h3>{{ __('partner.landing.how.step_2_title') }}</h3>
                         <p>
-                            Du wählst Kategorien, Öffnungszeiten, Liefer-PLZ, Mindestbestellwert
-                            und Zahlungsarten aus.
+                            {{ __('partner.landing.how.step_2_text') }}
                         </p>
                     </article>
 
                     <article>
                         <span>3</span>
-                        <h3>Wir bereiten alles vor</h3>
+                        <h3>{{ __('partner.landing.how.step_3_title') }}</h3>
                         <p>
-                            Dein Kiosk wird mit Grundstruktur vorbereitet und vor der Freischaltung
-                            noch einmal geprüft.
+                            {{ __('partner.landing.how.step_3_text') }}
                         </p>
                     </article>
 
                     <article>
                         <span>4</span>
-                        <h3>Bestellungen erhalten</h3>
+                        <h3>{{ __('partner.landing.how.step_4_title') }}</h3>
                         <p>
-                            Kunden finden dich über Kioskheld und bestellen direkt bei deinem Kiosk.
+                            {{ __('partner.landing.how.step_4_text') }}
                         </p>
                     </article>
                 </div>
@@ -189,32 +184,31 @@
 <section class="partner-benefits">
     <div class="container partner-benefits-grid">
         <div class="benefit-copy">
-            <p class="eyebrow">Warum Kioskheld?</p>
+            <p class="eyebrow">{{ __('partner.landing.benefits.eyebrow') }}</p>
 
             <h2>
-                Online bestellen.
-                <span>Ohne Technik-Stress.</span>
+                {{ __('partner.landing.benefits.headline') }}
+                <span>{{ __('partner.landing.benefits.headline_accent') }}</span>
             </h2>
 
             <p>
-                Kioskheld ist für lokale Kioske gebaut, die schnell online sichtbar werden wollen –
-                ohne komplizierte Einrichtung, ohne eigene Shop-Technik und ohne lange Einarbeitung.
+                {{ __('partner.landing.benefits.description') }}
             </p>
 
             <div class="benefit-metrics" aria-label="Kioskheld Vorteile">
                 <div>
-                    <strong>3 %</strong>
-                    <span>Partnergebühr</span>
+                    <strong>{{ __('partner.landing.benefits.metric_1_value') }}</strong>
+                    <span>{{ __('partner.landing.benefits.metric_1_label') }}</span>
                 </div>
 
                 <div>
-                    <strong>PLZ</strong>
-                    <span>regionale Suche</span>
+                    <strong>{{ __('partner.landing.benefits.metric_2_value') }}</strong>
+                    <span>{{ __('partner.landing.benefits.metric_2_label') }}</span>
                 </div>
 
                 <div>
-                    <strong>Start</strong>
-                    <span>mit Vorlage</span>
+                    <strong>{{ __('partner.landing.benefits.metric_3_value') }}</strong>
+                    <span>{{ __('partner.landing.benefits.metric_3_label') }}</span>
                 </div>
             </div>
         </div>
@@ -223,10 +217,9 @@
             <article>
                 <span class="benefit-icon">⚡</span>
                 <div>
-                    <strong>Schneller Einstieg</strong>
+                    <strong>{{ __('partner.landing.benefits.item_1_title') }}</strong>
                     <p>
-                        Erst nur Basisdaten senden. Danach bekommst du ein persönliches Startformular
-                        für Sortiment, Öffnungszeiten und Lieferung.
+                        {{ __('partner.landing.benefits.item_1_text') }}
                     </p>
                 </div>
             </article>
@@ -234,10 +227,9 @@
             <article>
                 <span class="benefit-icon">🛒</span>
                 <div>
-                    <strong>Gemacht für Kiosk-Sortiment</strong>
+                    <strong>{{ __('partner.landing.benefits.item_2_title') }}</strong>
                     <p>
-                        Getränke, Energy, Snacks, Süßes, Eis, Bundles und Angebote sind direkt
-                        als Struktur vorbereitet.
+                        {{ __('partner.landing.benefits.item_2_text') }}
                     </p>
                 </div>
             </article>
@@ -245,9 +237,9 @@
             <article>
                 <span class="benefit-icon">📍</span>
                 <div>
-                    <strong>Regional gefunden werden</strong>
+                    <strong>{{ __('partner.landing.benefits.item_3_title') }}</strong>
                     <p>
-                        Kunden suchen über ihre Postleitzahl und finden passende Kioske in ihrer Nähe.
+                        {{ __('partner.landing.benefits.item_3_text') }}
                     </p>
                 </div>
             </article>
@@ -255,10 +247,9 @@
             <article>
                 <span class="benefit-icon">✅</span>
                 <div>
-                    <strong>Kontrollierter Start</strong>
+                    <strong>{{ __('partner.landing.benefits.item_4_title') }}</strong>
                     <p>
-                        Nichts geht ungeprüft live. Deine Angaben werden vorbereitet, kontrolliert
-                        und erst danach freigeschaltet.
+                        {{ __('partner.landing.benefits.item_4_text') }}
                     </p>
                 </div>
             </article>
@@ -270,15 +261,15 @@
             <div class="container">
                 <div class="partner-final-card">
                     <div>
-                        <p class="eyebrow">Bereit für den Start?</p>
-                        <h2>Mach deinen Kiosk online bestellbar.</h2>
+                        <p class="eyebrow">{{ __('partner.landing.cta.eyebrow') }}</p>
+                        <h2>{{ __('partner.landing.cta.title') }}</h2>
                         <p>
-                            Registrierung absenden, kurz prüfen lassen und dann Schritt für Schritt starten.
+                            {{ __('partner.landing.cta.description') }}
                         </p>
                     </div>
 
                     <a href="{{ route('partner.register') }}" class="btn btn-primary">
-                        Jetzt Partner werden
+                        {{ __('partner.landing.cta.button') }}
                     </a>
                 </div>
             </div>

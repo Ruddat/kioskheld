@@ -224,6 +224,7 @@
     @vite([
         'resources/css/marketing.css',
         'resources/js/marketing-home.js',
+        'resources/js/language-switcher.js',
     ])
 </head>
 

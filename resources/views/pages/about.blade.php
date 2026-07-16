@@ -1,59 +1,57 @@
 @extends('layouts.marketing')
 
-@section('title', 'Über uns | Kioskheld')
+@section('title', __('about.meta_title'))
 
 @section('content')
     <main class="about-page">
         <section class="about-hero">
             <div class="container about-hero-grid">
                 <div class="about-hero-copy">
-                    <p class="about-kicker">Über Kioskheld</p>
+                    <p class="about-kicker">{{ __('about.hero.kicker') }}</p>
 
                     <h1>
-                        Der Kiosk um die Ecke.
-                        <span>Jetzt auch online.</span>
+                        {{ __('about.hero.headline') }}
+                        <span>{{ __('about.hero.headline_accent') }}</span>
                     </h1>
 
                     <p>
-                        Kioskheld bringt lokale Kioske, Spätis und Getränkeläden dahin, wo Kunden heute bestellen:
-                        direkt aufs Handy. Ohne Konzern-Blabla. Ohne komplizierten Shop. Schnell, lokal und klar.
+                        {{ __('about.hero.description') }}
                     </p>
 
                     <div class="about-hero-actions">
                         <a href="{{ route('home') }}#find" class="about-btn about-btn-primary">
-                            Kiosk finden
+                            {{ __('about.hero.btn_find') }}
                         </a>
 
                         <a href="{{ route('partner.index') }}" class="about-btn about-btn-outline">
-                            Partner werden
+                            {{ __('about.hero.btn_partner') }}
                         </a>
                     </div>
                 </div>
 
                 <div class="about-hero-card">
-                    <div class="about-hero-badge">Powered by Foodzwerge</div>
+                    <div class="about-hero-badge">{{ __('about.hero.card_badge') }}</div>
 
-                    <h2>Lokale Sofortbestellungen brauchen keine komplizierte Plattform.</h2>
+                    <h2>{{ __('about.hero.card_title') }}</h2>
 
                     <p>
-                        Kioskheld ist die einfache Oberfläche für Kunden. Foodzwerge liefert die Technik im Hintergrund:
-                        Produkte, Warenkorb, Bestellungen, Händlerlogik und Schnittstellen.
+                        {{ __('about.hero.card_description') }}
                     </p>
 
                     <div class="about-hero-steps">
                         <div>
                             <strong>01</strong>
-                            <span>PLZ eingeben</span>
+                            <span>{{ __('about.hero.step_1') }}</span>
                         </div>
 
                         <div>
                             <strong>02</strong>
-                            <span>Kiosk wählen</span>
+                            <span>{{ __('about.hero.step_2') }}</span>
                         </div>
 
                         <div>
                             <strong>03</strong>
-                            <span>Bestellen</span>
+                            <span>{{ __('about.hero.step_3') }}</span>
                         </div>
                     </div>
                 </div>
@@ -63,42 +61,39 @@
         <section class="about-section about-pullup-section">
             <div class="container">
                 <div class="about-statement">
-                    <p class="about-kicker about-kicker-dark">Warum Kioskheld?</p>
+                    <p class="about-kicker about-kicker-dark">{{ __('about.why.kicker') }}</p>
 
                     <h2>
-                        Weil kleine Händler digital sichtbar sein müssen,
-                        ohne sich von großen Plattformen abhängig zu machen.
+                        {{ __('about.why.headline') }}
                     </h2>
 
                     <p>
-                        Viele Kioske haben gute Lage, Stammkunden und Produkte, die Menschen sofort brauchen:
-                        Getränke, Snacks, Süßes, Eis, Tabakwaren, Haushaltsartikel oder kleine Alltagsretter.
-                        Aber online sind sie oft kaum auffindbar. Genau diese Lücke schließt Kioskheld.
+                        {{ __('about.why.description') }}
                     </p>
                 </div>
 
                 <div class="about-proof-grid">
                     <article class="about-proof-card">
-                        <span>Für Kunden</span>
-                        <strong>Schneller bestellen</strong>
+                        <span>{{ __('about.why.customers_label') }}</span>
+                        <strong>{{ __('about.why.customers_title') }}</strong>
                         <p>
-                            Postleitzahl eingeben, verfügbaren Kiosk finden und typische Kioskprodukte direkt online bestellen.
+                            {{ __('about.why.customers_text') }}
                         </p>
                     </article>
 
                     <article class="about-proof-card">
-                        <span>Für Händler</span>
-                        <strong>Mehr Sichtbarkeit</strong>
+                        <span>{{ __('about.why.merchants_label') }}</span>
+                        <strong>{{ __('about.why.merchants_title') }}</strong>
                         <p>
-                            Ein digitaler Verkaufskanal, ohne selbst eine große Plattform entwickeln oder betreiben zu müssen.
+                            {{ __('about.why.merchants_text') }}
                         </p>
                     </article>
 
                     <article class="about-proof-card">
-                        <span>Für die Region</span>
-                        <strong>Lokal bleibt lokal</strong>
+                        <span>{{ __('about.why.region_label') }}</span>
+                        <strong>{{ __('about.why.region_title') }}</strong>
                         <p>
-                            Bestellungen landen bei echten Anbietern aus der Umgebung statt in anonymen Konzernstrukturen.
+                            {{ __('about.why.region_text') }}
                         </p>
                     </article>
                 </div>
@@ -108,34 +103,32 @@
         <section class="about-section about-dark-section">
             <div class="container about-split">
                 <div class="about-split-copy">
-                    <p class="about-kicker">Unsere Haltung</p>
+                    <p class="about-kicker">{{ __('about.stance.kicker') }}</p>
 
                     <h2>
-                        Wir bauen keinen Marktplatz für alles.
-                        Wir bauen eine klare Lösung für Kioske.
+                        {{ __('about.stance.headline_1') }}
+                        {{ __('about.stance.headline_2') }}
                     </h2>
 
                     <p>
-                        Kioskprodukte sind Impulskäufe. Niemand will sich durch eine komplizierte Plattform klicken,
-                        wenn er schnell Getränke, Chips, Süßes oder Eis braucht. Deshalb ist Kioskheld bewusst fokussiert:
-                        finden, auswählen, bestellen.
+                        {{ __('about.stance.description') }}
                     </p>
                 </div>
 
                 <div class="about-dark-card">
                     <div class="about-dark-card-line">
-                        <span>Keine App-Pflicht</span>
-                        <strong>Direkt im Browser nutzbar.</strong>
+                        <span>{{ __('about.stance.point_1_label') }}</span>
+                        <strong>{{ __('about.stance.point_1_text') }}</strong>
                     </div>
 
                     <div class="about-dark-card-line">
-                        <span>Kein Technik-Chaos</span>
-                        <strong>Foodzwerge arbeitet im Hintergrund.</strong>
+                        <span>{{ __('about.stance.point_2_label') }}</span>
+                        <strong>{{ __('about.stance.point_2_text') }}</strong>
                     </div>
 
                     <div class="about-dark-card-line">
-                        <span>Kein unnötiger Ballast</span>
-                        <strong>Fokus auf Bestellungen, Sortiment und Region.</strong>
+                        <span>{{ __('about.stance.point_3_label') }}</span>
+                        <strong>{{ __('about.stance.point_3_text') }}</strong>
                     </div>
                 </div>
             </div>
@@ -144,35 +137,33 @@
         <section class="about-section">
             <div class="container">
                 <div class="about-section-head">
-                    <p class="about-kicker about-kicker-dark">So denken wir</p>
+                    <p class="about-kicker about-kicker-dark">{{ __('about.features.kicker') }}</p>
 
-                    <h2>Einfach genug für Kunden. Stark genug für Händler.</h2>
+                    <h2>{{ __('about.features.headline') }}</h2>
                 </div>
 
                 <div class="about-feature-grid">
                     <article class="about-feature-card">
                         <div class="about-feature-icon">⌖</div>
-                        <h3>Lokal zuerst</h3>
+                        <h3>{{ __('about.features.local_title') }}</h3>
                         <p>
-                            Kioskheld stellt Anbieter aus der Umgebung in den Vordergrund. Nicht irgendeinen Händler,
-                            sondern den Kiosk, der wirklich erreichbar ist.
+                            {{ __('about.features.local_text') }}
                         </p>
                     </article>
 
                     <article class="about-feature-card">
                         <div class="about-feature-icon">↯</div>
-                        <h3>Schnell statt kompliziert</h3>
+                        <h3>{{ __('about.features.fast_title') }}</h3>
                         <p>
-                            Der Weg zur Bestellung muss kurz bleiben. Gerade bei Snacks, Getränken und Sofortbedarf zählt Tempo.
+                            {{ __('about.features.fast_text') }}
                         </p>
                     </article>
 
                     <article class="about-feature-card">
                         <div class="about-feature-icon">▣</div>
-                        <h3>Technisch sauber</h3>
+                        <h3>{{ __('about.features.clean_title') }}</h3>
                         <p>
-                            Kioskheld nutzt Foodzwerge als technische Basis. Dadurch bleibt die Plattform erweiterbar,
-                            ohne die Oberfläche unnötig aufzublähen.
+                            {{ __('about.features.clean_text') }}
                         </p>
                     </article>
                 </div>
@@ -182,21 +173,18 @@
         <section class="about-section about-engine-section">
             <div class="container about-engine">
                 <div>
-                    <p class="about-kicker">Foodzwerge Verbindung</p>
+                    <p class="about-kicker">{{ __('about.engine.kicker') }}</p>
 
-                    <h2>Kioskheld ist die Bühne. Foodzwerge ist der Motor.</h2>
+                    <h2>{{ __('about.engine.headline') }}</h2>
                 </div>
 
                 <div class="about-engine-card">
                     <p>
-                        Im Vordergrund sieht der Kunde Kioskheld: eine einfache Plattform für lokale Kioskbestellungen.
-                        Im Hintergrund arbeitet Foodzwerge: Shop-Technik, Produkte, Bestellungen, Lieferlogik,
-                        Händlerverwaltung und Schnittstellen.
+                        {{ __('about.engine.description_1') }}
                     </p>
 
                     <p>
-                        Das Ergebnis: Kunden bekommen eine einfache Oberfläche. Händler bekommen ein handhabbares System.
-                        Und die technische Basis bleibt stabil erweiterbar.
+                        {{ __('about.engine.description_2') }}
                     </p>
                 </div>
             </div>
@@ -206,26 +194,25 @@
             <div class="container">
                 <div class="about-final-cta">
                     <div>
-                        <p class="about-kicker about-kicker-dark">Bereit?</p>
+                        <p class="about-kicker about-kicker-dark">{{ __('about.final.kicker') }}</p>
 
                         <h2>
-                            Finde deinen Kioskheld.
-                            Oder werde selbst einer.
+                            {{ __('about.final.headline_1') }}
+                            {{ __('about.final.headline_2') }}
                         </h2>
 
                         <p>
-                            Kioskheld startet regional und wächst mit den Händlern, die verstanden haben:
-                            Online bestellen ist längst nicht mehr nur etwas für Restaurants.
+                            {{ __('about.final.description') }}
                         </p>
                     </div>
 
                     <div class="about-final-actions">
                         <a href="{{ route('home') }}#find" class="about-btn about-btn-primary">
-                            Jetzt Kiosk suchen
+                            {{ __('about.final.btn_find') }}
                         </a>
 
                         <a href="{{ route('partner.register') }}" class="about-btn about-btn-dark">
-                            Als Partner starten
+                            {{ __('about.final.btn_partner') }}
                         </a>
                     </div>
                 </div>

@@ -1,42 +1,37 @@
 .about-page {
     overflow: hidden;
     background:
-        radial-gradient(circle at top left, rgba(255, 206, 71, 0.14), transparent 34rem),
-        linear-gradient(180deg, #111111 0%, #171717 28rem, #f6f1e7 28rem, #f6f1e7 100%);
-    color: #111111;
+        radial-gradient(circle at top left, rgba(255, 212, 0, 0.10), transparent 34rem),
+        var(--kh-cream);
+    color: var(--kh-black);
 }
+
+/* ── Hero ── */
 
 .about-hero {
     position: relative;
     overflow: hidden;
     min-height: 620px;
     padding: 112px 0 132px;
-    background:
-        linear-gradient(135deg, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.55)),
-        url("/images/partner-hero-bg.webp") center / cover no-repeat;
+    background: var(--kh-green);
     color: #ffffff;
 }
 
 .about-hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(circle at 15% 20%, rgba(255, 206, 71, 0.32), transparent 30rem),
-        radial-gradient(circle at 82% 16%, rgba(255, 206, 71, 0.13), transparent 24rem),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.22));
-    pointer-events: none;
+    display: none;
 }
 
 .about-hero::after {
-    content: "";
+    content: "KIOSK\A HELD";
     position: absolute;
     right: -12rem;
     bottom: -14rem;
-    width: 38rem;
-    height: 38rem;
-    border-radius: 999px;
-    background: rgba(255, 206, 71, 0.16);
+    white-space: pre;
+    color: rgba(255, 255, 255, .05);
+    font-size: clamp(3.8rem, 10vw, 8rem);
+    line-height: .78;
+    font-weight: 1000;
+    letter-spacing: -.08em;
     pointer-events: none;
 }
 
@@ -60,10 +55,10 @@
     width: fit-content;
     margin: 0 0 18px;
     padding: 9px 14px;
-    border: 1px solid rgba(255, 206, 71, 0.36);
+    border: 1px solid rgba(255, 212, 0, 0.34);
     border-radius: 999px;
-    background: rgba(255, 206, 71, 0.13);
-    color: #ffce47;
+    background: rgba(255, 212, 0, 0.13);
+    color: var(--kh-yellow);
     font-size: 0.78rem;
     font-weight: 950;
     letter-spacing: 0.1em;
@@ -75,14 +70,19 @@
     width: 8px;
     height: 8px;
     border-radius: 999px;
-    background: #ffce47;
-    box-shadow: 0 0 0 5px rgba(255, 206, 71, 0.16);
+    background: var(--kh-yellow);
+    box-shadow: 0 0 0 5px rgba(255, 212, 0, 0.16);
 }
 
 .about-kicker-dark {
-    border-color: rgba(17, 17, 17, 0.1);
-    background: rgba(255, 206, 71, 0.2);
-    color: #111111;
+    border-color: var(--kh-border);
+    background: rgba(255, 212, 0, 0.18);
+    color: var(--kh-black);
+}
+
+.about-kicker-dark::before {
+    background: var(--kh-green);
+    box-shadow: 0 0 0 5px rgba(26, 60, 52, 0.16);
 }
 
 .about-hero h1 {
@@ -95,7 +95,7 @@
 
 .about-hero h1 span {
     display: block;
-    color: #ffce47;
+    color: var(--kh-yellow);
 }
 
 .about-hero-copy > p:not(.about-kicker) {
@@ -137,9 +137,14 @@
 }
 
 .about-btn-primary {
-    background: #ffce47;
-    color: #111111;
-    box-shadow: 0 18px 38px rgba(255, 206, 71, 0.23);
+    background: var(--kh-yellow);
+    color: var(--kh-black);
+    box-shadow: 0 18px 38px rgba(255, 212, 0, 0.23);
+}
+
+.about-btn-primary:hover {
+    background: var(--kh-yellow-dark);
+    box-shadow: 0 22px 44px rgba(255, 212, 0, 0.3);
 }
 
 .about-btn-outline {
@@ -149,38 +154,36 @@
 }
 
 .about-btn-outline:hover {
-    border-color: rgba(255, 206, 71, 0.52);
-    background: rgba(255, 206, 71, 0.12);
-    color: #ffce47;
+    border-color: var(--kh-yellow);
+    background: rgba(255, 212, 0, 0.12);
+    color: var(--kh-yellow);
 }
 
 .about-btn-dark {
-    background: #111111;
-    color: #ffce47;
-    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.14);
+    background: var(--kh-green);
+    color: var(--kh-yellow);
+    box-shadow: 0 16px 34px rgba(26, 60, 52, 0.18);
 }
+
+.about-btn-dark:hover {
+    background: var(--kh-green-light);
+    box-shadow: 0 20px 40px rgba(26, 60, 52, 0.24);
+}
+
+/* ── Hero Card ── */
 
 .about-hero-card {
     position: relative;
     overflow: hidden;
     padding: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.11);
+    border: 2px solid var(--kh-green);
     border-radius: 34px;
-    background:
-        radial-gradient(circle at top right, rgba(255, 206, 71, 0.22), transparent 22rem),
-        rgba(255, 255, 255, 0.09);
-    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
-    backdrop-filter: blur(16px);
+    background: #ffffff;
+    box-shadow: var(--kh-shadow);
 }
 
 .about-hero-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 42%),
-        radial-gradient(circle at bottom left, rgba(255, 206, 71, 0.15), transparent 18rem);
-    pointer-events: none;
+    display: none;
 }
 
 .about-hero-badge {
@@ -191,8 +194,8 @@
     margin-bottom: 24px;
     padding: 9px 13px;
     border-radius: 999px;
-    background: #ffce47;
-    color: #111111;
+    background: var(--kh-green);
+    color: var(--kh-yellow);
     font-size: 0.78rem;
     font-weight: 950;
     letter-spacing: 0.07em;
@@ -203,7 +206,7 @@
     position: relative;
     z-index: 1;
     margin: 0;
-    color: #ffffff;
+    color: var(--kh-black);
     font-size: clamp(1.65rem, 2.6vw, 2.65rem);
     line-height: 0.98;
     letter-spacing: -0.06em;
@@ -213,7 +216,7 @@
     position: relative;
     z-index: 1;
     margin: 18px 0 0;
-    color: rgba(255, 255, 255, 0.72);
+    color: var(--kh-muted);
     line-height: 1.68;
 }
 
@@ -231,9 +234,9 @@
     gap: 14px;
     align-items: center;
     padding: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    border: 1px solid var(--kh-border);
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.07);
+    background: var(--kh-green-50);
 }
 
 .about-hero-steps strong {
@@ -242,16 +245,18 @@
     width: 42px;
     height: 42px;
     border-radius: 999px;
-    background: rgba(255, 206, 71, 0.17);
-    color: #ffce47;
+    background: var(--kh-green);
+    color: var(--kh-yellow);
     font-size: 0.8rem;
     font-weight: 950;
 }
 
 .about-hero-steps span {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--kh-black);
     font-weight: 900;
 }
+
+/* ── Sections ── */
 
 .about-section {
     position: relative;
@@ -267,10 +272,10 @@
     max-width: 980px;
     margin-top: -58px;
     padding: 38px;
-    border: 1px solid rgba(18, 18, 18, 0.08);
+    border: 1px solid var(--kh-border);
     border-radius: 34px;
     background: #ffffff;
-    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--kh-shadow);
 }
 
 .about-statement h2,
@@ -279,7 +284,7 @@
 .about-engine h2,
 .about-final-cta h2 {
     margin: 0;
-    color: #111111;
+    color: var(--kh-black);
     font-size: clamp(2rem, 4.2vw, 4.15rem);
     line-height: 0.95;
     letter-spacing: -0.075em;
@@ -288,10 +293,12 @@
 .about-statement > p:not(.about-kicker) {
     max-width: 820px;
     margin: 22px 0 0;
-    color: rgba(17, 17, 17, 0.68);
+    color: var(--kh-muted);
     font-size: 1.06rem;
     line-height: 1.76;
 }
+
+/* ── Proof Grid ── */
 
 .about-proof-grid {
     display: grid;
@@ -305,18 +312,16 @@
     position: relative;
     overflow: hidden;
     padding: 26px;
-    border: 1px solid rgba(18, 18, 18, 0.08);
+    border: 1px solid var(--kh-border);
     border-radius: 28px;
-    background:
-        radial-gradient(circle at top right, rgba(255, 206, 71, 0.16), transparent 18rem),
-        rgba(255, 255, 255, 0.78);
-    box-shadow: 0 16px 46px rgba(0, 0, 0, 0.075);
+    background: #ffffff;
+    box-shadow: var(--kh-shadow-soft);
 }
 
 .about-proof-card span {
     display: inline-flex;
     margin-bottom: 14px;
-    color: #9a6f00;
+    color: var(--kh-green);
     font-size: 0.78rem;
     font-weight: 950;
     letter-spacing: 0.08em;
@@ -325,7 +330,7 @@
 
 .about-proof-card strong {
     display: block;
-    color: #111111;
+    color: var(--kh-black);
     font-size: 1.45rem;
     line-height: 1.08;
     letter-spacing: -0.04em;
@@ -334,15 +339,15 @@
 .about-proof-card p,
 .about-feature-card p {
     margin: 12px 0 0;
-    color: rgba(17, 17, 17, 0.66);
+    color: var(--kh-muted);
     line-height: 1.68;
 }
 
+/* ── Dark Section (Stance) ── */
+
 .about-dark-section {
     overflow: hidden;
-    background:
-        radial-gradient(circle at 82% 20%, rgba(255, 206, 71, 0.16), transparent 28rem),
-        #111111;
+    background: var(--kh-green);
     color: #ffffff;
 }
 
@@ -362,7 +367,7 @@
 .about-split-copy > p:not(.about-kicker) {
     max-width: 680px;
     margin: 22px 0 0;
-    color: rgba(255, 255, 255, 0.68);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 1.05rem;
     line-height: 1.76;
 }
@@ -386,7 +391,7 @@
 .about-dark-card-line span {
     display: block;
     margin-bottom: 8px;
-    color: #ffce47;
+    color: var(--kh-yellow);
     font-size: 0.78rem;
     font-weight: 950;
     letter-spacing: 0.09em;
@@ -399,6 +404,8 @@
     font-size: 1.18rem;
     line-height: 1.28;
 }
+
+/* ── Features ── */
 
 .about-section-head {
     max-width: 860px;
@@ -418,24 +425,24 @@
     height: 54px;
     margin-bottom: 20px;
     border-radius: 18px;
-    background: #111111;
-    color: #ffce47;
+    background: var(--kh-green);
+    color: var(--kh-yellow);
     font-size: 1.4rem;
     font-weight: 950;
 }
 
 .about-feature-card h3 {
     margin: 0;
-    color: #111111;
+    color: var(--kh-black);
     font-size: 1.45rem;
     line-height: 1.08;
     letter-spacing: -0.045em;
 }
 
+/* ── Engine Section ── */
+
 .about-engine-section {
-    background:
-        radial-gradient(circle at top left, rgba(255, 206, 71, 0.2), transparent 28rem),
-        #171717;
+    background: var(--kh-green);
     color: #ffffff;
 }
 
@@ -443,15 +450,13 @@
     padding: 30px;
     border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 30px;
-    background:
-        radial-gradient(circle at top right, rgba(255, 206, 71, 0.16), transparent 20rem),
-        rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.07);
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
 }
 
 .about-engine-card p {
     margin: 0;
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 255, 255, 0.78);
     font-size: 1.04rem;
     line-height: 1.76;
 }
@@ -459,6 +464,8 @@
 .about-engine-card p + p {
     margin-top: 18px;
 }
+
+/* ── Final CTA ── */
 
 .about-final-section {
     padding-bottom: 96px;
@@ -470,20 +477,22 @@
     gap: 28px;
     align-items: center;
     padding: 38px;
-    border: 1px solid rgba(18, 18, 18, 0.08);
+    border: 1px solid var(--kh-border);
     border-radius: 34px;
     background:
-        radial-gradient(circle at top right, rgba(255, 206, 71, 0.24), transparent 28rem),
+        radial-gradient(circle at top right, rgba(255, 212, 0, 0.18), transparent 28rem),
         #ffffff;
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--kh-shadow);
 }
 
 .about-final-cta p:not(.about-kicker) {
     max-width: 760px;
     margin: 18px 0 0;
-    color: rgba(17, 17, 17, 0.66);
+    color: var(--kh-muted);
     line-height: 1.72;
 }
+
+/* ── Responsive ── */
 
 @media (max-width: 1020px) {
     .about-hero-grid,

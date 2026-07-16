@@ -1,7 +1,7 @@
 .faq-page {
     background:
-        radial-gradient(circle at top left, rgba(255, 212, 0, 0.14), transparent 34rem),
-        linear-gradient(180deg, #111111 0%, #171717 24rem, var(--kh-cream) 24rem, var(--kh-cream) 100%);
+        radial-gradient(circle at top left, rgba(255, 212, 0, 0.10), transparent 34rem),
+        var(--kh-cream);
     color: var(--kh-black);
 }
 

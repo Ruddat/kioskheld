@@ -7,12 +7,20 @@ return [
     ],
 
     'hero' => [
+        'kicker' => 'Dein lokaler Kiosk-Lieferservice',
+
         'headline' => 'Finde deinen Kiosk',
         'headline_accent' => 'in der Nähe.',
-        'subline' => 'Snacks, Getränke, Süßes & mehr – schnell, einfach und zuverlässig zu dir geliefert.',
-        'postcode_placeholder' => 'Deine Postleitzahl eingeben',
+
+        'subline' => 'Snacks, Getränke, Süßes und mehr – schnell, einfach und zuverlässig zu dir geliefert.',
+
+        'postcode_placeholder' => 'Deine Postleitzahl',
         'submit' => 'Kiosk finden',
+
         'postcode_example' => 'z. B. 31224, 38100, 38102',
+
+        'local_title' => 'Lokale Kioske',
+        'local_text' => 'Direkt aus deiner Nähe',
     ],
 
     'trust' => [

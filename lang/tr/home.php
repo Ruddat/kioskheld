@@ -13,6 +13,11 @@ return [
         'postcode_placeholder' => 'Posta kodunuzu girin',
         'submit' => 'Büfe bul',
         'postcode_example' => 'örn. 31224, 38100, 38102',
+
+        'kicker' => 'Yerel büfe teslimat hizmetin',
+
+        'local_title' => 'Yerel büfeler',
+        'local_text' => 'Hemen yakınında',
     ],
 
     'trust' => [

@@ -13,6 +13,10 @@
 
         <div class="container hero-grid" id="find">
             <div class="hero-content">
+                <p class="hero-kicker">
+                    {{ __('home.hero.kicker') }}
+                </p>
+
                 <h1 class="headline">
                     {{ __('home.hero.headline') }}
                     <span>{{ __('home.hero.headline_accent') }}</span>
@@ -22,12 +26,18 @@
                     {{ __('home.hero.subline') }}
                 </p>
 
-                {{-- PLZ-Suchformular: UNVERÄNDERT (alle data-Attribute, IDs, Klassen) --}}
+                {{-- PLZ-Suchformular:
+                 IDs, Routen und Data-Attribute nicht verändern. --}}
                 <form class="postcode-form" id="postcodeForm" data-postcode-check-url="{{ route('postcode.check') }}"
                     data-shop-selection-url="{{ route('shops.selection') }}"
                     data-shop-legacy-url="{{ route('shops.legacy', ['shopSlug' => '__SHOP_SLUG__']) }}" novalidate>
                     <label class="postcode-field" for="postcode">
-                        <span aria-hidden="true">⌕</span>
+                        <span class="postcode-field__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M21 21L16.65 16.65M19 11A8 8 0 1 1 3 11A8 8 0 0 1 19 11Z" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                        </span>
 
                         <input id="postcode" name="postcode" inputmode="numeric" autocomplete="postal-code"
                             placeholder="{{ __('home.hero.postcode_placeholder') }}" maxlength="5" pattern="[0-9]{5}"
@@ -36,16 +46,18 @@
 
                     <button class="submit-btn" type="submit">
                         {{ __('home.hero.submit') }}
+                        <span aria-hidden="true">→</span>
                     </button>
                 </form>
 
                 <div class="hint">
-                    ⌖ {{ __('home.hero.postcode_example') }}
+                    <span aria-hidden="true">⌖</span>
+                    {{ __('home.hero.postcode_example') }}
                 </div>
 
                 <div class="trust-row">
                     <div class="trust-item">
-                        <div class="trust-icon">⏱</div>
+                        <div class="trust-icon" aria-hidden="true">⏱</div>
 
                         <div class="trust-copy">
                             <strong>{{ __('home.trust.delivery_title') }}</strong>
@@ -54,7 +66,7 @@
                     </div>
 
                     <div class="trust-item">
-                        <div class="trust-icon">🧺</div>
+                        <div class="trust-icon" aria-hidden="true">🧺</div>
 
                         <div class="trust-copy">
                             <strong>{{ __('home.trust.minimum_title') }}</strong>
@@ -63,13 +75,46 @@
                     </div>
 
                     <div class="trust-item">
-                        <div class="trust-icon">✓</div>
+                        <div class="trust-icon" aria-hidden="true">✓</div>
 
                         <div class="trust-copy">
                             <strong>{{ __('home.trust.payment_title') }}</strong>
                             <span>{{ __('home.trust.payment_value') }}</span>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="hero-visual" aria-hidden="true">
+                <div class="hero-visual__glow"></div>
+
+                <img class="hero-visual__image" src="{{ asset('images/marketing/home/kioskheld-hero.webp') }}"
+                    alt="" width="1400" height="1050" decoding="async" fetchpriority="high">
+
+                <div class="hero-visual__fallback">
+                    <div class="hero-visual__fallback-pin">♛</div>
+
+                    <div class="hero-visual__fallback-shop">
+                        <span>KIOSK</span>
+                    </div>
+                </div>
+
+                <div class="hero-floating-card hero-floating-card--delivery">
+                    <span class="hero-floating-card__icon">⏱</span>
+
+                    <span>
+                        <strong>{{ __('home.trust.delivery_title') }}</strong>
+                        {{ __('home.trust.delivery_value') }}
+                    </span>
+                </div>
+
+                <div class="hero-floating-card hero-floating-card--local">
+                    <span class="hero-floating-card__icon">⌖</span>
+
+                    <span>
+                        <strong>{{ __('home.hero.local_title') }}</strong>
+                        {{ __('home.hero.local_text') }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -79,7 +124,7 @@
         {{-- ═══════════════════════════════════════════
              NEARBY KIOSKS (neu – dynamisch via JS)
              ═══════════════════════════════════════════ --}}
-        <section class="nearby-kiosks" id="nearby-kiosks">
+        <section class="nearby-kiosks nearby-kiosks--hidden" id="nearby-kiosks" aria-hidden="true">
             <div class="container">
                 <div class="nearby-kiosks-heading">
                     <p class="nearby-kiosks-kicker">
@@ -95,12 +140,7 @@
                     </p>
                 </div>
 
-                <div class="nearby-kiosks-grid" id="nearbyKiosksGrid">
-                    <div class="nearby-kiosks-empty" id="nearbyKiosksEmpty">
-                        <div class="nearby-kiosks-empty__icon" aria-hidden="true">⌖</div>
-                        <p>{{ __('home.nearby.empty_text') }}</p>
-                    </div>
-                </div>
+                <div class="nearby-kiosks-grid" id="nearbyKiosksGrid"></div>
             </div>
         </section>
 
@@ -182,37 +222,47 @@
         {{-- ═══════════════════════════════════════════
              PARTNER CTA
              ═══════════════════════════════════════════ --}}
-        <section class="partner-cta" id="partner">
-            <div class="container">
-                <div class="partner-banner">
-                    <div class="partner-banner__content">
-                        <h2>
-                            {{ __('home.partner.headline_before') }}
-                            <span>{{ __('home.partner.kiosk') }}</span>
+<section class="partner-cta" id="partner">
+    <div class="container">
+        <div class="partner-banner">
+            <div class="partner-banner__content">
+                <h2>
+                    {{ __('home.partner.headline_before') }}
+                    <span>{{ __('home.partner.kiosk') }}</span>
 
-                            {{ __('home.partner.or') }}
+                    {{ __('home.partner.or') }}
 
-                            <br>
+                    <br>
 
-                            <span>{{ __('home.partner.beverage_service') }}</span>
-                        </h2>
+                    <span>{{ __('home.partner.beverage_service') }}</span>
+                </h2>
 
-                        <p>
-                            {{ __('home.partner.description') }}
-                        </p>
+                <p>
+                    {{ __('home.partner.description') }}
+                </p>
 
-                        <a class="partner-banner__button" href="{{ route('partner.index') }}">
-                            {{ __('home.partner.button') }}
-                        </a>
-                    </div>
-
-                    <div class="partner-banner__badge" aria-hidden="true">
-                        <span class="partner-banner__crown">♛</span>
-                        <strong>KIOSK<br>HELD</strong>
-                    </div>
-                </div>
+                <a
+                    class="partner-banner__button"
+                    href="{{ route('partner.index') }}"
+                >
+                    {{ __('home.partner.button') }}
+                </a>
             </div>
-        </section>
+
+            <div class="partner-banner__visual" aria-hidden="true">
+                <img
+                    class="partner-banner__image"
+                    src="{{ asset('images/marketing/home/partner-cta.webp') }}"
+                    alt=""
+                    width="1400"
+                    height="933"
+                    loading="lazy"
+                    decoding="async"
+                >
+            </div>
+        </div>
+    </div>
+</section>
 
         {{-- ═══════════════════════════════════════════
              CATALOG / CATEGORIES

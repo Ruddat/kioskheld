@@ -13,6 +13,10 @@ return [
         'postcode_placeholder' => 'Enter your postcode',
         'submit' => 'Find a kiosk',
         'postcode_example' => 'e.g. 31224, 38100, 38102',
+        'kicker' => 'Your local convenience-store delivery service',
+
+        'local_title' => 'Local stores',
+        'local_text' => 'Right in your area',
     ],
 
     'trust' => [

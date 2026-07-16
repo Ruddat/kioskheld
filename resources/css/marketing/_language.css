@@ -12,13 +12,14 @@
     padding: 0 13px;
     border: 1px solid var(--kh-border);
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.7);
+    background: #ffffff;
     color: var(--kh-black);
     font: inherit;
     font-size: 13px;
     font-weight: 800;
     line-height: 1;
     cursor: pointer;
+    box-shadow: var(--kh-shadow-soft);
     transition:
         background-color 160ms ease,
         border-color 160ms ease,
@@ -28,7 +29,7 @@
 .language-switcher-trigger:hover,
 .language-switcher:focus-within .language-switcher-trigger {
     border-color: var(--kh-green);
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--kh-green-50);
 }
 
 .language-switcher-trigger:active {

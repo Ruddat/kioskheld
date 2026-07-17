@@ -126,6 +126,13 @@ Route::prefix('{locale}')
                     '/partner-onboardings/{partnerOnboarding}/status',
                     PartnerOnboardingStatusController::class
                 )->name('partner-onboardings.status');
+
+                Route::get(
+                    '/analytics',
+                    \App\Http\Controllers\Admin\AnalyticsAdminController::class
+                )->name('analytics.index');
+
+
             });
     });
 

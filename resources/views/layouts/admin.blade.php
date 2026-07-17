@@ -25,6 +25,11 @@
                     Dashboard
                 </a>
 
+    <a href="{{ route('admin.analytics.index') }}"
+        @class(['active' => request()->routeIs('admin.analytics.*')])>
+        Analytics
+    </a>
+
                 <a href="{{ route('admin.partner-leads.index') }}" @class(['active' => request()->routeIs('admin.partner-leads.*')])>
                     Partner-Anfragen
                 </a>

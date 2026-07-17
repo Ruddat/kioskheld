@@ -3,6 +3,7 @@
 use App\Http\Middleware\AddSeoRobotsHeader;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\EnsureUserIsVendor;
+use App\Http\Middleware\LogPageView;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -16,19 +17,20 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->appendToGroup('web', [
+            AddSeoRobotsHeader::class,
+            LogPageView::class,
+        ]);
 
-        $middleware->appendToGroup(
-        'web',
-        AddSeoRobotsHeader::class
-    );
-    $middleware->alias([
+        $middleware->alias([
             'admin' => EnsureUserIsAdmin::class,
             'vendor' => EnsureUserIsVendor::class,
-                'locale' => SetLocale::class,
+            'locale' => SetLocale::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*'),
+            fn (Request $request): bool => $request->is('api/*'),
         );
-    })->create();
+    })
+    ->create();
